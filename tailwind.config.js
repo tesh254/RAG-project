@@ -19,7 +19,13 @@ module.exports = {
             100: "#e1e1e1",
           },
           purple: "#8748FF",
-          black: "#181818"
+          black: "#181818",
+        },
+      },
+      fontFamily: {
+        suportal: {
+          bold: ["GT Walsheim Pro Bold", "sans-serif"],
+          medium: ["GT Walsheim Pro", "sans-serif"],
         },
       },
     },

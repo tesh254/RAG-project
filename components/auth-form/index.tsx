@@ -2,6 +2,7 @@
 import React, { FC, useState } from "react";
 import Link from "next/link";
 import Input from "../input";
+import Button from "../button";
 
 interface IAuthForm {
   type: "login" | "signup";
@@ -61,6 +62,11 @@ const AuthForm: FC<IAuthForm> = ({ type, label }) => {
             label="Password"
             type="password"
           />
+          <Button className="" onClick={() => {}} kind="secondary">
+            <span className="text-white">
+              Continue
+            </span>
+          </Button>
         </div>
       </div>
     </div>
