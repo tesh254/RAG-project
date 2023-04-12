@@ -1,0 +1,11 @@
+.base-input__container {
+    @apply flex flex-col space-y-[4px];
+}
+
+.base-label {
+    @apply text-[1rem] font-medium;
+}
+
+.base-input {
+    @apply font-medium placeholder:font-medium outline-none py-[14px] px-[16px] border-suportal-gray-100 border-[1px] rounded-[1rem] w-full;
+}

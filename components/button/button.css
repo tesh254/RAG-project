@@ -1,0 +1,18 @@
+.button {
+  display: grid;
+  grid-template-columns: 20px auto;
+  grid-template-rows: auto;
+  gap: 0px 8px;
+}
+
+.button-no-loading {
+    
+}
+
+.button-primary {
+  @apply flex place-items-center space-x-[7px] justify-center bg-suportal-blue rounded-[12px] px-[13px] py-[12px];
+}
+
+.button-secondary {
+  @apply flex place-items-center space-x-[7px] justify-center bg-suportal-purple rounded-[16px] w-full px-[13px] py-[12px];
+}
