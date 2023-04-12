@@ -1,0 +1,31 @@
+.form-base {
+    @apply w-screen h-screen bg-suportal-black flex justify-center place-items-center;
+}
+
+.form {
+    @apply mx-auto my-auto h-auto flex flex-col place-items-center;
+}
+
+.form img {
+    @apply w-[144px] mb-[20px];
+}
+
+.form h3 {
+    @apply text-white font-bold text-[28px] mb-[11px];
+}
+
+.form h6 {
+    @apply mb-[48px];
+}
+
+.form h6 span {
+    @apply text-suportal-gray-light font-medium;
+}
+
+.form a {
+    @apply text-suportal-purple font-medium;
+}
+
+.form-items {
+    @apply w-[380px] flex flex-col space-y-[14px];
+}
