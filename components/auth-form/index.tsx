@@ -69,7 +69,7 @@ const AuthForm: FC<IAuthForm> = ({ type, label }) => {
 
       if (data.user) {
         toast.success("Success! Please check email for verfication link");
-        console.log(data.user);
+        router.push("/go-to-email");
       }
     }
   };
