@@ -1,8 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { FC, useState } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import Input from "../input";
 import Button from "../button";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 
 interface IAuthForm {
   type: "login" | "signup";
@@ -17,6 +20,72 @@ const AuthForm: FC<IAuthForm> = ({ type, label }) => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const supabaseClient = useSupabaseClient();
+  const router = useRouter();
+
+  const signInWithEmail = async () => {
+    setIsLoading(true);
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: state.email,
+      password: state.password,
+    });
+
+    if (data.user || error?.message) {
+      setIsLoading(false);
+
+      if (error?.message) {
+        toast.error(error.message);
+      }
+
+      if (data.user) {
+        toast.success("Login success");
+
+        router.push("/dashboard");
+      }
+    }
+  };
+
+  const signUpWithEmail = async () => {
+    setIsLoading(true);
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: state.email,
+      password: state.password,
+      options: {
+        emailRedirectTo:
+          process.env.NODE_ENV === "development" ||
+          process.env.NODE_ENV === "test"
+            ? "http://localhost:3000/verify/"
+            : "http://localhost:3000/verify/",
+      },
+    });
+
+    if (data.user || error?.message) {
+      setIsLoading(false);
+
+      if (error?.message) {
+        toast.error(error.message);
+      }
+
+      if (data.user) {
+        toast.success("Success! Please check email for verfication link");
+        console.log(data.user);
+      }
+    }
+  };
+
+  const onSubmit = async () => {
+    switch (type) {
+      case "login":
+        await signInWithEmail();
+        break;
+      case "signup":
+        await signUpWithEmail();
+        break;
+      default:
+        await signInWithEmail();
+    }
+  };
 
   return (
     <div className="form-base">
@@ -62,10 +131,13 @@ const AuthForm: FC<IAuthForm> = ({ type, label }) => {
             label="Password"
             type="password"
           />
-          <Button className="" onClick={() => {}} kind="secondary">
-            <span className="text-white">
-              Continue
-            </span>
+          <Button
+            className=""
+            onClick={onSubmit}
+            kind="secondary"
+            isLoading={isLoading}
+          >
+            <span className="text-white">Continue</span>
           </Button>
         </div>
       </div>
