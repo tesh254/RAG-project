@@ -56,7 +56,7 @@ const AuthForm: FC<IAuthForm> = ({ type, label }) => {
           process.env.NODE_ENV === "development" ||
           process.env.NODE_ENV === "test"
             ? "http://localhost:3000/verify/"
-            : "http://localhost:3000/verify/",
+            : "https://app.suportal.ai/verify",
       },
     });
 
