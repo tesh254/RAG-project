@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Button from "../components/button";
 
 const Verify: NextPage = () => {
-    const router = useRouter();
+  const router = useRouter();
   return (
     <div className="form-base">
       <div className="form">
@@ -17,7 +17,8 @@ const Verify: NextPage = () => {
           <Button
             className=""
             onClick={() => {
-                router.push("/dashboard");            }}
+              router.push("/");
+            }}
             kind="secondary"
             isLoading={false}
           >

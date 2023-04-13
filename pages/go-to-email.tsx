@@ -17,7 +17,7 @@ const GoToEmail: NextPage = () => {
           <Button
             className=""
             onClick={() => {
-              router.push("/dashboard");
+              router.push("/");
             }}
             kind="secondary"
             isLoading={false}

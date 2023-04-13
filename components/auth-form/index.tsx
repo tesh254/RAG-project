@@ -41,7 +41,7 @@ const AuthForm: FC<IAuthForm> = ({ type, label }) => {
       if (data.user) {
         toast.success("Login success");
 
-        router.push("/dashboard");
+        router.push("/");
       }
     }
   };

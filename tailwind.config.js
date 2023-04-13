@@ -20,6 +20,7 @@ module.exports = {
           },
           purple: "#8748FF",
           black: "#181818",
+          bg: "#F7F9FB"
         },
       },
       fontFamily: {
