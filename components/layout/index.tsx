@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 import Navbar from "../navbar";
+import Script from "next/script";
 
 export default function Layout({
   children,
@@ -34,9 +35,12 @@ export default function Layout({
         <meta name="twitter:description" content={title} />
         {/* <meta name="twitter:image" content={meta.cardImage} /> */}
       </Head>
+      <Script strategy="afterInteractive" src="/widget/embed.js" />
       <Navbar />
       <main id="skip" className="bg-suportal-bg mt-[80px]">
-        <section className="max-w-screen-lg mx-auto px-2 py-[16px] min-h-screen">{children}</section>
+        <section className="max-w-screen-lg mx-auto px-2 py-[16px] min-h-screen">
+          {children}
+        </section>
       </main>
     </>
   );

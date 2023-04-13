@@ -1,6 +1,30 @@
+function getURL() {
+  return new URL(window.location.href).hostname;
+}
+
+async function sendMessage() {
+  const message = "how do I connect a custom domain";
+  const website_link = getURL();
+
+  const response = fetch("http://localhost:3000/api/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message,
+      website_link,
+    }),
+  });
+}
+
+async function submitChat(chatListElement) {}
+
 window.addEventListener("load", function () {
-    let font = document.createElement("style");
-    const fontFace = `
+  sendMessage();
+
+  let font = document.createElement("style");
+  const fontFace = `
          @font-face {
             font-family: "SuportalBold";
             src: url("https://app.suportal.co/font/GTWalsheimPro-Bold.ttf") format("truetype");
@@ -14,22 +38,42 @@ window.addEventListener("load", function () {
             font-weight: bold;
             font-style: norma;
          }
+
+         .chat-message {
+            margin: 5px;
+            padding: 12px;
+            border-radius: 17px;
+            max-width: 80%;
+            animation: slide-up 0.5s ease-in-out;
+        }
+
+         @keyframes slide-up {
+          from {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
       `;
-    font.appendChild(document.createTextNode(fontFace));
-  
-    document.head.appendChild(font);
-  
-    let toggleButton = document.createElement("button");
-    let chatContainer = document.createElement("section");
-    let chatHeader = document.createElement("div");
-    let chatBody = document.createElement("div");
-    let chatInputContainer = document.createElement("div");
-    let chatInput = document.createElement("textarea");
-    let chatActionButton = document.createElement("button");
-    let chatFooterContainer = document.createElement("div");
-    let chatFooterText = document.createElement("p");
-    let chatFooterLogoContainer = document.createElement("a");
-    let chatFooterLogo = `<svg width="52" height="15" viewBox="0 0 844 247" fill="none" xmlns="http://www.w3.org/2000/svg">
+  font.appendChild(document.createTextNode(fontFace));
+
+  document.head.appendChild(font);
+
+  let toggleButton = document.createElement("button");
+  let chatContainer = document.createElement("section");
+  let chatHeader = document.createElement("div");
+  let chatBody = document.createElement("div");
+  let chatList = document.createElement("div");
+  let chatInputContainer = document.createElement("div");
+  let chatInput = document.createElement("textarea");
+  let chatActionButton = document.createElement("button");
+  let chatFooterContainer = document.createElement("div");
+  let chatFooterText = document.createElement("p");
+  let chatFooterLogoContainer = document.createElement("a");
+  let chatFooterLogo = `<svg width="52" height="15" viewBox="0 0 844 247" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M319.967 173.015C310.496 173.015 302.8 170.592 296.88 165.746C290.96 160.9 288 154.977 288 147.977H305.598C305.598 151.208 306.997 153.846 309.796 155.892C312.702 157.938 316.415 158.962 320.936 158.962C324.273 158.962 326.91 158.154 328.847 156.538C330.785 154.923 331.753 152.769 331.753 150.077C331.753 145.769 329.87 143.131 326.102 142.162L306.728 136.831C295.857 133.815 290.422 126.869 290.422 115.992C290.422 109.746 293.113 104.523 298.494 100.323C303.876 96.0154 310.818 93.8615 319.322 93.8615C328.901 93.8615 336.22 96.0154 341.279 100.323C346.445 104.631 349.029 110.285 349.029 117.285H331.753C331.753 114.162 330.569 111.738 328.201 110.015C325.941 108.185 322.766 107.269 318.676 107.269C315.554 107.269 312.971 108.023 310.926 109.531C308.881 110.931 307.858 112.762 307.858 115.023C307.858 119.115 310.011 121.808 314.317 123.1L332.238 128.269C337.404 129.777 341.602 132.362 344.831 136.023C348.06 139.577 349.674 143.723 349.674 148.462C349.674 155.785 347.037 161.708 341.763 166.231C336.597 170.754 329.332 173.015 319.967 173.015Z" fill="black"/>
       <path d="M389.719 173.015C381.216 173.015 374.435 170.485 369.376 165.423C364.318 160.362 361.788 152.931 361.788 143.131V95.8H379.386V138.769C379.386 145.123 380.57 149.915 382.938 153.146C385.306 156.377 389.235 157.992 394.724 157.992C401.075 157.992 405.703 156.215 408.609 152.662C411.515 149 412.968 144.208 412.968 138.285V95.8H430.566V171.077H412.968V160.577C408.34 168.869 400.59 173.015 389.719 173.015Z" fill="black"/>
       <path d="M491.037 93.8615C501.801 93.8615 510.465 97.5231 517.031 104.846C523.597 112.062 526.88 121.592 526.88 133.438C526.88 145.069 523.435 154.6 516.547 162.031C509.658 169.354 500.778 173.015 489.907 173.015C484.956 173.015 480.274 171.938 475.861 169.785C471.448 167.523 468.111 164.562 465.851 160.9V205H448.253V95.8H465.851V105.977C468.111 102.315 471.556 99.4077 476.184 97.2538C480.812 94.9923 485.763 93.8615 491.037 93.8615ZM487.324 157.346C493.782 157.346 499.056 155.138 503.146 150.723C507.236 146.2 509.281 140.438 509.281 133.438C509.281 126.438 507.236 120.731 503.146 116.315C499.056 111.792 493.782 109.531 487.324 109.531C480.651 109.531 475.269 111.738 471.179 116.154C467.089 120.569 465.044 126.331 465.044 133.438C465.044 140.546 467.089 146.308 471.179 150.723C475.269 155.138 480.651 157.346 487.324 157.346Z" fill="black"/>
@@ -52,22 +96,20 @@ window.addEventListener("load", function () {
       </defs>
       </svg>    
     `;
-    let chatActionIcon = `<svg width="12" height="10" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+  let chatActionIcon = `<svg width="12" height="10" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M9.14924 0.251051C9.49637 -0.0836838 10.0592 -0.0836838 10.4063 0.251051L15.7397 5.39391C16.0868 5.72864 16.0868 6.27136 15.7397 6.60609L10.4063 11.7489C10.0592 12.0837 9.49637 12.0837 9.14924 11.7489C8.80211 11.4142 8.80211 10.8715 9.14924 10.5368L12.9651 6.85714H0.888889C0.397969 6.85714 0 6.47339 0 6C0 5.52661 0.397969 5.14286 0.888889 5.14286H12.9651L9.14924 1.46323C8.80211 1.1285 8.80211 0.585786 9.14924 0.251051Z" fill="white"/>
     </svg>
     `;
-    let closePopupButton = document.createElement("button");
-    let closeIcon = `<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+  let closePopupButton = document.createElement("button");
+  let closeIcon = `<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="9.03662" width="2.36655" height="12.3061" rx="1.18328" transform="rotate(45 9.03662 0)" fill="#0E123B"/>
     <rect y="1.6736" width="2.36655" height="12.3061" rx="1.18328" transform="rotate(-45 0 1.6736)" fill="#0E123B"/>
     </svg>
     `;
-  
-    closePopupButton.addEventLister("click", () => {});
-  
-    let chatHeaderTitle = document.createElement("h6");
-    chatHeaderTitle.textContent = `Zaap`;
-    toggleButton.innerHTML = `<svg width="34" height="34" viewBox="0 0 226 247" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  let chatHeaderTitle = document.createElement("h6");
+  chatHeaderTitle.textContent = `Zaap`;
+  toggleButton.innerHTML = `<svg width="34" height="34" viewBox="0 0 226 247" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M32.2044 22.4035L110.085 1.50872C137.696 -5.89908 164.817 14.9049 164.817 43.4923V140.33C164.817 159.999 151.61 177.217 132.613 182.313L54.7321 203.208C27.1212 210.616 0 189.812 0 161.225V64.3871C0 44.7183 13.2074 27.5003 32.2044 22.4035Z" fill="url(#paint0_linear_11_40)"/>
     <path fill-rule="evenodd" clip-rule="evenodd" d="M92.8484 63.8192L170.729 42.9244C198.34 35.5166 225.461 56.3206 225.461 84.9079V181.746C225.461 201.414 212.254 218.632 193.257 223.729L115.376 244.624C87.7653 252.032 60.644 231.228 60.644 202.64V105.803C60.644 86.1339 73.8515 68.9159 92.8484 63.8192Z" fill="url(#paint1_linear_11_40)"/>
     <defs>
@@ -82,73 +124,74 @@ window.addEventListener("load", function () {
     </defs>
     </svg>
     `;
-    toggleButton.style.cssText = `outline: none; border-radius: 16px; border: none; background: #8748FF; height: 60px; width: 60px; transition: 0.3s all; position: fixed; right: 32px; bottom: 32px; cursor: pointer;`;
-  
-    chatContainer.style.cssText = `width: 300px; height: 434px; border-radius: 20px; position: absolute; bottom: 109px; right: 32px; display: none; flex-direction: column; background: #fff; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);`;
-  
-    toggleButton.addEventListener("click", () => {
-      if (chatContainer.style.display === "none") {
-        chatContainer.style.display = "flex";
-      } else {
-        chatContainer.style.display = "none";
-      }
-    });
-  
-    closePopupButton.addEventListener("click", () => {
-      if (chatContainer.style.display === "none") {
-        chatContainer.style.display = "flex";
-      }
-    });
-  
-    chatHeader.style.cssText = `width: 100%; padding: 12px 20px; display: flex; justify-content: space-between; place-items-: center; box-sizing: border-box; border-bottom: 1px solid rgba(0, 0, 0, 0.1);`;
-  
-    chatHeaderTitle.style.cssText = `font-family: "SuportalBold", sans-serif; font-size: 16px; margin: 0px;`;
-  
-    closePopupButton.innerHTML = closeIcon;
-  
-    closePopupButton.style.cssText = `background: transparent; outline: none; border: none;`;
-  
-    chatInputContainer.style.cssText = `padding: 0px 16px 4px 16px; max-height: 58px; position: relative;`;
-  
-    chatFooterContainer.style.cssText = `width: 100%; display: flex; justify-content: center; gap: 6px 0px; place-items: center; border-top: 1px solid rgba(0, 0, 0, 0.1); padding: 5px; box-sizing: border-box;`;
-  
-    chatFooterLogoContainer.innerHTML = chatFooterLogo;
-  
-    chatFooterLogoContainer.setAttribute("href", "https://www.suportal.co");
-    chatFooterLogoContainer.setAttribute("target", "_blank");
-  
-    chatFooterLogoContainer.style.cssText = `cursor: pointer;`;
-  
-    chatFooterText.textContent = "Powered by";
-  
-    chatFooterText.style.cssText = `font-family: "SuportalBold", sans-serif; font-weight: bold; margin: 0px 8px 0px 0px; font-size: 11px;`;
-  
-    chatFooterContainer.appendChild(chatFooterText);
-    chatFooterContainer.appendChild(chatFooterLogoContainer);
-  
-    chatBody.style.cssText = `height: 318px; overflow: scroll;`;
-  
-    chatInput.setAttribute("autofocus", "");
-    chatInput.rows = 1;
-    chatInput.placeholder = "How can I help?";
-  
-    chatInput.style.cssText = `resize: none; width: 100%; box-sizing: border-box; border: 2px solid #E8E8EB; border-radius: 25.5px; font-family: "SuportalMedium", sans-serif; font-weight: bold; padding: 10px 16px; outline-color: #007AFF !important;`;
-  
-    chatActionButton.innerHTML = chatActionIcon;
-  
-    chatActionButton.style.cssText = `background: #007AFF; border-radius: 50%; position: absolute; right: 22px; outline: none; border: none; height: 28px; width: 28px; bottom: 14px; cursor: pointer;`;
-  
-    chatHeader.appendChild(chatHeaderTitle);
-    chatHeader.appendChild(closePopupButton);
-    chatInputContainer.appendChild(chatInput);
-    chatInputContainer.appendChild(chatActionButton);
-  
-    chatContainer.appendChild(chatHeader);
-    chatContainer.appendChild(chatBody);
-    chatContainer.appendChild(chatInputContainer);
-    chatContainer.appendChild(chatFooterContainer);
-  
-    document.body.appendChild(toggleButton);
-    document.body.appendChild(chatContainer);
+  toggleButton.style.cssText = `outline: none; border-radius: 16px; border: none; background: #8748FF; height: 60px; width: 60px; transition: 0.3s all; position: fixed; right: 32px; bottom: 32px; cursor: pointer; display: flex; justify-content: center; place-items: center;`;
+
+  chatContainer.style.cssText = `width: 300px; height: 434px; border-radius: 20px; position: absolute; bottom: 109px; right: 32px; display: none; flex-direction: column; background: #fff; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);`;
+
+  toggleButton.addEventListener("click", () => {
+    if (chatContainer.style.display === "none") {
+      chatContainer.style.display = "flex";
+    } else {
+      chatContainer.style.display = "none";
+    }
   });
-  
+
+  chatHeader.style.cssText = `width: 100%; padding: 12px 20px; display: flex; justify-content: space-between; place-items-: center; box-sizing: border-box; border-bottom: 1px solid rgba(0, 0, 0, 0.1);`;
+
+  chatHeaderTitle.style.cssText = `font-family: "SuportalBold", sans-serif; font-size: 16px; margin: 0px;`;
+
+  closePopupButton.innerHTML = closeIcon;
+
+  closePopupButton.style.cssText = `background: transparent; outline: none; border: none;`;
+
+  closePopupButton.addEventListener("click", () => {
+    if (chatContainer.style.display === "none") {
+      chatContainer.style.display = "flex";
+    }
+  });
+
+  chatInputContainer.style.cssText = `padding: 0px 16px 4px 16px; max-height: 58px; position: relative;`;
+
+  chatFooterContainer.style.cssText = `width: 100%; display: flex; justify-content: center; gap: 6px 0px; place-items: center; border-top: 1px solid rgba(0, 0, 0, 0.1); padding: 5px; box-sizing: border-box;`;
+
+  chatFooterLogoContainer.innerHTML = chatFooterLogo;
+
+  chatFooterLogoContainer.setAttribute("href", "https://www.suportal.co");
+  chatFooterLogoContainer.setAttribute("target", "_blank");
+
+  chatFooterLogoContainer.style.cssText = `cursor: pointer;`;
+
+  chatFooterText.textContent = "Powered by";
+
+  chatFooterText.style.cssText = `font-family: "SuportalBold", sans-serif; font-weight: bold; margin: 0px 8px 0px 0px; font-size: 11px;`;
+
+  chatFooterContainer.appendChild(chatFooterText);
+  chatFooterContainer.appendChild(chatFooterLogoContainer);
+
+  chatBody.style.cssText = `height: 318px; position: relative;`;
+
+  chatList.style.cssText = `display: flex; flex-direction: column-reverse; align-items: flex-end; width: 100%; max-height: 100%; overflow-y: scroll; margin-bottom: 13px;`;
+
+  chatInput.setAttribute("autofocus", "");
+  chatInput.rows = 1;
+  chatInput.placeholder = "How can I help?";
+
+  chatInput.style.cssText = `resize: none; width: 100%; box-sizing: border-box; border: 2px solid #E8E8EB; border-radius: 25.5px; font-family: "SuportalMedium", sans-serif; font-weight: bold; padding: 10px 16px; outline-color: #007AFF !important;`;
+
+  chatActionButton.innerHTML = chatActionIcon;
+
+  chatActionButton.style.cssText = `background: #007AFF; border-radius: 50%; position: absolute; right: 22px; outline: none; border: none; height: 28px; width: 28px; bottom: 14px; cursor: pointer;`;
+
+  chatHeader.appendChild(chatHeaderTitle);
+  chatHeader.appendChild(closePopupButton);
+  chatInputContainer.appendChild(chatInput);
+  chatInputContainer.appendChild(chatActionButton);
+
+  chatContainer.appendChild(chatHeader);
+  chatContainer.appendChild(chatBody);
+  chatContainer.appendChild(chatInputContainer);
+  chatContainer.appendChild(chatFooterContainer);
+
+  document.body.appendChild(toggleButton);
+  document.body.appendChild(chatContainer);
+});
