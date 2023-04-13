@@ -3855,6 +3855,7 @@ __metadata:
     react-hot-toast: ^2.4.0
     tailwindcss: ^3.3.1
     typescript: 5.0.4
+    uglify-js: ^3.17.4
   languageName: unknown
   linkType: soft
 
@@ -4104,6 +4105,15 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: bb309d320c59a26565fb3793dba550576ab861018ff3fd1b7fccabbe46ae4a35546bc45f342c0a0b6f265c801ccdf64ffd68f548f117ceb7f0eac4b805cd52a9
+  languageName: node
+  linkType: hard
+
+"uglify-js@npm:^3.17.4":
+  version: 3.17.4
+  resolution: "uglify-js@npm:3.17.4"
+  bin:
+    uglifyjs: bin/uglifyjs
+  checksum: 7b3897df38b6fc7d7d9f4dcd658599d81aa2b1fb0d074829dd4e5290f7318dbca1f4af2f45acb833b95b1fe0ed4698662ab61b87e94328eb4c0a0d3435baf924
   languageName: node
   linkType: hard
 
