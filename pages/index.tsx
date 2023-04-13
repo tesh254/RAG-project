@@ -1,13 +1,12 @@
 import { GetServerSidePropsContext, NextPage } from "next";
 import Layout from "../components/layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import BotForm from "../components/bot-form";
 
 const Dashboard: NextPage = () => {
     return (
         <Layout title="Suportal - Dashboard">
-          <section>
-            Hello this is the dashbaord
-          </section>
+          <BotForm />
         </Layout>
     );
 }
