@@ -2,39 +2,42 @@ function getURL() {
   return new URL(window.location.href).hostname;
 }
 
-async function sendMessage() {
-  const message = "how do I connect a custom domain";
+function sendMessage(chatInput, message) {
   const website_link = getURL();
 
-  const response = fetch("http://localhost:3000/api/chat", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      message,
-      website_link,
-    }),
-  });
+  // fetch("http://localhost:3000/api/chat", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     message,
+  //     website_link,
+  //   }),
+  // });
+
+  clearInput(chatInput);
+
+  console.log({ message, website_link });
 }
 
-async function submitChat(chatListElement) {}
+async function clearInput(chatInput) {
+  chatInput.value = "";
+}
 
 window.addEventListener("load", function () {
-  sendMessage();
-
   let font = document.createElement("style");
   const fontFace = `
          @font-face {
             font-family: "SuportalBold";
-            src: url("https://app.suportal.co/font/GTWalsheimPro-Bold.ttf") format("truetype");
+            src: url("https://app.suportal.co/fonts/GTWalsheimPro-Bold.ttf") format("truetype");
             font-weight: bold;
             font-style: normal;
          }
          
          @font-face {
             font-family: "SuportalMedium";
-            src: "https://app.suportal.co/font/GTWalsheimPro-Medium.ttf";
+            src: "https://app.suportal.co/fonts/GTWalsheimPro-Medium.ttf";
             font-weight: bold;
             font-style: norma;
          }
@@ -72,6 +75,7 @@ window.addEventListener("load", function () {
   let chatActionButton = document.createElement("button");
   let chatFooterContainer = document.createElement("div");
   let chatFooterText = document.createElement("p");
+  let chat = document.createElement("div");
   let chatFooterLogoContainer = document.createElement("a");
   let chatFooterLogo = `<svg width="52" height="15" viewBox="0 0 844 247" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M319.967 173.015C310.496 173.015 302.8 170.592 296.88 165.746C290.96 160.9 288 154.977 288 147.977H305.598C305.598 151.208 306.997 153.846 309.796 155.892C312.702 157.938 316.415 158.962 320.936 158.962C324.273 158.962 326.91 158.154 328.847 156.538C330.785 154.923 331.753 152.769 331.753 150.077C331.753 145.769 329.87 143.131 326.102 142.162L306.728 136.831C295.857 133.815 290.422 126.869 290.422 115.992C290.422 109.746 293.113 104.523 298.494 100.323C303.876 96.0154 310.818 93.8615 319.322 93.8615C328.901 93.8615 336.22 96.0154 341.279 100.323C346.445 104.631 349.029 110.285 349.029 117.285H331.753C331.753 114.162 330.569 111.738 328.201 110.015C325.941 108.185 322.766 107.269 318.676 107.269C315.554 107.269 312.971 108.023 310.926 109.531C308.881 110.931 307.858 112.762 307.858 115.023C307.858 119.115 310.011 121.808 314.317 123.1L332.238 128.269C337.404 129.777 341.602 132.362 344.831 136.023C348.06 139.577 349.674 143.723 349.674 148.462C349.674 155.785 347.037 161.708 341.763 166.231C336.597 170.754 329.332 173.015 319.967 173.015Z" fill="black"/>
@@ -126,7 +130,7 @@ window.addEventListener("load", function () {
     `;
   toggleButton.style.cssText = `outline: none; border-radius: 16px; border: none; background: #8748FF; height: 60px; width: 60px; transition: 0.3s all; position: fixed; right: 32px; bottom: 32px; cursor: pointer; display: flex; justify-content: center; place-items: center;`;
 
-  chatContainer.style.cssText = `width: 300px; height: 434px; border-radius: 20px; position: absolute; bottom: 109px; right: 32px; display: none; flex-direction: column; background: #fff; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);`;
+  chatContainer.style.cssText = `z-index: 999; width: 300px; height: 434px; border-radius: 20px; position: absolute; bottom: 109px; right: 32px; display: none; flex-direction: column; background: #fff; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);`;
 
   toggleButton.addEventListener("click", () => {
     if (chatContainer.style.display === "none") {
@@ -138,7 +142,7 @@ window.addEventListener("load", function () {
 
   chatHeader.style.cssText = `width: 100%; padding: 12px 20px; display: flex; justify-content: space-between; place-items-: center; box-sizing: border-box; border-bottom: 1px solid rgba(0, 0, 0, 0.1);`;
 
-  chatHeaderTitle.style.cssText = `font-family: "SuportalBold", sans-serif; font-size: 16px; margin: 0px;`;
+  chatHeaderTitle.style.cssText = `font-family: "SuportalBold", sans-serif !important; font-size: 16px; margin: 0px;`;
 
   closePopupButton.innerHTML = closeIcon;
 
@@ -176,16 +180,24 @@ window.addEventListener("load", function () {
   chatInput.rows = 1;
   chatInput.placeholder = "How can I help?";
 
-  chatInput.style.cssText = `resize: none; width: 100%; box-sizing: border-box; border: 2px solid #E8E8EB; border-radius: 25.5px; font-family: "SuportalMedium", sans-serif; font-weight: bold; padding: 10px 16px; outline-color: #007AFF !important;`;
+  chatInput.style.cssText = `resize: none; width: 1fr; box-sizing: border-box; font-family: "SuportalMedium", sans-serif; font-weight: bold; padding: 10px 16px; outline: none;`;
 
   chatActionButton.innerHTML = chatActionIcon;
 
-  chatActionButton.style.cssText = `background: #007AFF; border-radius: 50%; position: absolute; right: 22px; outline: none; border: none; height: 28px; width: 28px; bottom: 14px; cursor: pointer;`;
+  chatActionButton.style.cssText = `background: #007AFF; border-radius: 50%; display: flex; justify-content: center; place-items: center; outline: none; border: none; height: 28px; width: 28px; cursor: pointer;`;
+
+  chat.style.cssText = `width: 100%; height: 100%; overflow: hidden; border: 2px solid #E8E8EB; border-radius: 25.5px; border-box: box-sizing; display: flex; place-items: center; padding: 5px 7px;`;
+
+  chat.appendChild(chatInput);
+  chat.appendChild(chatActionButton);
 
   chatHeader.appendChild(chatHeaderTitle);
   chatHeader.appendChild(closePopupButton);
-  chatInputContainer.appendChild(chatInput);
-  chatInputContainer.appendChild(chatActionButton);
+  chatInputContainer.appendChild(chat);
+
+  chatActionButton.addEventListener("click", () => {
+    sendMessage(chatInput, chatInput.value);
+  });
 
   chatContainer.appendChild(chatHeader);
   chatContainer.appendChild(chatBody);
