@@ -5,7 +5,7 @@ function getURL() {
 function getChatBot(chatHeaderTitle) {
   const website_link = getURL();
 
-  fetch(`http://localhost:3000/api/chat/${website_link}`)
+  fetch(`https://app.suportal.co/api/chat/${website_link}`)
     .then((res) => res.json())
     .then((res) => {
       chatHeaderTitle.textContent = res.chatbot.title;
@@ -38,7 +38,7 @@ function sendMessage(
   chatReply.textContent = "Typing...";
   chatList.appendChild(chatReply);
 
-  fetch("http://localhost:3000/api/chat", {
+  fetch("https://app.suportal.co/api/chat", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

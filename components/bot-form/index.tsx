@@ -107,14 +107,14 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
       {`src="https://app.suportal.co
       /widget `}
       <br />
-      {`/embed.js"></script>`}
+      {`/embed.min.js"></script>`}
     </span>
   );
 
   const copyText = () => {
     // Create a temporary element to hold the text
     const tempElement = document.createElement("textarea");
-    tempElement.value = `<script src="https://app.suportal.co/widget/embed.js"></script>`;
+    tempElement.value = `<script src="https://app.suportal.co/widget/embed.min.js"></script>`;
     document.body.appendChild(tempElement);
 
     // Select the text in the temporary element
