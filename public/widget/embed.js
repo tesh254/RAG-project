@@ -1,11 +1,15 @@
 function getURL() {
-  return new URL(window.location.href).hostname;
+  const url = new URL(window.location.href);
+  const port = url.port ? `:${url.port}` : "";
+  return url.protocol + "//" + url.hostname + port;
 }
 
 function getChatBot(chatHeaderTitle) {
   const website_link = getURL();
 
-  fetch(`https://app.suportal.co/api/chat/${website_link}`)
+  fetch(`https://app.suportal.co/api/chat/${btoa(website_link)}`, {
+    method: "GET"
+  })
     .then((res) => res.json())
     .then((res) => {
       chatHeaderTitle.textContent = res.chatbot.title;
@@ -130,7 +134,7 @@ window.addEventListener("load", function () {
             font-size: 14px;
         }
 
-        input:focus {
+        textarea:focus {
           outline: none !important;
         }
 
@@ -274,7 +278,7 @@ window.addEventListener("load", function () {
 
   chatActionButton.style.cssText = `background: #007AFF; border-radius: 50%; display: flex; justify-content: center; place-items: center; outline: none; border: none; height: 28px; width: 28px; cursor: pointer;`;
 
-  chat.style.cssText = `width: 100%; height: 100%; overflow: hidden; border: 2px solid #E8E8EB; border-radius: 25.5px; border-box: box-sizing; display: flex; place-items: center; padding: 5px 7px;`;
+  chat.style.cssText = `width: 100%; height: 100%; overflow: hidden; border: 2px solid #E8E8EB; border-radius: 25.5px; border-box: box-sizing; display: grid; grid-template-columns: 1fr auto; grid-template-rows: 42px; gap: 0px 4px; place-items: center; padding: 5px 7px;`;
 
   chat.appendChild(chatInput);
   chat.appendChild(chatActionButton);

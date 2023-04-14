@@ -11,7 +11,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   if (req.method === "GET") {
-    console.log(req.query.website_link);
     try {
       const supabaseClient = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL as string,
@@ -21,7 +20,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const { data: chatbot, error } = await supabaseClient
         .from("chatbot")
         .select("*")
-        .eq("website_link", req.query.website_link);
+        .eq(
+          "website_link",
+          Buffer.from(
+            req.query.website_link as unknown as string,
+            "base64"
+          ).toString("utf-8")
+        );
 
       if (chatbot?.length === 0) {
         return res.status(200).json({
