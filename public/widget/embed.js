@@ -268,11 +268,7 @@ window.addEventListener("load", function () {
   chatInput.rows = 1;
   chatInput.placeholder = "How can I help?";
 
-<<<<<<< Updated upstream
-  chatInput.style.cssText = `resize: none; width: 1fr; box-sizing: border-box; font-family: "SuportalMedium", sans-serif; font-weight: medium; padding: 10px 16px; outline: none;`;
-=======
   chatInput.style.cssText = `resize: none; width: 100%; box-sizing: border-box; font-family: "SuportalMedium", sans-serif; font-weight: medium; padding: 10px 16px; outline: none !important border: none !important;`;
->>>>>>> Stashed changes
 
   chatActionButton.innerHTML = chatActionIcon;
 
