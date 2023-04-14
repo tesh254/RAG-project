@@ -50,7 +50,6 @@ const handler: NextApiHandler = async (
       }
 
       const payload = {
-        support_link: req.body.support_link,
         website_link: req.body.website_link,
         title: req.body.title,
         user_id: user?.id,

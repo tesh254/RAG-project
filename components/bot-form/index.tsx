@@ -28,7 +28,6 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
   const [state, setState] = useState({
     title: "",
     website_link: "",
-    support_link: "",
   });
   const [updating, setUpdating] = useState(false);
 

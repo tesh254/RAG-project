@@ -32,14 +32,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       if (chatbot?.length !== 0) {
         // @ts-ignore
-        const support_link = chatbot[0].support_link;
-
         const content = `
             You are helping answer a user's question
 
             Their question was: "${body.message}"
 
-            All the support docs are here: ${support_link}
+            All the support docs are here: ${body.website_link}
 
             Write an answer to the user's question
 
