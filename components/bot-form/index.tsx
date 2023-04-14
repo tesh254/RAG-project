@@ -13,8 +13,14 @@ const fetcher: any = (url: string) =>
     })
     .then((r) => r.data);
 
-const regex =
-  /^(?:https?|ftp):\/\/(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))?(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+function isValidUrl(url: string) {
+  try {
+    new URL(url);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
 
 const BotForm: FC<{ user: User }> = ({ user }) => {
   const { data, error, isLoading, mutate } = useSWR("/api/chatbot", fetcher);
@@ -41,7 +47,7 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
       return;
     }
 
-    if (regex.test(state.support_link)) {
+    if (!isValidUrl(state.support_link)) {
       toast.error("Please provide a valid Suportal support link");
       return;
     }
@@ -67,9 +73,9 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
     if (!isLoading && !error && typeof data !== "string") {
       setState((prev) => ({
         ...prev,
-        title: data.bot.title,
-        website_link: data.bot.website_link,
-        support_link: data.bot.support_link,
+        title: data?.bot?.title ?? "",
+        website_link: data?.bot?.website_link ?? "",
+        support_link: data?.bot?.support_link ?? "",
       }));
     }
 
@@ -231,7 +237,7 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
           </div>
         </div>
       </div>
-      {!user.email_confirmed_at && (
+      {/* {!user.confirmed_at && (
         <div className="space-x-[10px] max-w-[500px] w-full mx-auto bg-suportal-red mt-[17px] py-[16px] flex place-items-center justify-center rounded-[16px]">
           <svg
             width="22"
@@ -252,7 +258,7 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
             Verify your account by clicking the link sent to your email
           </p>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
