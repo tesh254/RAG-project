@@ -36,7 +36,9 @@ export default function Layout({
       </Head>
       <Navbar />
       <main id="skip" className="bg-suportal-bg mt-[80px]">
-        <section className="max-w-screen-lg mx-auto px-2 py-[16px] min-h-screen">{children}</section>
+        <section className="max-w-screen-lg mx-auto px-2 py-[16px] min-h-screen">
+          {children}
+        </section>
       </main>
     </>
   );

@@ -7,10 +7,11 @@ interface IButtonProps {
   icon?: ReactNode;
   className: string;
   isLoading?: boolean;
+  disabled?: boolean;
 }
 
 const Button = forwardRef<LegacyRef<HTMLButtonElement>, IButtonProps>(
-  ({ kind, onClick, className, children, icon, isLoading = false }, ref) => {
+  ({ kind, onClick, className, children, icon, isLoading = false, disabled = false }, ref) => {
     return (
       <button
         className={`button${
@@ -18,6 +19,7 @@ const Button = forwardRef<LegacyRef<HTMLButtonElement>, IButtonProps>(
         } button-${kind} ${className}`}
         ref={ref as LegacyRef<HTMLButtonElement>}
         onClick={onClick}
+        disabled={disabled}
       >
         {isLoading && (
           <span>
@@ -33,7 +35,7 @@ const Button = forwardRef<LegacyRef<HTMLButtonElement>, IButtonProps>(
                 cy="12"
                 r="10"
                 stroke="currentColor"
-                stroke-width="4"
+                strokeWidth="4"
               ></circle>
               <path
                 className="opacity-75"

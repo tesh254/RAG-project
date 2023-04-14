@@ -9,7 +9,7 @@ const Navbar = () => {
   const router = useRouter();
 
   return (
-    <div className="w-full bg-white fixed top-0 h-[81px]">
+    <div className="w-full bg-white fixed top-0 h-[81px] z-30">
       <div className="max-w-screen-lg py-[20px] mx-auto w-full flex place-items-center justify-between">
         <img className="w-[144px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
         <Button

@@ -7,7 +7,7 @@ interface IInputProps {
   labelClassname?: string;
   inputClassname?: string;
   name?: string;
-  label: string;
+  label?: string;
   placeholder: string;
   type: string;
 }
@@ -22,7 +22,7 @@ const Input = forwardRef<InputRef, IInputProps>(
       theme = "light",
       labelClassname = "",
       inputClassname = "",
-      label,
+      label = "",
       placeholder,
       name,
       type,
@@ -36,15 +36,21 @@ const Input = forwardRef<InputRef, IInputProps>(
         ? "text-white"
         : "";
     const localInputClassname =
-      theme === "light" ? "" : theme === "dark" ? "bg-transparent placeholder:text-suportal-gray-dark text-suportal-gray-dark" : "";
+      theme === "light"
+        ? ""
+        : theme === "dark"
+        ? "bg-transparent placeholder:text-suportal-gray-dark text-suportal-gray-dark"
+        : "";
 
     return (
       <div className="base-input__container">
-        <label
-          className={`base-label ${localLabelClassname} ${labelClassname}`}
-        >
-          {label}
-        </label>
+        {label && (
+          <label
+            className={`base-label ${localLabelClassname} ${labelClassname}`}
+          >
+            {label}
+          </label>
+        )}
         <input
           className={`base-input ${localInputClassname} ${inputClassname}`}
           ref={ref as InputRef}
