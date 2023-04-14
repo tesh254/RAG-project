@@ -77,9 +77,7 @@ function sendMessage(
             chatReply.appendChild(messageNode);
             if (i < chunkArray.length - 1) {
               const br = document.createElement("br");
-              const br1 = document.createElement("br");
               chatReply.appendChild(br);
-              chatReply.appendChild(br1);
             }
           }
         }
