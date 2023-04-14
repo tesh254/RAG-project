@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextApiRequest, NextApiResponse } from "next";
 import Cors from "nextjs-cors";
-import { StreamPayload, chatGPTStream } from "../../lib/gpt-parser";
+import { StreamPayload, chatGPTStream } from "../../../lib/gpt-parser";
 
 type RequestData = {
   website_link: string;
@@ -43,7 +43,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             Write an answer to the user's question
 
-            no markdown
+            no markdown, return the response in number bullets
         `;
 
         const data: StreamPayload = {

@@ -2,6 +2,19 @@ function getURL() {
   return new URL(window.location.href).hostname;
 }
 
+function getChatBot(chatHeaderTitle) {
+  const website_link = getURL();
+
+  fetch(`http://localhost:3000/api/chat/${website_link}`)
+    .then((res) => res.json())
+    .then((res) => {
+      chatHeaderTitle.textContent = res.chatbot.title;
+    })
+    .catch((err) => {
+      chatHeaderTitle.textContent = "Chat";
+    });
+}
+
 function sendMessage(
   chatInput,
   chatList,
@@ -18,6 +31,12 @@ function sendMessage(
   const website_link = getURL();
 
   actionButton.disabled = true;
+
+  const chatReply = document.createElement("div");
+  chatReply.classList.add("chat-message");
+  chatReply.style.cssText = `background: #E8E8EB; color: #000; font-family: "SuportalMedium", sans-serif; font-weight: medium; align-self: flex-start; margin: 4px 0px 8px 0px;`;
+  chatReply.textContent = "Typing...";
+  chatList.appendChild(chatReply);
 
   fetch("http://localhost:3000/api/chat", {
     method: "POST",
@@ -41,16 +60,24 @@ function sendMessage(
 
         const chunk = decoder.decode(value, { stream: true });
 
-        const chatReply = document.createElement("div");
-        chatReply.classList.add("chat-message");
-        chatReply.style.cssText = `background: #E8E8EB; color: #000; font-family: "SuportalMedium", sans-serif; font-weight: medium; align-self: flex-start; margin: 4px 0px 8px 0px;`;
-        chatReply.textContent = "Typing...";
-        chatList.appendChild(chatReply);
+        if (chunk === ".\n") console.log({ chunk });
 
         if (chatReply.textContent === "Typing...") {
           chatReply.textContent = chunk;
         } else {
-          chatReply.textContent += chunk;
+          const chunkArray = chunk.split("\n");
+          for (let i = 0; i < chunkArray.length; i++) {
+            const message = chunkArray[i];
+            if (message === "") {
+              continue;
+            }
+            const messageNode = document.createTextNode(message);
+            chatReply.appendChild(messageNode);
+            if (i < chunkArray.length - 1) {
+              const br = document.createElement("br");
+              chatReply.appendChild(br);
+            }
+          }
         }
 
         chatList.scrollTop = chatList.scrollHeight;
@@ -168,6 +195,7 @@ window.addEventListener("load", function () {
 
   let chatHeaderTitle = document.createElement("h6");
   chatHeaderTitle.textContent = `Zaap`;
+  getChatBot(chatHeaderTitle);
   toggleButton.innerHTML = `<svg width="34" height="34" viewBox="0 0 226 247" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M32.2044 22.4035L110.085 1.50872C137.696 -5.89908 164.817 14.9049 164.817 43.4923V140.33C164.817 159.999 151.61 177.217 132.613 182.313L54.7321 203.208C27.1212 210.616 0 189.812 0 161.225V64.3871C0 44.7183 13.2074 27.5003 32.2044 22.4035Z" fill="url(#paint0_linear_11_40)"/>
     <path fill-rule="evenodd" clip-rule="evenodd" d="M92.8484 63.8192L170.729 42.9244C198.34 35.5166 225.461 56.3206 225.461 84.9079V181.746C225.461 201.414 212.254 218.632 193.257 223.729L115.376 244.624C87.7653 252.032 60.644 231.228 60.644 202.64V105.803C60.644 86.1339 73.8515 68.9159 92.8484 63.8192Z" fill="url(#paint1_linear_11_40)"/>
