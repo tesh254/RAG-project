@@ -32,7 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       if (chatbot?.length !== 0) {
         // @ts-ignore
-        const support_link = chatbot.support_link;
+        const support_link = chatbot[0].support_link;
 
         const content = `
             You are helping answer a user's question
@@ -43,7 +43,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             Write an answer to the user's question
 
-            no markdown format or list format, just paragraphs
+            no markdown
         `;
 
         const data: StreamPayload = {
@@ -78,17 +78,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         res.end();
       } else {
-        return res.status(400).json({
+        throw {
           message:
             "Sorry, there was an error while processing your request. Please try again later or contact support if the problem persists.",
-        });
+        };
       }
     } catch (error) {
-      return res
-        .status(500)
-        .json(
-          "Sorry, there was an error while processing your request. Please try again later or contact support if the problem persists."
-        );
+      return res.status(500).json({
+        // @ts-ignore
+        message: error.message,
+      });
     }
   }
 };

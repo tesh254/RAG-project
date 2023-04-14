@@ -2,27 +2,79 @@ function getURL() {
   return new URL(window.location.href).hostname;
 }
 
-function sendMessage(chatInput, message) {
+function sendMessage(
+  chatInput,
+  chatList,
+  message,
+  actionButton,
+  chatContainer
+) {
+  const chatSender = document.createElement("div");
+  chatSender.classList.add("chat-message");
+  chatSender.style.cssText = `background-color: #007AFF; color: #fff; font-family: "SuportalMedium", sans-serif; font-weight: medium; align-self: flex-end; margin: 4px 0px 8px 0px;`;
+  chatSender.textContent = message;
+  chatList.appendChild(chatSender);
+
   const website_link = getURL();
 
-  // fetch("http://localhost:3000/api/chat", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     message,
-  //     website_link,
-  //   }),
-  // });
+  actionButton.disabled = true;
+
+  fetch("http://localhost:3000/api/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message,
+      website_link,
+    }),
+  })
+    .then((response) => {
+      const reader = response.body.getReader();
+
+      const decoder = new TextDecoder();
+
+      const processStream = ({ done, value }) => {
+        if (done) {
+          return;
+        }
+
+        const chunk = decoder.decode(value, { stream: true });
+
+        const chatReply = document.createElement("div");
+        chatReply.classList.add("chat-message");
+        chatReply.style.cssText = `background: #E8E8EB; color: #000; font-family: "SuportalMedium", sans-serif; font-weight: medium; align-self: flex-start; margin: 4px 0px 8px 0px;`;
+        chatReply.textContent = "Typing...";
+        chatList.appendChild(chatReply);
+
+        if (chatReply.textContent === "Typing...") {
+          chatReply.textContent = chunk;
+        } else {
+          chatReply.textContent += chunk;
+        }
+
+        chatList.scrollTop = chatList.scrollHeight;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        return reader.read().then(processStream);
+      };
+
+      return reader.read().then(processStream);
+    })
+    .catch(() => {
+      actionButton.disabled = false;
+      chatReply.textContent =
+        "Sorry, there was an error while processing your request. Please try again later or contact support if the problem persists.";
+    });
+
+  actionButton.disabled = false;
 
   clearInput(chatInput);
-
-  console.log({ message, website_link });
 }
 
 async function clearInput(chatInput) {
   chatInput.value = "";
+  chatInput.focus();
 }
 
 window.addEventListener("load", function () {
@@ -39,15 +91,18 @@ window.addEventListener("load", function () {
             font-family: "SuportalMedium";
             src: "https://app.suportal.co/fonts/GTWalsheimPro-Medium.ttf";
             font-weight: bold;
-            font-style: norma;
+            font-style: normal;
          }
 
          .chat-message {
             margin: 5px;
+            box-sizing: border-box;
             padding: 12px;
             border-radius: 17px;
-            max-width: 80%;
-            animation: slide-up 0.5s ease-in-out;
+            max-width: 90%;
+            animation: slide-up 0.3s ease-in-out;
+            word-wrap: break-word;
+            font-size: 14px;
         }
 
          @keyframes slide-up {
@@ -130,7 +185,7 @@ window.addEventListener("load", function () {
     `;
   toggleButton.style.cssText = `outline: none; border-radius: 16px; border: none; background: #8748FF; height: 60px; width: 60px; transition: 0.3s all; position: fixed; right: 32px; bottom: 32px; cursor: pointer; display: flex; justify-content: center; place-items: center;`;
 
-  chatContainer.style.cssText = `z-index: 999; width: 300px; height: 434px; border-radius: 20px; position: absolute; bottom: 109px; right: 32px; display: none; flex-direction: column; background: #fff; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);`;
+  chatContainer.style.cssText = `z-index: 999; overflow: hidden; width: 300px; height: 434px; border-radius: 20px; position: fixed; bottom: 109px; right: 32px; display: none; flex-direction: column; background: #fff; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);`;
 
   toggleButton.addEventListener("click", () => {
     if (chatContainer.style.display === "none") {
@@ -140,7 +195,7 @@ window.addEventListener("load", function () {
     }
   });
 
-  chatHeader.style.cssText = `width: 100%; padding: 12px 20px; display: flex; justify-content: space-between; place-items-: center; box-sizing: border-box; border-bottom: 1px solid rgba(0, 0, 0, 0.1);`;
+  chatHeader.style.cssText = `width: 100%; padding: 12px 20px; display: flex; justify-content: space-between; place-items-: center; box-sizing: border-box; border-bottom: 1px solid rgba(0, 0, 0, 0.1); background: #fff;  z-index: 99;`;
 
   chatHeaderTitle.style.cssText = `font-family: "SuportalBold", sans-serif !important; font-size: 16px; margin: 0px;`;
 
@@ -172,15 +227,18 @@ window.addEventListener("load", function () {
   chatFooterContainer.appendChild(chatFooterText);
   chatFooterContainer.appendChild(chatFooterLogoContainer);
 
-  chatBody.style.cssText = `height: 318px; position: relative;`;
+  chatBody.style.cssText = `height: 318px; position: relative; transition: 0.5s all; margin-top: 16px; padding: 0px 8px; box-sizing: border-box;`;
 
-  chatList.style.cssText = `display: flex; flex-direction: column-reverse; align-items: flex-end; width: 100%; max-height: 100%; overflow-y: scroll; margin-bottom: 13px;`;
+  chatList.style.cssText = `display: flex; flex-direction: column; align-items: flex-end; width: auto; max-height: 100%; overflow-y: scroll; margin-bottom: 13px; transition: 0.5s all; position: absolute; bottom: 0px; width: 95%; box-sizing: border-box;`;
+
+  chatList.style.scrollbarWidth = "none !important";
+  chatList.style.webkitScrollbar = "none !important";
 
   chatInput.setAttribute("autofocus", "");
   chatInput.rows = 1;
   chatInput.placeholder = "How can I help?";
 
-  chatInput.style.cssText = `resize: none; width: 1fr; box-sizing: border-box; font-family: "SuportalMedium", sans-serif; font-weight: bold; padding: 10px 16px; outline: none;`;
+  chatInput.style.cssText = `resize: none; width: 1fr; box-sizing: border-box; font-family: "SuportalMedium", sans-serif; font-weight: medium; padding: 10px 16px; outline: none;`;
 
   chatActionButton.innerHTML = chatActionIcon;
 
@@ -196,9 +254,16 @@ window.addEventListener("load", function () {
   chatInputContainer.appendChild(chat);
 
   chatActionButton.addEventListener("click", () => {
-    sendMessage(chatInput, chatInput.value);
+    sendMessage(
+      chatInput,
+      chatList,
+      chatInput.value,
+      chatActionButton,
+      chatContainer
+    );
   });
 
+  chatBody.appendChild(chatList);
   chatContainer.appendChild(chatHeader);
   chatContainer.appendChild(chatBody);
   chatContainer.appendChild(chatInputContainer);
