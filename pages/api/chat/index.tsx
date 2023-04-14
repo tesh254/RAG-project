@@ -30,6 +30,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .select("*")
         .eq("website_link", body.website_link);
 
+      console.log(body.website_link, chatbot);
+
       if (chatbot?.length !== 0) {
         // @ts-ignore
         const support_link = chatbot[0].support_link;
