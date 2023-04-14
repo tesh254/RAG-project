@@ -5,6 +5,7 @@ import Input from "../input";
 import Button from "../button";
 import { toast } from "react-hot-toast";
 import { User } from "@supabase/auth-helpers-nextjs";
+import { apiUrl } from "../../public/widget/embed-string";
 
 const fetcher: any = (url: string) =>
   axios
@@ -42,13 +43,8 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
       return;
     }
 
-    if (!state.support_link) {
-      toast.error("Please provide Suportal support link");
-      return;
-    }
-
-    if (!isValidUrl(state.support_link)) {
-      toast.error("Please provide a valid Suportal support link");
+    if (!isValidUrl(state.website_link)) {
+      toast.error("Please provide a valid Suportal website link");
       return;
     }
 
@@ -75,7 +71,6 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
         ...prev,
         title: data?.bot?.title ?? "",
         website_link: data?.bot?.website_link ?? "",
-        support_link: data?.bot?.support_link ?? "",
       }));
     }
 
@@ -84,14 +79,7 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
         "Sorry, there was a problem faced while updating your suportal"
       );
     }
-  }, [
-    data?.bot?.support_link,
-    data?.bot?.title,
-    data?.bot?.website_link,
-    isLoading,
-    error,
-    data,
-  ]);
+  }, [data?.bot?.title, data?.bot?.website_link, isLoading, error, data]);
 
   const onChange = (name: string, value: string | number) => {
     setState((prev) => ({
@@ -104,30 +92,33 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
     <span>
       {`<script`}
       <br />
-      {`src="https://app.suportal.co
-      /widget `}
+      {`src="${apiUrl}/api/widget`}
       <br />
-      {`/embed.min.js"></script>`}
+      {`/${user.id}"></script>`}
     </span>
   );
 
   const copyText = () => {
-    // Create a temporary element to hold the text
-    const tempElement = document.createElement("textarea");
-    tempElement.value = `<script src="https://app.suportal.co/widget/embed.min.js"></script>`;
-    document.body.appendChild(tempElement);
+    if (state.title && state.website_link) {
+      // Create a temporary element to hold the text
+      const tempElement = document.createElement("textarea");
+      tempElement.value = `<script src="${apiUrl}/api/widget/${user.id}"></script>`;
+      document.body.appendChild(tempElement);
 
-    // Select the text in the temporary element
-    tempElement.select();
-    tempElement.setSelectionRange(0, 99999); // For mobile devices
+      // Select the text in the temporary element
+      tempElement.select();
+      tempElement.setSelectionRange(0, 99999); // For mobile devices
 
-    // Copy the selected text to clipboard
-    document.execCommand("copy");
+      // Copy the selected text to clipboard
+      document.execCommand("copy");
 
-    // Remove the temporary element
-    document.body.removeChild(tempElement);
+      // Remove the temporary element
+      document.body.removeChild(tempElement);
 
-    toast.success("Copied");
+      toast.success("Copied");
+    } else {
+      toast.error("Please provide a Suportal title and website link");
+    }
   };
 
   return (
@@ -182,33 +173,11 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
             </div>
           </div>
           <div className="base-s-input">
-            <label className="">Support Link</label>
-            <div className="base-s-input-element-container">
-              <Input
-                name="support_link"
-                onChange={onChange}
-                inputClassname=""
-                placeholder="Support link"
-                type="text"
-                value={state.support_link}
-              />
-              <Button
-                isLoading={updating}
-                disabled={isLoading}
-                kind="primary"
-                className=""
-                onClick={updateBot}
-              >
-                Save
-              </Button>
-            </div>
-          </div>
-          <div className="base-s-input">
             <label className="base-label text-suportal-gray-dark">
               Embed code:
             </label>
             <div className="base-s-input-element-container">
-              <p className="">{script}</p>
+              <p className="select-none">{script}</p>
               <Button
                 className=""
                 kind="primary"

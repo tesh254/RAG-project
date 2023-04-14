@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextApiRequest, NextApiResponse } from "next";
 import Cors from "nextjs-cors";
+import widgetString from "../../../public/widget/embed-string";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await Cors(req, res, {
@@ -20,13 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const { data: chatbot, error } = await supabaseClient
         .from("chatbot")
         .select("*")
-        .eq(
-          "website_link",
-          Buffer.from(
-            req.query.website_link as unknown as string,
-            "base64"
-          ).toString("utf-8")
-        );
+        .eq("user_id", req.query.identifier);
 
       if (chatbot?.length === 0) {
         return res.status(200).json({
@@ -34,15 +29,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
 
-      let chat: any[] = chatbot as unknown as any[];
+      let chat: {
+        website_link: string;
+        title: string;
+      } = chatbot
+        ? {
+            website_link: chatbot[0].website_link,
+            title: chatbot[0].title,
+          }
+        : { website_link: "", title: "" };
 
-      return res.status(200).json({
-        chatbot: chat[0],
-      });
+      const script = widgetString(chat.title, chat.website_link);
+
+      res.setHeader("Content-Type", "application/javascript");
+      res.status(200).send(script);
     } catch (error) {
-      return res.status(200).json({
-        chatbot: null,
-      });
+      const script = widgetString("", "");
+
+      res.setHeader("Content-Type", "application/javascript");
+      res.status(200).send(script);
     }
   }
 };

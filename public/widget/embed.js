@@ -1,22 +1,5 @@
-function getURL() {
-  const url = new URL(window.location.href);
-  const port = url.port ? `:${url.port}` : "";
-  return url.protocol + "//" + url.hostname + port;
-}
-
-function getChatBot(chatHeaderTitle) {
-  const website_link = getURL();
-
-  fetch(`https://app.suportal.co/api/chat/${btoa(website_link)}`, {
-    method: "GET",
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      chatHeaderTitle.textContent = res.chatbot.title;
-    })
-    .catch((err) => {
-      chatHeaderTitle.textContent = "Chat";
-    });
+function getChatBot(chatHeaderTitle, chatbotTitle) {
+  chatHeaderTitle.textContent = chatbotTitle;
 }
 
 function sendMessage(
