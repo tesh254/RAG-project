@@ -8,7 +8,7 @@ function getChatBot(chatHeaderTitle) {
   const website_link = getURL();
 
   fetch(`https://app.suportal.co/api/chat/${btoa(website_link)}`, {
-    method: "GET"
+    method: "GET",
   })
     .then((res) => res.json())
     .then((res) => {
@@ -77,7 +77,9 @@ function sendMessage(
             chatReply.appendChild(messageNode);
             if (i < chunkArray.length - 1) {
               const br = document.createElement("br");
+              const br1 = document.createElement("br");
               chatReply.appendChild(br);
+              chatReply.appendChild(br1);
             }
           }
         }
@@ -219,7 +221,7 @@ window.addEventListener("load", function () {
     `;
   toggleButton.style.cssText = `outline: none; border-radius: 16px; border: none; background: #8748FF; height: 60px; width: 60px; transition: 0.3s all; position: fixed; right: 32px; bottom: 32px; cursor: pointer; display: flex; justify-content: center; place-items: center;`;
 
-  chatContainer.style.cssText = `z-index: 999; overflow: hidden; width: 300px; height: 434px; border-radius: 20px; position: fixed; bottom: 109px; right: 32px; display: none; flex-direction: column; background: #fff; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);`;
+  chatContainer.style.cssText = `z-index: 99999; overflow: hidden; width: 300px; height: 434px; border-radius: 20px; position: fixed; bottom: 109px; right: 32px; display: none; flex-direction: column; background: #fff; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);`;
 
   toggleButton.addEventListener("click", () => {
     if (chatContainer.style.display === "none") {
