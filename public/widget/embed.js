@@ -232,8 +232,8 @@ window.addEventListener("load", function () {
   closePopupButton.style.cssText = `background: transparent; outline: none; border: none;`;
 
   closePopupButton.addEventListener("click", () => {
-    if (chatContainer.style.display === "none") {
-      chatContainer.style.display = "flex";
+    if (chatContainer.style.display === "flex") {
+      chatContainer.style.display = "none";
     }
   });
 

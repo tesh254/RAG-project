@@ -31,7 +31,7 @@ const handler: NextApiHandler = async (
       }
 
       return res.status(200).json({
-        bots: data,
+        bot: data[0],
       });
     } catch (error) {
       return res.status(400).json(error);
@@ -40,39 +40,49 @@ const handler: NextApiHandler = async (
 
   if (req.method === "POST") {
     try {
-        const { data, error } = await supabaseServerClient
+      const { data, error } = await supabaseServerClient
         .from("chatbot")
         .select("*")
         .eq("user_id", user?.id);
 
-        if (error) {
-            throw error;
-        }
+      if (error) {
+        return res.status(400).json(error);
+      }
 
-        if (data.length !== 0) {
-            return res.status(401).json({
-                message: "A Suportal bot already exists in your account",
-            });
-        }
+      const payload = {
+        support_link: req.body.support_link,
+        website_link: req.body.website_link,
+        title: req.body.title,
+        user_id: user?.id,
+      };
 
-        const payload = {
-            support_link: req.body.support_link,
-            website_link: req.body.website_link,
-            title: req.body.title,
-            user_id: user?.id,
-        };
-
-        const { data: saveData, error: saveError } = await supabaseServerClient.from("chatbot").insert(payload);
-        
-        if (saveError) {
-            throw saveError;
-        }
+      if (data.length !== 0) {
+        const { data: updateData, error: updateError } =
+          await supabaseServerClient
+            .from("chatbot")
+            .update(payload)
+            .eq("user_id", user?.id);
 
         return res.status(201).json({
-            chatbot: [saveData],
+          bot: updateData,
         });
-    } catch (error) {
+      }
+
+      const { data: saveData, error: saveError } = await supabaseServerClient
+        .from("chatbot")
+        .insert(payload);
+
+      if (saveError) {
         return res.status(400).json(error);
+      }
+
+      return res.status(201).json({
+        bot: [saveData],
+      });
+    } catch (error) {
+      return res.status(400).json(error);
     }
   }
 };
+
+export default handler;

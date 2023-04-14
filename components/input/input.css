@@ -1,11 +1,51 @@
 .base-input__container {
-    @apply flex flex-col space-y-[4px];
+  @apply flex flex-col space-y-[4px];
 }
 
 .base-label {
-    @apply text-[1rem] font-medium;
+  @apply text-[1rem] font-medium;
 }
 
 .base-input {
-    @apply font-medium placeholder:font-medium outline-none py-[14px] px-[16px] border-suportal-gray-100 border-[1px] rounded-[1rem] w-full;
+  @apply font-medium placeholder:font-medium outline-none py-[14px] px-[16px] border-suportal-gray-100 border-[1px] rounded-[1rem] w-full;
+}
+
+.base-s-input-element-container {
+  @apply w-full h-[120px];
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 42px;
+  grid-column-gap: 8px;
+  grid-row-gap: 0px;
+}
+
+.base-s-input-element-container .base-input__container {
+  @apply grow flex w-full;
+}
+
+.base-s-input {
+}
+
+.base-s-input-element-container {
+  @apply border-suportal-gray-100 py-[10px] w-[450px] px-[16px] border-[1px] rounded-[1rem] flex space-x-[24px] place-items-center justify-between h-fit;
+  margin: 0px;
+}
+
+.base-s-input-element-container label {
+  @apply text-[1rem] font-medium text-suportal-gray-dark mb-[4px];
+}
+
+.base-s-input-element-container .base-input__container input {
+  padding: 8px 0px !important;
+  @apply bg-transparent border-none w-full text-suportal-gray-dark;
+}
+
+.base-s-input-element-container button {
+  @apply flex-none border-none py-[12px] px-[13px];
+  margin: 0px !important;
+}
+
+.base-s-input-element-container p {
+  /* width: 100% !important; */
+  @apply text-suportal-gray-dark text-opacity-90 whitespace-normal;
 }
