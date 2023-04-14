@@ -5,8 +5,6 @@ export const apiUrl =
 
 
 export default function widgetString(chatbotTitle: string, websiteLink: string) {
-    console.log({ chatbotTitle, websiteLink });
-
     return `
     function getChatBot(chatHeaderTitle) {
         chatHeaderTitle.textContent = "${chatbotTitle}";
