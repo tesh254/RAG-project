@@ -84,10 +84,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         };
       }
     } catch (error) {
-      return res.status(500).json({
-        // @ts-ignore
-        message: error.message,
-      });
+      console.log(error);
+      // @ts-ignore
+      return res.status(500).send(error.message);
     }
   }
 };
