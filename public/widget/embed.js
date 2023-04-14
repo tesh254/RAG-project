@@ -60,8 +60,6 @@ function sendMessage(
 
         const chunk = decoder.decode(value, { stream: true });
 
-        if (chunk === ".\n") console.log({ chunk });
-
         if (chatReply.textContent === "Typing...") {
           chatReply.textContent = chunk;
         } else {
@@ -130,6 +128,10 @@ window.addEventListener("load", function () {
             animation: slide-up 0.3s ease-in-out;
             word-wrap: break-word;
             font-size: 14px;
+        }
+
+        input:focus {
+          outline: none !important;
         }
 
          @keyframes slide-up {
@@ -266,7 +268,11 @@ window.addEventListener("load", function () {
   chatInput.rows = 1;
   chatInput.placeholder = "How can I help?";
 
+<<<<<<< Updated upstream
   chatInput.style.cssText = `resize: none; width: 1fr; box-sizing: border-box; font-family: "SuportalMedium", sans-serif; font-weight: medium; padding: 10px 16px; outline: none;`;
+=======
+  chatInput.style.cssText = `resize: none; width: 100%; box-sizing: border-box; font-family: "SuportalMedium", sans-serif; font-weight: medium; padding: 10px 16px; outline: none !important border: none !important;`;
+>>>>>>> Stashed changes
 
   chatActionButton.innerHTML = chatActionIcon;
 

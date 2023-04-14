@@ -11,6 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   if (req.method === "GET") {
+    console.log(req.query.website_link);
     try {
       const supabaseClient = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL as string,
