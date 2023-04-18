@@ -32,3 +32,29 @@ a {
   box-sizing: border-box;
 }
 
+.chat-message {
+  margin: 5px;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 17px;
+  max-width: 90%;
+  animation: slide-up 0.3s ease-in-out;
+  word-wrap: break-word;
+  font-size: 14px;
+}
+
+textarea:focus {
+  outline: none !important;
+}
+
+ @keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+

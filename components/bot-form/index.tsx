@@ -54,9 +54,20 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
       });
 
       mutate("/api/chatbot", res.data);
+
+      if (data.bot.id) {
+        const getLinksRes = await axios.post("/api/get-links", {
+          website_link: state.website_link,
+          chatbot_id: data.bot.id,
+        });
+
+        mutate("/api/get-links", getLinksRes.data);
+      }
+
       setUpdating(false);
       toast.success("Suportal updated");
     } catch (error) {
+      console.log({ error });
       toast.error(
         "Sorry, there was a problem faced while updating your suportal"
       );

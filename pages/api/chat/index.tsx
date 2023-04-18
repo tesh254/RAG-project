@@ -1,6 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextApiRequest, NextApiResponse } from "next";
-import Cors from "nextjs-cors";
 import { StreamPayload, chatGPTStream } from "../../../lib/gpt-parser";
 
 type RequestData = {
@@ -8,17 +7,14 @@ type RequestData = {
   message: string;
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  await Cors(req, res, {
-    // Options
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-    origin: "*",
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  });
+export const config = {
+  runtime: 'edge',
+};
 
+const handler = async (req: Request) => {
   if (req.method === "POST") {
     try {
-      const body = req.body as RequestData;
+      const body = (await req.json()) as RequestData;
 
       const supabaseClient = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL as string,
@@ -39,9 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             All the support docs are here: ${body.website_link}
 
-            Write an answer to the user's question
-
-            no markdown, return the response in number bullets
+            Write an answer to the user's question in markdown format
         `;
 
         const data: StreamPayload = {
@@ -56,25 +50,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           n: 1,
         };
 
-        const parsedResponse = await chatGPTStream(data);
+        const stream = await chatGPTStream(data);
 
-        const reader = parsedResponse.getReader();
-
-        const decoder = new TextDecoder();
-
-        let done = false;
-
-        while (!done) {
-          const { value, done: doneReading } = await reader.read();
-
-          done = doneReading;
-
-          const chunkValue = decoder.decode(value);
-
-          res.write(chunkValue);
-        }
-
-        res.end();
+        return new Response(stream);
       } else {
         throw {
           message:
