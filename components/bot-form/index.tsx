@@ -1,11 +1,12 @@
 import React, { useEffect, useState, FC } from "react";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import axios from "axios";
 import Input from "../input";
 import Button from "../button";
 import { toast } from "react-hot-toast";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { apiUrl } from "../../public/widget/embed-string";
+import Paths from "../paths";
 
 const fetcher: any = (url: string) =>
   axios
@@ -54,16 +55,6 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
       });
 
       mutate("/api/chatbot", res.data);
-
-      if (data.bot.id) {
-        const getLinksRes = await axios.post("/api/get-links", {
-          website_link: state.website_link,
-          chatbot_id: data.bot.id,
-        });
-
-        mutate("/api/get-links", getLinksRes.data);
-      }
-
       setUpdating(false);
       toast.success("Suportal updated");
     } catch (error) {
@@ -108,6 +99,8 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
     </span>
   );
 
+  console.log({ data });
+
   const copyText = () => {
     if (state.title && state.website_link) {
       // Create a temporary element to hold the text
@@ -132,8 +125,8 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
   };
 
   return (
-    <div className="w-full h-screen">
-      <div className="mx-auto mt-[32px] bg-white w-fit-content p-[24px] rounded-[26px] w-[500px]">
+    <div className="w-full space-x-[24px] h-auto flex justify-center place-items-center">
+      <div className="mx-auto mt-[4px] bg-white w-fit-content p-[24px] rounded-[26px] w-[500px]">
         <h6 className="text-black mb-[32px] text-[25px]">
           Manage Your Suportal
         </h6>
@@ -216,6 +209,9 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
           </div>
         </div>
       </div>
+      {data && data.bot && data.bot.id && (
+        <Paths chatbot_id={data.bot.id} website_link={data.bot.website_link} />
+      )}
       {/* {!user.confirmed_at && (
         <div className="space-x-[10px] max-w-[500px] w-full mx-auto bg-suportal-red mt-[17px] py-[16px] flex place-items-center justify-center rounded-[16px]">
           <svg
