@@ -35,7 +35,9 @@ const handler = async (req: Request) => {
 
             All the support docs are here: ${body.website_link}
 
-            Write an answer to the user's question in markdown format
+            Write an answer to the user's question
+
+            Answer as markdown
         `;
 
         const data: StreamPayload = {

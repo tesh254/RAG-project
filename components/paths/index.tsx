@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 
 type PathsType = {
-  id: string;
+  id: number;
   path: string;
   chatbot_id: number;
   is_trained: boolean;
@@ -33,9 +33,9 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
 
   useEffect(() => {
     if (data && data.paths) {
-      setPaths(data.paths);
+      setPaths(data?.paths);
     }
-  }, [data, data.paths]);
+  }, [data, data?.paths]);
 
   useEffect(() => {
     if (query) {
@@ -45,12 +45,25 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
 
       setPaths(results);
     } else {
-      setPaths(data.paths);
+      setPaths(data?.paths);
     }
-  }, [query, data, data.paths, paths]);
+  }, [query, data, data?.paths, paths]);
 
-  const getContent = (link: string) => {
-    return;
+  const getContent = (link: string, path_id: number, path: string) => {
+    axios
+      .post("/api/get-content", {
+        base_link: link,
+        path,
+        website_link_id: path_id,
+      })
+      .then((r) => {
+        toast.success(
+          `${link} content is being retrieved and trained, this might take a couple of minutes`
+        );
+      })
+      .catch((err) => {
+        toast.error(`Problem retrieving content from: ${link}`);
+      });
   };
 
   const getLinks = async () => {
@@ -61,10 +74,13 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
           chatbot_id: chatbot_id,
         })
         .then((res) => {
-          toast.loading(`We are refreshing the links for ${website_link}`, {
-            duration: Infinity,
-            position: "top-center",
-          });
+          toast.loading(
+            `We are refreshing the links for ${website_link}, this will take close to 10 minutes, you can make a coffee ☕️ in the meantime`,
+            {
+              duration: Infinity,
+              position: "top-center",
+            }
+          );
         })
         .catch((err) => {
           toast.error(
@@ -76,7 +92,7 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
 
   return (
     <div className="h-[495px] p-[24px] w-[500px] overflow-y-hidden rounded-[26px] bg-white">
-      <div className="flex justify-between space-x-[24px]">
+      <div className="flex justify-between space-x-[24px] pb-[16px]">
         <p className="text-[18px] text-black">Paths</p>
         <input
           type="search"
@@ -133,10 +149,10 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
         </div>
       )}
       {!isLoading && data && (
-        <div className="overflow-y-scroll h-full scrollbar-none">
-          {data.paths.length > 0 && (
+        <div className="overflow-y-scroll h-full scrollbar-none pb-[24px]">
+          {data?.paths.length > 0 && (
             <>
-              {paths.map((path: PathsType) => {
+              {paths?.map((path: PathsType) => {
                 return (
                   <div
                     className="flex place-items-center justify-between space-x-[8px] space-y-[8px] border-b-[1px] border-suportal-gray-100 py-[8px]"
@@ -147,7 +163,11 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
                     </p>
                     <button
                       onClick={() => {
-                        getContent(`${website_link}${path.path}`);
+                        getContent(
+                          `${website_link}${path.path}`,
+                          path.id,
+                          path.path
+                        );
                       }}
                       className="bg-suportal-purple text-suportal-purple hover:bg-opacity-30 place-items-center bg-opacity-10 flex border-[1px] border-suportal-purple p-[4px] rounded-[8px]"
                     >
