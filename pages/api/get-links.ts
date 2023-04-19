@@ -18,6 +18,8 @@ const handler: NextApiHandler = async (
     try {
         const body = req.body;
 
+        console.log({ scrapperUrl });
+
         const response = await axios.post(`${scrapperUrl}/suportal-links/${body.chatbot_id}`, {
             website_link: body.website_link,
         }, {
