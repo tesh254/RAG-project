@@ -29,7 +29,8 @@ const handler: NextApiHandler = async (
       console.log({ response: response.data });
       return res.status(200).json(response.data);
     } catch (error) {
-      console.log({ error });
+      // @ts-ignore
+      console.log({ error: error.response.data });
       return res.status(500).json({
         message: "Problem receiving and processing content",
       });
