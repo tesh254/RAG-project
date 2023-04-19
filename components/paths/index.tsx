@@ -32,30 +32,6 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
     fetcher
   );
 
-  // const supabaseClient = useSupabaseClient();
-
-  // useEffect(() => {
-  //   const realtimeChannel = supabaseClient
-  //     .channel("websitelinks-channel")
-  //     .on(
-  //       "postgres_changes",
-  //       {
-  //         event: "INSERT",
-  //         schema: "public",
-  //         table: "websitelink",
-  //         filter: `chatbot_id=eq.${chatbot_id}`,
-  //       },
-  //       (payload) => {
-  //         console.log(payload);
-  //       }
-  //     )
-  //     .subscribe();
-
-  //     return () => {
-  //       realtimeChannel.unsubscribe();
-  //     }
-  // }, [chatbot_id, supabaseClient]);
-
   useEffect(() => {
     if (data && data.paths) {
       setPaths(data?.paths);

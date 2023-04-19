@@ -209,28 +209,6 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
       {data && data.bot && data.bot.id && (
         <Paths chatbot_id={data.bot.id} website_link={data.bot.website_link} />
       )}
-      {/* {!user.confirmed_at && (
-        <div className="space-x-[10px] max-w-[500px] w-full mx-auto bg-suportal-red mt-[17px] py-[16px] flex place-items-center justify-center rounded-[16px]">
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 22 22"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M11 7V11M11 15H11.01M21 11C21 16.5228 16.5228 21 11 21C5.47715 21 1 16.5228 1 11C1 5.47715 5.47715 1 11 1C16.5228 1 21 5.47715 21 11Z"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <p className="text-white font-suportal-medium">
-            Verify your account by clicking the link sent to your email
-          </p>
-        </div>
-      )} */}
     </div>
   );
 };
