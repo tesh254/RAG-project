@@ -17,18 +17,22 @@ const handler: NextApiHandler = async (
 
   if (req.method === "POST") {
     try {
-        const body = req.body;
+      const body = req.body;
 
-        const response = await axios.post(`${scrapperUrl}/suportal-content/${body.website_link_id}`, {
-            base_link: body.base_link,
-            path: body.path,
-        });
-
-        return res.status(200).json(response.data);
+      const response = await axios.post(
+        `${scrapperUrl}/suportal-content/${body.website_link_id}`,
+        {
+          base_link: body.base_link,
+          path: body.path,
+        }
+      );
+      console.log({ response: response.data });
+      return res.status(200).json(response.data);
     } catch (error) {
-        return res.status(500).json({
-            message: "Problem receiving and processing content"
-        })
+      console.log({ error });
+      return res.status(500).json({
+        message: "Problem receiving and processing content",
+      });
     }
   }
 
@@ -40,8 +44,9 @@ const handler: NextApiHandler = async (
         process.env.NEXT_PUBLIC_SUPABASE_URL as string,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
       );
-      
-      const { data: path, error } = await supabaseClient.from("websitelink")
+
+      const { data: path, error } = await supabaseClient
+        .from("websitelink")
         .delete()
         .eq("id", parseInt(body.path_id, 10));
 
@@ -49,7 +54,7 @@ const handler: NextApiHandler = async (
         throw error;
       }
 
-      return res.status(200).json({ path_id: body.path_id })
+      return res.status(200).json({ path_id: body.path_id });
     } catch (error) {
       return res.status(500).json({
         message: "Problem experienced deleting website link",

@@ -67,9 +67,6 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
           );
         })
         .catch((err) => {
-          toast.error(
-            "Please confirm the link is in the correct format, example: https://<your-domain>"
-          );
         });
     }
   };
