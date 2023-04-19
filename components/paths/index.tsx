@@ -51,7 +51,7 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
   useEffect(() => {
     const interval = setInterval(() => {
       refetch();
-    }, 20000);
+    }, 600000);
 
     return () => {
       clearInterval(interval);
