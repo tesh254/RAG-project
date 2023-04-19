@@ -5,8 +5,9 @@ import { PathsType } from "../paths";
 const PathLink: FC<{
   path: PathsType;
   website_link: string;
+  refetch: () => void;
   handleRemovedLink: (path_id: number) => void;
-}> = ({ path, website_link, handleRemovedLink }) => {
+}> = ({ path, website_link, handleRemovedLink, refetch }) => {
   const getContent = (link: string, path_id: number, path: string) => {
     axios
       .post("/api/get-content", {

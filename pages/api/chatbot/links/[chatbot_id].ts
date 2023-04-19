@@ -17,7 +17,8 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
             const { data, error } = await supabaseServerClient
                 .from("websitelink")
                 .select("*")
-                .eq("chatbot_id", req.query.chatbot_id);
+                .eq("chatbot_id", req.query.chatbot_id)
+                .order("updated_at", { ascending: true });
 
             if (error) {
                 throw error;

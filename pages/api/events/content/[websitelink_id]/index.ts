@@ -71,6 +71,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                 await supabaseClient.from("websitelink")
                     .update({
                         is_trained: true,
+                        updated_at: new Date().toISOString(),
                     })
                     .eq("id", websitelinkId);
 
