@@ -8,10 +8,11 @@ interface Chat {
   chat: {
     title: string;
     website_link: string;
+    id: number;
   };
 }
 
-const Widget: NextPage<Chat> = ({ chat: { title, website_link } }) => {
+const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
   const [chats, setChats] = useState<
     { message: string; user: "reply" | "sender"; id: number }[]
   >([]);
@@ -41,6 +42,7 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link } }) => {
       body: JSON.stringify({
         message: text,
         website_link,
+        chatbot_id: id,
       }),
     })
       .then(async (response) => {
@@ -188,27 +190,19 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { data: chatbot, error } = await supabase
     .from("chatbot")
     .select("*")
-    .eq("user_id", ctx.query.identifier);
+    .eq("user_id", ctx.query.identifier)
+    .limit(1)
+    .single();
 
-  if (chatbot?.length === 0) {
-    return {
-      props: {
-        chat: {
-          title: "",
-          website_link: "",
-        },
+  return {
+    props: {
+      chat: {
+        title: chatbot?.title ?? "",
+        website_link: chatbot?.website_link ?? "",
+        id: chatbot?.id,
       },
-    };
-  } else {
-    return {
-      props: {
-        chat: {
-          title: chatbot ? chatbot[0].title : "",
-          website_link: chatbot ? chatbot[0].website_link : "",
-        },
-      },
-    };
-  }
+    },
+  };
 };
 
 export default Widget;

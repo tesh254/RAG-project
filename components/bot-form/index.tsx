@@ -54,7 +54,6 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
         withCredentials: true,
       });
 
-      mutate("/api/chatbot", res.data);
       setUpdating(false);
       toast.success("Suportal updated");
     } catch (error) {
@@ -98,8 +97,6 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
       {`/${user.id}"></script>`}
     </span>
   );
-
-  console.log({ data });
 
   const copyText = () => {
     if (state.title && state.website_link) {

@@ -2,8 +2,9 @@ import React, { FC, useState, useEffect } from "react";
 import useSWR from "swr";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import PathLink from "../link";
 
-type PathsType = {
+export type PathsType = {
   id: number;
   path: string;
   chatbot_id: number;
@@ -31,6 +32,30 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
     fetcher
   );
 
+  // const supabaseClient = useSupabaseClient();
+
+  // useEffect(() => {
+  //   const realtimeChannel = supabaseClient
+  //     .channel("websitelinks-channel")
+  //     .on(
+  //       "postgres_changes",
+  //       {
+  //         event: "INSERT",
+  //         schema: "public",
+  //         table: "websitelink",
+  //         filter: `chatbot_id=eq.${chatbot_id}`,
+  //       },
+  //       (payload) => {
+  //         console.log(payload);
+  //       }
+  //     )
+  //     .subscribe();
+
+  //     return () => {
+  //       realtimeChannel.unsubscribe();
+  //     }
+  // }, [chatbot_id, supabaseClient]);
+
   useEffect(() => {
     if (data && data.paths) {
       setPaths(data?.paths);
@@ -48,23 +73,6 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
       setPaths(data?.paths);
     }
   }, [query, data, data?.paths, paths]);
-
-  const getContent = (link: string, path_id: number, path: string) => {
-    axios
-      .post("/api/get-content", {
-        base_link: link,
-        path,
-        website_link_id: path_id,
-      })
-      .then((r) => {
-        toast.success(
-          `${link} content is being retrieved and trained, this might take a couple of minutes`
-        );
-      })
-      .catch((err) => {
-        toast.error(`Problem retrieving content from: ${link}`);
-      });
-  };
 
   const getLinks = async () => {
     if (chatbot_id) {
@@ -154,35 +162,11 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
             <>
               {paths?.map((path: PathsType) => {
                 return (
-                  <div
-                    className="flex place-items-center justify-between space-x-[8px] space-y-[8px] border-b-[1px] border-suportal-gray-100 py-[8px]"
+                  <PathLink
                     key={path.id}
-                  >
-                    <p className="text-suportal-gray-dark select-none grow text-[12px]">
-                      {path.path}
-                    </p>
-                    <button
-                      onClick={() => {
-                        getContent(
-                          `${website_link}${path.path}`,
-                          path.id,
-                          path.path
-                        );
-                      }}
-                      className="bg-suportal-purple text-suportal-purple hover:bg-opacity-30 place-items-center bg-opacity-10 flex border-[1px] border-suportal-purple p-[4px] rounded-[8px]"
-                    >
-                      <svg
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        className="h-[10px] w-[10px]"
-                      >
-                        <path d="M11.983 1.907a.75.75 0 00-1.292-.657l-8.5 9.5A.75.75 0 002.75 12h6.572l-1.305 6.093a.75.75 0 001.292.657l8.5-9.5A.75.75 0 0017.25 8h-6.572l1.305-6.093z"></path>
-                      </svg>
-                      <span className="text-[12px]">train</span>
-                    </button>
-                  </div>
+                    website_link={website_link}
+                    path={path}
+                  />
                 );
               })}
             </>
