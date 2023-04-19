@@ -38,7 +38,7 @@ export default function Layout({
       <Script strategy="afterInteractive" src="http://localhost:3000/api/widget/ea8a05af-102b-4862-828b-530489106e52" />
       <Navbar />
       <main id="skip" className="bg-suportal-bg mt-[80px]">
-        <section className="max-w-screen-lg mx-auto px-2 py-[16px] min-h-screen">
+        <section className="max-w-screen-lg mx-auto px-2 py-[16px]">
           {children}
         </section>
       </main>

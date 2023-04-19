@@ -39,12 +39,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           }
         : { website_link: "", title: "" };
 
-      const script = widgetString(chat.title, chat.website_link);
+      const script = widgetString(req.query.identifier as unknown as string);
 
       res.setHeader("Content-Type", "application/javascript");
       res.status(200).send(script);
     } catch (error) {
-      const script = widgetString("", "");
+      const script = widgetString(req.query.identifier as unknown as string);
 
       res.setHeader("Content-Type", "application/javascript");
       res.status(200).send(script);
