@@ -19,10 +19,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
             );
             body.links.forEach(async (item: string) => {
-                console.log({ item, chatbotId })
                 const { data: result, error } = await supabaseClient.from("websitelink").select("*").eq('path', item).eq("chatbot_id", chatbotId)
-
-                console.log({ result, error })
 
                 if (result?.length !== 0) {
                     return;

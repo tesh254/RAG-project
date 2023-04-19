@@ -68,9 +68,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                     .select()
                     .limit(1)
                     .single()
-
-                console.log({ data: spResponse.data, error: spResponse.error });
-
                 await supabaseClient.from("websitelink")
                     .update({
                         is_trained: true,
@@ -86,7 +83,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                 };
             }
         } catch (error) {
-            console.log({ error })
             return res.status(500).json({
                 message: "Problem get website links"
             })

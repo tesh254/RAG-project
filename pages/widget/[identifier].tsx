@@ -94,7 +94,6 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
         setIsSending(false);
       })
       .catch((error) => {
-        console.log(error);
         setIsSending(false);
       });
   };

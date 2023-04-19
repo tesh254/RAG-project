@@ -18,8 +18,6 @@ const handler: NextApiHandler = async (
     try {
         const body = req.body;
 
-        console.log({ scrapperUrl });
-
         const response = await axios.post(`${scrapperUrl}/suportal-links/${body.chatbot_id}`, {
             website_link: body.website_link,
         }, {
@@ -28,12 +26,8 @@ const handler: NextApiHandler = async (
           }
         });
 
-        console.log(response.data);
-
         return res.status(200).json(response.data);
     } catch (error) {
-      // @ts-ignore
-      console.log({ error: error.response.data })
         return res.status(500).json({
             message: "Problem processing links"
         })
