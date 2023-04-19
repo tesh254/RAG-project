@@ -22,6 +22,8 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
   const chatListRef = useRef<LegacyRef<HTMLDivElement>>();
 
   const sendText = () => {
+    const $text = text;
+    setText("");
     setIsSending(true);
     const newChat: any = {
       message: text,
@@ -40,14 +42,12 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        message: text,
+        message: $text,
         website_link,
         chatbot_id: id,
       }),
     })
       .then(async (response) => {
-        setText("");
-
         // @ts-ignore
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -80,8 +80,12 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
             const updatedChats = [...prev];
             updatedChats.splice(typingChatIndex, 1, updatedChat);
             if (chatListRef.current) {
-              // @ts-ignore
-              chatListRef.current?.scrollIntoView({ behavior: "smooth" });
+              //@ts-ignore
+              chatListRef.current?.scrollTo({
+                //@ts-ignore
+                top: chatListRef.current?.scrollHeight,
+                behavior: "smooth",
+              });
             }
             return updatedChats;
           });
@@ -101,7 +105,10 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
         <h6 className="font-suportal-bold text-[16px]">{title ?? "Chat"}</h6>
       </div>
       <div className="grow relative mt-[16px] px-[1px]">
-        <div className="flex flex-col items-end w-full h-auto max-h-[100%] overflow-y-scroll mb-[13px] absolute bottom-0 w-[95%]">
+        <div
+          ref={chatListRef as LegacyRef<HTMLDivElement>}
+          className="flex flex-col items-end w-full h-auto max-h-[100%] overflow-y-scroll mb-[13px] absolute bottom-0 w-[95%]"
+        >
           {chats.map((chat) => {
             return (
               <div
@@ -117,7 +124,6 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
             );
           })}
         </div>
-        <div ref={chatListRef as LegacyRef<HTMLDivElement>} />
       </div>
       <div className="pt-0 pl-[16px] pb-[4px] pr-[16px] max-h-[58px] relative">
         <div
