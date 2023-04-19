@@ -166,6 +166,15 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
                     key={path.id}
                     website_link={website_link}
                     path={path}
+                    handleRemovedLink={(path_id) => {
+                      if (data && data.paths) {
+                        const $newPaths = data.paths.filter(
+                          (item: PathsType) => item.id != path_id
+                        );
+
+                        setPaths($newPaths);
+                      }
+                    }}
                   />
                 );
               })}

@@ -122,7 +122,7 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
   };
 
   return (
-    <div className="w-full space-x-[24px] h-auto flex justify-center place-items-center">
+    <div className="w-full space-y-[24px] h-auto flex justify-center flex-col place-items-center">
       <div className="mx-auto mt-[4px] bg-white w-fit-content p-[24px] rounded-[26px] w-[500px]">
         <h6 className="text-black mb-[32px] text-[25px]">
           Manage Your Suportal
