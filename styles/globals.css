@@ -59,3 +59,6 @@ textarea:focus {
   }
 }
 
+p a {
+  @apply text-suportal-blue;
+}

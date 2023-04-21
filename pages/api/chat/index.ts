@@ -17,6 +17,15 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+function isJsonParsable(str: string): boolean {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     try {
@@ -64,14 +73,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // console.log({ parsedMessage: message.trim().split("data: ") });
         if (message !== "[DONE]") {
           const crMsg = message.trim().split("data: ").filter((item: string) => item !== "" && item !== "[DONE]");
-          if (crMsg === "[DONE]") {
-            res.end();
-          } else {
-            console.log(crMsg[0])
+          if (isJsonParsable(crMsg[0])) {
             const parsedMessage: any = JSON.parse(crMsg[0]);
             const text = parsedMessage.choices[0]?.text.toString();
-            res.write(text);
+            return res.write(text);
           }
+          return;
         } else {
           res.end();
         }
