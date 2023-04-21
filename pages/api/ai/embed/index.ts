@@ -2,10 +2,17 @@ import { createClient } from "@supabase/supabase-js";
 import { cosSimilarity, trimStr } from "../../../../lib/sanitizer";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
+import Cors from "nextjs-cors";
 
 const openAiKey = process.env.OPEN_API_KEY;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  await Cors(req, res, {
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    origin: "*",
+    optionsSuccessStatus: 200,
+  });
+
   if (req.method === "POST") {
     try {
       const body = req.body;

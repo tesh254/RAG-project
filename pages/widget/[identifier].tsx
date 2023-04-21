@@ -3,6 +3,7 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { LegacyRef, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import axios from "axios";
 
 interface Chat {
   chat: {
@@ -11,6 +12,9 @@ interface Chat {
     id: number;
   };
 }
+
+const coreUrl = process.env.NEXT_PUBLIC_SCRAPER_BACKEND_URL;
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
   const [chats, setChats] = useState<
@@ -36,35 +40,31 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
       id: chats.length + 2,
     };
     setChats((prev) => [...prev, newChat, typingChat]);
-    fetch("/api/chat", {
-      method: "POST",
+    axios({
+      method: "post",
+      url: `${coreUrl}/core-chat`,
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
+      responseType: "arraybuffer",
+      data: {
         message: $text,
         website_link,
         chatbot_id: id,
-      }),
+      },
     })
       .then(async (response) => {
-        // @ts-ignore
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-
+        const reader = new Response(response.data)?.body?.getReader();
         let done = false;
         let accumulatedChunks = "";
-
         while (!done) {
-          const { value, done: doneReading } = await reader.read();
-
+          // @ts-ignore
+          const { value, done: doneReading } = await reader?.read();
           if (doneReading) {
             done = true;
           }
-
-          const chunk = decoder.decode(value);
+          const chunk = new TextDecoder("utf-8").decode(value);
           accumulatedChunks += chunk;
-
           setChats((prev) => {
             const typingChatIndex = prev.findIndex(
               (item) => item.id === typingChat.id
@@ -91,7 +91,7 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
           });
         }
       })
-      .catch((error) => {
+      .catch((error: any) => {
         setIsSending(false);
       });
     setIsSending(false);

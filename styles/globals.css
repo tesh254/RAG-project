@@ -62,3 +62,8 @@ textarea:focus {
 p a {
   @apply text-suportal-blue;
 }
+
+ol {
+  list-style-type: decimal !important;
+  @apply ml-[24px];
+}
