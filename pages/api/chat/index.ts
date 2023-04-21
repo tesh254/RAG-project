@@ -63,6 +63,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         message = message.replace(/\n/g, "").trim();
         if (message !== "[DONE]") {
           const parsedMessage: any = JSON.parse(message.trim().split("data: ").filter((item: string) => item !== "")[0]);
+          console.log({ parsedMessage });
           const text = parsedMessage.choices[0]?.text.toString();
           res.write(text);
         } else {
