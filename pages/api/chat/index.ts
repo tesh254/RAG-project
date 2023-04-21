@@ -1,6 +1,6 @@
-import { createConfiguration, OpenAIApi } from "@fortaine/openai";
-import { streamCompletion } from "@fortaine/openai/stream";
-import { StreamPayload, chatGPTStream } from "../../../lib/gpt-parser";
+import { Configuration, CreateCompletionResponse, OpenAIApi } from "openai";
+import { Readable, Transform } from 'stream';
+import { StreamPayload } from "../../../lib/gpt-parser";
 import { apiUrl } from "../../../public/widget/embed-string";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -11,17 +11,9 @@ export type RequestData = {
   chatbot_id: number;
 };
 
-// export const config = {
-//   runtime: "edge",
-// };
-
-const configuration = createConfiguration({
-  authMethods: {
-    apiKeyAuth: {
-      accessToken: process.env.OPEN_API_KEY as unknown as string,
-    }
-  }
-});
+const configuration = new Configuration({
+  apiKey: process.env.OPEN_API_KEY as unknown as string,
+})
 
 const openai = new OpenAIApi(configuration);
 
@@ -41,17 +33,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const { context } = response;
 
       const content = `
-            You are helping answer a user's question
+        You are helping answer a user's question
 
-            Use the paragraph below as context:
-            ${context}
+        Use the paragraph below as context:
+        ${context}
 
-            Their question was: "${body.message}"
+        Their question was: "${body.message}"
 
-            Write an answer to the user's question
+        Write an answer to the user's question
 
-            Answer as markdown
-        `;
+        Answer as markdown
+      `;
 
       const data: StreamPayload = {
         model: "text-davinci-003",
@@ -61,36 +53,43 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         stream: true,
       };
 
-      const completion = await openai.createCompletion(data);
+      const completion = await openai.createCompletion(data, { responseType: "stream" });
+      const stream = completion.data as unknown as Readable;
 
-      res.setHeader("Content-Type", "text/plain");
-      // @ts-ignore
-      for await (const message of streamCompletion(completion)) {
-        try {
-          const parsed = JSON.parse(message);
-          const { text } = parsed.choices[0];
+      res.setHeader("Content-Type", "application/octet-stream");
+
+      stream.on("data", (chunk) => {
+        let message: any = Buffer.from(chunk).toString();
+        message = message.replace(/\n/g, "").trim();
+        if (message !== "[DONE]") {
+          const parsedMessage: any = JSON.parse(message.trim().split("data: ").filter((item: string) => item !== "")[0]);
+          const text = parsedMessage.choices[0]?.text.toString();
           res.write(text);
-        } catch (error) {
-          console.error("Could not JSON parse stream message", message, error);
+        } else {
+          res.end();
         }
-      }
-      res.end();
+      });
     } catch (err) {
-      const error: any = err;
-      if (error.code) {
-        try {
-          const parsed = JSON.parse(error.body);
-          console.error("An error occurred during OpenAI request: ", parsed);
-        } catch (error) {
-          console.error("An error occurred during OpenAI request: ", error);
-        }
-      } else {
-        console.error("An error occurred during OpenAI request", error);
-      }
-      res.status(500).end();
+      res.write(`We are currently facing an issue on processing messages, please try again later`);
+      res.end();
     }
   }
 };
 
-
 export default handler;
+
+// stream.data.on('data', (data: string) => {
+//   const lines = data.toString().split('\n').filter((line) => line.trim() !== '');
+//   for (const line of lines) {
+//     const message = line.replace(/^data: /, '');
+//     if (message === '[DONE]') {
+//       return; // Stream finished
+//     }
+//     try {
+//       const parsed = JSON.parse(message);
+//       return parsed.choices[0].text;
+//     } catch (error) {
+//       console.error('Could not JSON parse stream message', message, error);
+//     }
+//   }
+// });

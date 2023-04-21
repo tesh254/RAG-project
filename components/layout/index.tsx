@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 import Navbar from "../navbar";
+import Script from "next/script";
 
 export default function Layout({
   children,
@@ -34,6 +35,12 @@ export default function Layout({
         <meta name="twitter:description" content={title} />
         {/* <meta name="twitter:image" content={meta.cardImage} /> */}
       </Head>
+      {process.env.NODE_ENV === "development" && (
+        <Script
+          strategy="afterInteractive"
+          src="http://localhost:3000/api/widget/ea8a05af-102b-4862-828b-530489106e52"
+        />
+      )}
       <Navbar />
       <main id="skip" className="bg-suportal-bg mt-[80px]">
         <section className="max-w-screen-lg mx-auto px-2 py-[16px]">
