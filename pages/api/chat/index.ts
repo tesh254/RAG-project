@@ -63,8 +63,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         message = message.replace(/\n/g, "").trim();
         // console.log({ parsedMessage: message.trim().split("data: ") });
         if (message !== "[DONE]") {
-          const crMsg = message.trim().split("data: ").filter((item: string) => item !== "")
-
+          const crMsg = message.trim().split("data: ").filter((item: string) => item !== "" && item !== "[DONE]");
           if (crMsg === "[DONE]") {
             res.end();
           } else {
