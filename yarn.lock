@@ -5288,6 +5288,7 @@ __metadata:
     tailwindcss: ^3.3.1
     typescript: 5.0.4
     uglify-js: ^3.17.4
+    url-parse: ^1.5.10
   languageName: unknown
   linkType: soft
 
@@ -5769,7 +5770,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-parse@npm:^1.4.3":
+"url-parse@npm:^1.4.3, url-parse@npm:^1.5.10":
   version: 1.5.10
   resolution: "url-parse@npm:1.5.10"
   dependencies:
