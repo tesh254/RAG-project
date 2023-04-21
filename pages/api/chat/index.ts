@@ -61,11 +61,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       stream.on("data", (chunk) => {
         let message: any = Buffer.from(chunk).toString();
         message = message.replace(/\n/g, "").trim();
+        // console.log({ parsedMessage: message.trim().split("data: ") });
         if (message !== "[DONE]") {
-          const parsedMessage: any = JSON.parse(message.trim().split("data: ").filter((item: string) => item !== "")[0]);
-          console.log({ parsedMessage });
-          const text = parsedMessage.choices[0]?.text.toString();
-          res.write(text);
+          const crMsg = message.trim().split("data: ").filter((item: string) => item !== "")
+
+          if (crMsg === "[DONE]") {
+            res.end();
+          } else {
+            console.log(crMsg[0])
+            const parsedMessage: any = JSON.parse(crMsg[0]);
+            const text = parsedMessage.choices[0]?.text.toString();
+            res.write(text);
+          }
         } else {
           res.end();
         }

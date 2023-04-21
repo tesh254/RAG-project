@@ -90,12 +90,11 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
             return updatedChats;
           });
         }
-
-        setIsSending(false);
       })
       .catch((error) => {
         setIsSending(false);
       });
+    setIsSending(false);
   };
 
   return (
