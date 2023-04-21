@@ -47,21 +47,6 @@ export default function widgetString(identifier: string) {
 
       iframe.width = "100%";
       iframe.height = "100%";
-
-      // iframe.style.position = "fixed";
-      // iframe.style.right = "0";
-      // iframe.style.zIndex = "1000";
-      // iframe.style.border = "none";
-      // iframe.style.width = "100%";
-      // iframe.style.bottom = window.innerWidth <640 ? "0" : "80px";
-      // iframe.style.right = window.innerWidth <640 ? "0" : "16px";
-      // iframe.style.width = window.innerWidth <640 ? "100%" : "448px";
-      // iframe.style.height = window.innerWidth <640 ? "100%" : "90dvh";
-      // iframe.style.borderRadius = window.innerWidth <640 ? "0" : "0.75rem";
-      // iframe.style.boxShadow =
-      //   "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)";
-      // iframe.style.zIndex = "9999999";
-      // iframe.style.display = "none";
       chatContainer.appendChild(iframe);
     
       document.body.appendChild(toggleButton);
