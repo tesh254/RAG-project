@@ -70,6 +70,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
       });
     } catch (err) {
+      console.log(err);
       res.write(`We are currently facing an issue on processing messages, please try again later`);
       res.end();
     }
