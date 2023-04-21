@@ -28,7 +28,7 @@ export default function widgetString(identifier: string) {
                   </defs>
                   </svg>
                     \`;
-      toggleButton.style.cssText = \`outline: none; border-radius: 16px; border: none; background: #8748FF; height: 60px; width: 60px; transition: 0.3s all; position: fixed; right: 32px; bottom: 32px; cursor: pointer; display: flex; justify-content: center; place-items: center; \`;
+      toggleButton.style.cssText = \`outline: none; border-radius: 16px; border: none; background: #8748FF; height: 60px; width: 60px; transition: 0.3s all; position: fixed; right: 32px; bottom: 32px; cursor: pointer; display: flex; justify-content: center; place-items: center; z-index: 99999;\`;
     
       chatContainer.style.cssText = \`z-index: 99999; overflow: hidden; width: 300px; height: 434px; border-radius: 20px; position: fixed; bottom: 109px; right: 32px; display: none; flex-direction: column; background: #fff; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1); \`;
     
