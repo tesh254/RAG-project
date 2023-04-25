@@ -54,6 +54,12 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
         withCredentials: true,
       });
 
+      const { bot } = res.data;
+
+      await axios.post("/api/billing/create", {
+        chatbot_id: bot.id,
+      });
+
       setUpdating(false);
       toast.success("Suportal updated");
     } catch (error) {
