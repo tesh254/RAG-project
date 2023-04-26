@@ -1,7 +1,7 @@
 import React, { LegacyRef, ReactNode, forwardRef } from "react";
 
 interface IButtonProps {
-  kind: "primary" | "secondary";
+  kind: "primary" | "secondary" | "third";
   onClick: () => void;
   children: ReactNode;
   icon?: ReactNode;
