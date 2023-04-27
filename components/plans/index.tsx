@@ -128,7 +128,7 @@ const Plans: FC<Props> = ({ plans, billing }) => {
                     onClick={() => {}}
                     type="button"
                     className=" py-[7px]"
-                    disabled={billing.plan_label === plan.product.name}
+                    disabled={billing.product_id === plan.id}
                   >
                     {billing.plan_label === plan.product.name
                       ? "Current Plan"

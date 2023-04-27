@@ -13,6 +13,7 @@ export type Billing = {
   chatbot_id?: number;
   plan_slug?: string;
   plan_label?: string;
+  product_id?: string;
 };
 
 export type PlansType = {
