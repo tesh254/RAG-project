@@ -10,7 +10,9 @@
     "bundle:widget": "uglifyjs public/widget/embed.js -o public/widget/embed.min.js -c pure_funcs -m --verbose"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.14",
     "@microsoft/fetch-event-source": "^2.0.1",
+    "@stripe/react-stripe-js": "^2.1.0",
     "@stripe/stripe-js": "^1.52.1",
     "@supabase/auth-helpers-nextjs": "^0.6.0",
     "@supabase/auth-helpers-react": "^0.3.1",
@@ -19,8 +21,10 @@
     "cheerio": "^1.0.0-rc.12",
     "eventsource-parser": "^1.0.0",
     "gpt3-tokenizer": "^1.1.5",
+    "micro": "^10.0.1",
     "natural": "^6.2.0",
     "next": "13.3.0",
+    "next-connect": "^0.13.0",
     "nextjs-cors": "^2.1.2",
     "openai": "^3.2.1",
     "puppeteer": "^19.9.0",

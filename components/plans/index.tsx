@@ -1,8 +1,11 @@
-import axios from "axios";
 import React, { FC, useEffect, useRef } from "react";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
+import { toast } from "react-hot-toast";
+import { Elements } from "@stripe/react-stripe-js";
+import { useUser } from "@supabase/auth-helpers-react";
 import { Billing, PlansType } from "../../pages/billing";
 import Button from "../button";
+import Checkout from "../checkout";
 
 type Props = {
   plans: PlansType[];
@@ -33,6 +36,7 @@ const CheckIcon = ({
 
 const Plans: FC<Props> = ({ plans, billing }) => {
   const stripeRef = useRef<Stripe | null>(null);
+  const user = useUser();
 
   useEffect(() => {
     (async () => {
@@ -42,17 +46,23 @@ const Plans: FC<Props> = ({ plans, billing }) => {
     })();
   }, []);
 
+  const changePlan = async (priceId: string) => {
+    // @ts-ignore
+    const { error } = await stripeRef.current?.redirectToCheckout({
+      lineItems: [{ price: priceId, quantity: 1 }],
+      mode: "subscription",
+      customerEmail: user?.email,
+      successUrl: `${window.location.origin}/billing/success`,
+      cancelUrl: `${window.location.origin}/billing/cancel`,
+    });
+
+    if (error) {
+      toast.error(error.message);
+    }
+  };
+
   return (
-    <div
-      className="select-none flex flex-wrap gap-y-[14px] gap-x-[14px]"
-      //   style={{
-      //     display: "grid",
-      //     gridTemplateColumns: "repeat(2, 1fr)",
-      //     gridTemplateRows: "repeat(2, 1fr)",
-      //     gridColumnGap: "14px",
-      //     gridRowGap: "14px",
-      //   }}
-    >
+    <div className="select-none flex flex-wrap gap-y-[14px] gap-x-[14px]">
       {[...plans].reverse().map((plan) => {
         return (
           <div
@@ -109,18 +119,23 @@ const Plans: FC<Props> = ({ plans, billing }) => {
               </div>
             </div>
             <div className="mb-[18px]">
-              <Button
-                kind={plan.product.name === "Developer" ? "third" : "primary"}
-                onClick={() => {
-                  if (plan.product.name !== billing.plan_label) {
-                  }
-                }}
-                className=" py-[7px]"
-              >
-                {billing.plan_label === plan.product.name
-                  ? "Current Plan"
-                  : "Upgrade"}
-              </Button>
+              <Elements stripe={stripeRef.current}>
+                <Checkout billing={billing} plan={plan}>
+                  <Button
+                    kind={
+                      plan.product.name === "Developer" ? "third" : "primary"
+                    }
+                    onClick={() => {}}
+                    type="button"
+                    className=" py-[7px]"
+                    disabled={billing.plan_label === plan.product.name}
+                  >
+                    {billing.plan_label === plan.product.name
+                      ? "Current Plan"
+                      : "Upgrade"}
+                  </Button>
+                </Checkout>
+              </Elements>
             </div>
             {plan.product.name === "Developer" && (
               <p className="text-[12px] m-0 p-0 font-normal">

@@ -8,10 +8,23 @@ interface IButtonProps {
   className: string;
   isLoading?: boolean;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset" | undefined;
 }
 
 const Button = forwardRef<LegacyRef<HTMLButtonElement>, IButtonProps>(
-  ({ kind, onClick, className, children, icon, isLoading = false, disabled = false }, ref) => {
+  (
+    {
+      kind,
+      onClick,
+      className,
+      type,
+      children,
+      icon,
+      isLoading = false,
+      disabled = false,
+    },
+    ref
+  ) => {
     return (
       <button
         className={`button${
@@ -20,6 +33,7 @@ const Button = forwardRef<LegacyRef<HTMLButtonElement>, IButtonProps>(
         ref={ref as LegacyRef<HTMLButtonElement>}
         onClick={onClick}
         disabled={disabled}
+        type={type ?? "button"}
       >
         {isLoading && (
           <span>

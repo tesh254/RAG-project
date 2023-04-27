@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../components/layout";
 import { User } from "@supabase/supabase-js";
 import { GetServerSidePropsContext, NextPage } from "next";
@@ -52,13 +52,13 @@ export type PlansType = {
   };
 };
 
-const Billing: NextPage<{ user: User }> = ({ user }) => {
+const BillingPage: NextPage<{ user: User }> = ({ user }) => {
   const [billing, setBilling] = useState<Billing>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFetchingProducts, setIsFetchingProducts] = useState<boolean>(false);
   const [plans, setPlans] = useState<PlansType[]>([]);
 
-  const getOrCreateBilling = () => {
+  const getOrCreateBilling = useCallback(() => {
     setIsLoading(true);
     axios
       .post(
@@ -71,37 +71,39 @@ const Billing: NextPage<{ user: User }> = ({ user }) => {
       .then((res) => {
         setIsLoading(false);
         setBilling(res.data.billing);
+        setPlans(res.data.plans);
       })
       .catch((err) => {
         setIsLoading(false);
         toast.error(err.response.data.message);
       });
-  };
+  }, []);
 
-  const getStripePlans = () => {
-    setIsFetchingProducts(true);
-    axios
-      .get("/api/billing/plans")
-      .then((res) => {
-        setIsFetchingProducts(false);
-        setPlans(res.data.plans);
-        getOrCreateBilling();
-      })
-      .catch((err) => {
-        setIsFetchingProducts(false);
-      });
-  };
+  console.log(plans);
+
+  // const getStripePlans = useCallback(() => {
+  //   setIsFetchingProducts(true);
+  //   axios
+  //     .get("/api/billing/plans")
+  //     .then((res) => {
+  //       setIsFetchingProducts(false);
+  //       setPlans(res.data.plans);
+  //       getOrCreateBilling();
+  //     })
+  //     .catch((err) => {
+  //       setIsFetchingProducts(false);
+  //     });
+  // }, []);
 
   useEffect(() => {
-    // getOrCreateBilling();
-    getStripePlans();
-  }, []);
+    getOrCreateBilling();
+  }, [getOrCreateBilling]);
 
   return (
     <Layout title="Suportal - Billing">
       <div className="w-[600px] p-[24px] mx-auto bg-white rounded-[25px]">
         <h1 className="font-bold text-[22px]">Upgrade</h1>
-        {isLoading || isFetchingProducts ? (
+        {isLoading ? (
           <div className="w-full justify-center">
             <span>
               <svg
@@ -161,4 +163,4 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   return { props: { user } };
 };
 
-export default Billing;
+export default BillingPage;

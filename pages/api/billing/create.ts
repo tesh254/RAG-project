@@ -17,6 +17,10 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         try {
             const { data: user, error } = await supabaseServerClient.auth.getUser();
 
+            const plans = await stripe.private.plans.list({
+                expand: ["data.product"]
+            });
+
             if (user) {
                 const { data: chatbot, error: chatbotError } = await supabaseServerClient.from("chatbot").select("id").eq("user_id", user?.user?.id).single();
 
@@ -26,6 +30,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                     if (existingBilling) {
                         return res.status(200).json({
                             billing: existingBilling,
+                            plans: plans.data,
                         });
                     }
 
@@ -33,12 +38,22 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                         email: user.user?.email,
                     });
 
+                    const subscription = await stripe.private.subscriptions.create({
+                        customer: customer.id,
+                        items: [
+                            {
+                                price: process.env.STRIPE_PRICING_DEFAULT_API_ID,
+                            },
+                        ],
+                    })
+
                     const { data: billing, error: billingError } = await supabaseServerClient.from("billing").insert({
                         chatbot_id: chatbot.id,
                         openai_api_k: "",
                         product_id: process.env.STRIPE_PRICING_DEFAULT_API_ID,
                         user_id: user.user?.id,
-                        billing_id: customer.id
+                        billing_id: customer.id,
+                        subscription_id: subscription.id,
                     }).single();
 
                     if (billingError) {
@@ -47,6 +62,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
                     return res.status(201).json({
                         billing,
+                        plans: plans.data,
                     });
                 } else {
                     throw new Error("Chatbot does not exist");
