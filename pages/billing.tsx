@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import Plans from "../components/plans";
 import Stripe from "stripe";
+import Counter from "../components/counter";
 
 export type Billing = {
   id?: number;
@@ -41,14 +42,16 @@ export type PlansType = {
   price: {
     unit_amount: number;
     id: string;
-  },
+  };
 };
 
-const BillingPage: NextPage<{ user: User }> = ({ user }) => {
-  const [billing, setBilling] = useState<Billing>({});
+const BillingPage: NextPage<{
+  user: User;
+  billing: Billing;
+  plans: PlansType[];
+}> = ({ user, billing, plans }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFetchingProducts, setIsFetchingProducts] = useState<boolean>(false);
-  const [plans, setPlans] = useState<PlansType[]>([]);
 
   const resetPlan = () => {
     axios
@@ -61,39 +64,12 @@ const BillingPage: NextPage<{ user: User }> = ({ user }) => {
       )
       .then((res) => {
         setIsLoading(false);
-        setBilling(res.data.billing);
-        setPlans(res.data.plans);
       })
       .catch((err) => {
         setIsLoading(false);
         toast.error(err.response.data.message);
       });
-  }
-
-  const getOrCreateBilling = useCallback(() => {
-    setIsLoading(true);
-    axios
-      .post(
-        "/api/billing/create",
-        {},
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        setIsLoading(false);
-        setBilling(res.data.billing);
-        setPlans(res.data.plans);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        toast.error(err.response.data.message);
-      });
-  }, []);
-
-  useEffect(() => {
-    getOrCreateBilling();
-  }, [getOrCreateBilling]);
+  };
 
   return (
     <Layout title="Suportal - Billing">
@@ -128,6 +104,10 @@ const BillingPage: NextPage<{ user: User }> = ({ user }) => {
           <>
             {billing && (
               <div className="mt-[20px]">
+                <Counter
+                  billing_id={billing.id as unknown as number}
+                  plans={plans}
+                />
                 <Plans resetPlan={resetPlan} plans={plans} billing={billing} />
               </div>
             )}
@@ -156,7 +136,29 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   const { user } = session;
 
-  return { props: { user } };
+  const data = {
+    user,
+  };
+
+  try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/billing/create`,
+      data,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const billing = response.data.billing;
+    const plans = response.data.plans;
+    return { props: { user, billing, plans } };
+  } catch (error) {
+    console.error(error);
+    return { props: { user, billing: null, plans: null } };
+  }
 };
 
 export default BillingPage;

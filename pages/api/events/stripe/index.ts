@@ -54,13 +54,15 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
                 .single();
 
             if (billing) {
+                const date =  new Date(subscription.current_period_end * 1000).toISOString();
+
                 await supabaseServerClient
                     .from("billing")
                     .update({
                         billing_id: subscription.customer,
                         subscription_id: subscription.id,
                         product_id: subscription.plan.product,
-                        next_billing: new Date(subscription.current_period_end).toISOString(),
+                        next_billing: date,
                         is_paid: true,
                         price_id: subscription.plan.id,
                     })
@@ -87,7 +89,7 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
                     .update({
                         billing_id: subscription.customer,
                         is_paid: false,
-                        next_billing: new Date(subscription.current_period_end).toISOString(),
+                        next_billing: new Date(subscription.current_period_end * 1000).toISOString(),
                         price_id: process.env.NEXT_PUBLIC_STRIPE_PRICING_DEFAULT_API_ID,
                         product_id: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_DEFAULT_ID,
                         subscription_id: "",
@@ -112,7 +114,7 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
                         billing_id: subscription.customer,
                         subscription_id: subscription.id,
                         product_id: subscription.plan.product,
-                        next_billing: new Date(subscription.current_period_end).toISOString(),
+                        next_billing: new Date(subscription.current_period_end * 1000).toISOString(),
                         is_paid: true,
                         price_id: subscription.plan.id,
                     })

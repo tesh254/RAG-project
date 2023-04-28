@@ -13,9 +13,9 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     });
 
     if (req.method === "POST") {
-        try {
-            const { data: user, error } = await supabaseServerClient.auth.getUser();
+        const { user } = req.body;
 
+        try {
             const products = await stripe.private.products.list({
                 active: true,
                 expand: ['data.price'],
@@ -32,7 +32,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
             }
 
             if (user) {
-                const { data: chatbot, error: chatbotError } = await supabaseServerClient.from("chatbot").select("id").eq("user_id", user?.user?.id).single();
+                const { data: chatbot, error: chatbotError } = await supabaseServerClient.from("chatbot").select("id").eq("user_id", user?.id).single();
 
                 if (chatbot) {
                     const { data: existingBilling, error: existingBillingError } = await supabaseServerClient.from("billing").select("*").eq("chatbot_id", chatbot.id).single();
@@ -45,7 +45,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                     }
 
                     const customer = await stripe.private.customers.create({
-                        email: user.user?.email,
+                        email: user.email,
                     });
 
                     const { data: billing, error: billingError } = await supabaseServerClient.from("billing").insert({
@@ -53,7 +53,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                         openai_api_k: "",
                         price_id: process.env.STRIPE_PRICING_DEFAULT_API_ID,
                         product_id: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_DEFAULT_ID,
-                        user_id: user.user?.id,
+                        user_id: user.id,
                         billing_id: customer.id,
                         subscription_id: "",
                     }).single();
