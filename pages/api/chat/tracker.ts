@@ -16,8 +16,6 @@ const addNewChat = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const { chatbot_id, user_fp } = req.body;
 
-        console.log({ chatbot_id, user_fp })
-
         const { data: usage, error } = await supabaseServerClient
             .from("chat_usage")
             .select("*")
@@ -30,7 +28,6 @@ const addNewChat = async (req: NextApiRequest, res: NextApiResponse) => {
             .eq("chatbot_id", chatbot_id)
             .single()
 
-        console.log({ usage });
 
         if (usage) {
             if (!usage.user_fp.includes(user_fp)) {

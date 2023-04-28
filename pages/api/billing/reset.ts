@@ -72,7 +72,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
             res.redirect("/login");
         } catch (error: unknown) {
-            console.log({ error });
             if (error instanceof Error) {
                 return res.status(400).json(error);
             }
