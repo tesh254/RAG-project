@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import { addDays } from "date-fns";
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
@@ -20,7 +21,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
             if (usage) {
                 // @ts-ignore
-                if (new Date().getTime > new Date(billing.next_billing).getTime()) {
+                if (new Date().getTime > new Date(addDays(billing.next_billing, 3)).getTime()) {
                     // @ts-ignore
                     await supabaseClient.from("chat_usage").delete("billing_id", billing.id);
                 }
