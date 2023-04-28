@@ -1,9 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { LegacyRef, useRef, useState } from "react";
+import { LegacyRef, useRef, useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import axios from "axios";
+import { getFingerprint } from "../../lib/identity";
 
 interface Chat {
   chat: {
@@ -20,10 +21,40 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
   const [chats, setChats] = useState<
     { message: string; user: "reply" | "sender"; id: number }[]
   >([]);
+  const [fp, setFp] = useState<string>("");
   const [text, setText] = useState<string>("");
   const [isSending, setIsSending] = useState<boolean>(false);
   const textareaRef = useRef<LegacyRef<HTMLTextAreaElement>>();
   const chatListRef = useRef<LegacyRef<HTMLDivElement>>();
+
+  const sendUsage = () => {
+    axios
+      .post("/api/chat/tracker", {
+        chatbot_id: id,
+        user_fp: fp,
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return;
+  };
+
+  const checkIfNewChat = () => {
+    const item = sessionStorage.getItem("nu");
+
+    if (!item) {
+      sendUsage();
+      sessionStorage.setItem("nu", fp);
+    }
+  };
+
+  useEffect(() => {
+    const fingerprint = getFingerprint();
+
+    setFp(fingerprint);
+  }, []);
 
   const sendText = () => {
     const $text = text;
@@ -40,6 +71,7 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
       id: chats.length + 2,
     };
     setChats((prev) => [...prev, newChat, typingChat]);
+    checkIfNewChat();
     axios({
       method: "post",
       url: `${coreUrl}/core-chat`,

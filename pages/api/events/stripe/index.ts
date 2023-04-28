@@ -14,7 +14,6 @@ export const config = {
     },
 };
 
-
 const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
     const supabaseServerClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL as string,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string);
@@ -46,30 +45,52 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
 
     switch (event.type) {
         case 'customer.subscription.created': {
-            const subscription = event.data.object;
-            console.log({ subscription, type: event.type });
+            const subscription: any = event.data.object;
+
+            const { data: billing } = await supabaseServerClient
+                .from("billing")
+                .select("*")
+                .eq("billing_id", subscription.customer)
+                .single();
+
+            if (billing) {
+                await supabaseServerClient
+                    .from("billing")
+                    .update({
+                        billing_id: subscription.customer,
+                        subscription_id: subscription.id,
+                        product_id: subscription.plan.product,
+                        next_billing: new Date(subscription.current_period_end).toISOString(),
+                        is_paid: true,
+                        price_id: subscription.plan.id,
+                    })
+                    .eq("id", billing.id)
+            }
+
             // handle subscription created event
             break;
         }
 
         case 'customer.subscription.deleted': {
             const subscription: any = event.data.object;
-            console.log({ subscription, type: event.type });
             // handle subscription deleted or updated event
 
             const { data: billing } = await supabaseServerClient
                 .from("billing")
                 .select("id")
-                .eq("subscription_id", subscription.id)
+                .eq("billing_id", subscription.customer)
                 .single()
 
             if (billing) {
                 await supabaseServerClient
                     .from("billing")
                     .update({
-                        is_paid: true,
+                        billing_id: subscription.customer,
+                        is_paid: false,
                         next_billing: new Date(subscription.current_period_end).toISOString(),
-                        product_id: process.env.STRIPE_PRICING_DEFAULT_API_ID,
+                        price_id: process.env.NEXT_PUBLIC_STRIPE_PRICING_DEFAULT_API_ID,
+                        product_id: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_DEFAULT_ID,
+                        subscription_id: "",
                     });
             }
 
@@ -81,16 +102,21 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
             const { data: billing } = await supabaseServerClient
                 .from("billing")
                 .select("id")
-                .eq("subscription_id", subscription.id)
+                .eq("billing_id", subscription.customer)
                 .single();
 
             if (billing) {
                 await supabaseServerClient
                     .from("billing")
                     .update({
-                        is_paid: true,
+                        billing_id: subscription.customer,
+                        subscription_id: subscription.id,
+                        product_id: subscription.plan.product,
                         next_billing: new Date(subscription.current_period_end).toISOString(),
-                    });
+                        is_paid: true,
+                        price_id: subscription.plan.id,
+                    })
+                    .eq("id", billing.id)
             }
             // handle subscription deleted or updated event
             break;
@@ -98,41 +124,14 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
 
         case 'invoice.paid': {
             const invoice: any = event.data.object;
-            const { data: billing } = await supabaseServerClient
-                .from("billing")
-                .select("id")
-                .eq("subscription_id", invoice.subscription)
-                .single();
-
-            if (billing) {
-                await supabaseServerClient
-                    .from("billing")
-                    .update({
-                        is_paid: true,
-                        next_billing: new Date(invoice.period_end).toISOString(),
-                    });
-            }
+            console.log({ invoice });
 
             break;
         }
 
         case 'invoice.payment_failed': {
             const invoice: any = event.data.object;
-            const { data: billing } = await supabaseServerClient
-                .from("billing")
-                .select("id")
-                .eq("subscription_id", invoice.subscription)
-                .single()
-
-            if (billing) {
-                await supabaseServerClient
-                    .from("billing")
-                    .update({
-                        is_paid: true,
-                        next_billing: new Date(invoice.period_end).toISOString(),
-                        product_id: process.env.STRIPE_PRICING_DEFAULT_API_ID,
-                    });
-            }
+            console.log(invoice);
             break;
         }
 

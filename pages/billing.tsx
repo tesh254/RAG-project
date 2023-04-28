@@ -6,6 +6,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import Plans from "../components/plans";
+import Stripe from "stripe";
 
 export type Billing = {
   id?: number;
@@ -14,43 +15,33 @@ export type Billing = {
   plan_slug?: string;
   plan_label?: string;
   product_id?: string;
+  subscription_id?: string;
 };
 
 export type PlansType = {
   active: boolean;
-  aggregate_usage: null;
-  amount: number;
-  amount_decimal: string;
-  billing_scheme: string;
+  attributes: [];
   created: number;
-  currency: string;
+  default_price: string;
+  description: string | null;
   id: string;
-  interval: string;
-  interval_count: number;
+  images: string[];
   livemode: boolean;
-  metadata: {};
-  nickname: null;
-  product: {
-    active: boolean;
-    attributes: [];
-    created: number;
-    default_price: string;
-    description: string | null;
-    id: string;
-    images: string[];
-    livemode: boolean;
-    metadata: {
-      chatbot_count: string;
-      chats: string;
-      own_api: string;
-      plan_id: string;
-    };
-    name: string;
-    object: string;
-    type: string;
-    updated: number;
-    url: string | null;
+  metadata: {
+    chatbot_count: string;
+    chats: string;
+    own_api: string;
+    plan_id: string;
   };
+  name: string;
+  object: string;
+  type: string;
+  updated: number;
+  url: string | null;
+  price: {
+    unit_amount: number;
+    id: string;
+  },
 };
 
 const BillingPage: NextPage<{ user: User }> = ({ user }) => {
@@ -58,6 +49,26 @@ const BillingPage: NextPage<{ user: User }> = ({ user }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFetchingProducts, setIsFetchingProducts] = useState<boolean>(false);
   const [plans, setPlans] = useState<PlansType[]>([]);
+
+  const resetPlan = () => {
+    axios
+      .post(
+        "/api/billing/reset",
+        {},
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        setIsLoading(false);
+        setBilling(res.data.billing);
+        setPlans(res.data.plans);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        toast.error(err.response.data.message);
+      });
+  }
 
   const getOrCreateBilling = useCallback(() => {
     setIsLoading(true);
@@ -79,22 +90,6 @@ const BillingPage: NextPage<{ user: User }> = ({ user }) => {
         toast.error(err.response.data.message);
       });
   }, []);
-
-  console.log(plans);
-
-  // const getStripePlans = useCallback(() => {
-  //   setIsFetchingProducts(true);
-  //   axios
-  //     .get("/api/billing/plans")
-  //     .then((res) => {
-  //       setIsFetchingProducts(false);
-  //       setPlans(res.data.plans);
-  //       getOrCreateBilling();
-  //     })
-  //     .catch((err) => {
-  //       setIsFetchingProducts(false);
-  //     });
-  // }, []);
 
   useEffect(() => {
     getOrCreateBilling();
@@ -133,7 +128,7 @@ const BillingPage: NextPage<{ user: User }> = ({ user }) => {
           <>
             {billing && (
               <div className="mt-[20px]">
-                <Plans plans={plans} billing={billing} />
+                <Plans resetPlan={resetPlan} plans={plans} billing={billing} />
               </div>
             )}
           </>

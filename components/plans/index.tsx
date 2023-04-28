@@ -6,10 +6,13 @@ import { useUser } from "@supabase/auth-helpers-react";
 import { Billing, PlansType } from "../../pages/billing";
 import Button from "../button";
 import Checkout from "../checkout";
+import axios, { AxiosResponse } from "axios";
+import { useRouter } from "next/router";
 
 type Props = {
   plans: PlansType[];
   billing: Billing;
+  resetPlan: () => void;
 };
 
 const CheckIcon = ({
@@ -34,7 +37,7 @@ const CheckIcon = ({
   </svg>
 );
 
-const Plans: FC<Props> = ({ plans, billing }) => {
+const Plans: FC<Props> = ({ plans, billing, resetPlan }) => {
   const stripeRef = useRef<Stripe | null>(null);
   const user = useUser();
 
@@ -46,19 +49,18 @@ const Plans: FC<Props> = ({ plans, billing }) => {
     })();
   }, []);
 
-  const changePlan = async (priceId: string) => {
-    // @ts-ignore
-    const { error } = await stripeRef.current?.redirectToCheckout({
-      lineItems: [{ price: priceId, quantity: 1 }],
-      mode: "subscription",
-      customerEmail: user?.email,
-      successUrl: `${window.location.origin}/billing/success`,
-      cancelUrl: `${window.location.origin}/billing/cancel`,
-    });
+  const router = useRouter();
 
-    if (error) {
-      toast.error(error.message);
-    }
+  const changePlan = (priceId: string) => {
+    axios
+      .post(`/api/billing/checkout`, {
+        price_id: priceId,
+        billing_id: billing.id,
+        customer_id: billing.billing_id,
+      })
+      .then((res: AxiosResponse) => {
+        router.push(res.data.url);
+      });
   };
 
   return (
@@ -68,76 +70,62 @@ const Plans: FC<Props> = ({ plans, billing }) => {
           <div
             key={plan.id}
             className={`p-[1rem] rounded-[18px] border-[1px] border-[rgba(83, 90, 116, 0.08)] w-[265px] h-fit min-h-[234px] ${
-              plan.product.name === "Developer"
-                ? "bg-[#212121] text-white"
-                : "bg-white"
+              plan.name === "Developer" ? "bg-[#212121] text-white" : "bg-white"
             }`}
           >
             <div className="mb-[18px]">
-              <h4 className="text-[18px]">{plan.product.name}</h4>
+              <h4 className="text-[18px]">{plan.name}</h4>
               <h6
                 className={`text-[22px] ${
-                  plan.product.name === "Developer"
+                  plan.name === "Developer"
                     ? "text-suportal-purple"
                     : "text-suportal-blue"
                 }`}
               >
-                ${plan.amount / 100}/mo
+                ${plan.price.unit_amount / 100}/mo
               </h6>
             </div>
             <div className="mb-[18px]">
               <div className="flex space-x-[11px] place-items-center mb-[8px]">
                 <CheckIcon
-                  fill={
-                    plan.product.name === "Developer" ? "#8849FF" : "#0C8CFB"
-                  }
+                  fill={plan.name === "Developer" ? "#8849FF" : "#0C8CFB"}
                   className="w-[18px] h-[18px]"
                 />
                 <p>
-                  {plan.product.metadata.own_api === "true"
+                  {plan.metadata.own_api === "true"
                     ? "Use your own API Key"
                     : "No API key required"}
                 </p>
               </div>
               <div className="flex space-x-[11px] place-items-center mb-[8px]">
                 <CheckIcon
-                  fill={
-                    plan.product.name === "Developer" ? "#8849FF" : "#0C8CFB"
-                  }
+                  fill={plan.name === "Developer" ? "#8849FF" : "#0C8CFB"}
                   className="w-[18px] h-[18px]"
                 />
-                <p>{plan.product.metadata.chats}</p>
+                <p>{plan.metadata.chats}</p>
               </div>
               <div className="flex space-x-[11px] place-items-center mb-[8px]">
                 <CheckIcon
-                  fill={
-                    plan.product.name === "Developer" ? "#8849FF" : "#0C8CFB"
-                  }
+                  fill={plan.name === "Developer" ? "#8849FF" : "#0C8CFB"}
                   className="w-[18px] h-[18px]"
                 />
-                <p>{`${plan.product.metadata.chatbot_count} ChatBot`}</p>
+                <p>{`${plan.metadata.chatbot_count} ChatBot`}</p>
               </div>
             </div>
             <div className="mb-[18px]">
-              <Elements stripe={stripeRef.current}>
-                <Checkout billing={billing} plan={plan}>
-                  <Button
-                    kind={
-                      plan.product.name === "Developer" ? "third" : "primary"
-                    }
-                    onClick={() => {}}
-                    type="button"
-                    className=" py-[7px]"
-                    disabled={billing.product_id === plan.id}
-                  >
-                    {billing.plan_label === plan.product.name
-                      ? "Current Plan"
-                      : "Upgrade"}
-                  </Button>
-                </Checkout>
-              </Elements>
+              <Button
+                kind={plan.name === "Developer" ? "third" : "primary"}
+                onClick={() => {
+                  changePlan(plan.price.id);
+                }}
+                type="button"
+                className=" py-[7px]"
+                disabled={billing.product_id === plan.id}
+              >
+                {billing.product_id === plan.id ? "Current Plan" : "Upgrade"}
+              </Button>
             </div>
-            {plan.product.name === "Developer" && (
+            {plan.name === "Developer" && (
               <p className="text-[12px] m-0 p-0 font-normal">
                 *Using your own Key will require an OpenAI account.
               </p>

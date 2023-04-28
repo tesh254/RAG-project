@@ -16,6 +16,8 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         try {
             const { data: user, error } = await supabaseServerClient.auth.getUser();
 
+            const { customer_id } = req.body;
+
             const products = await stripe.private.products.list({
                 active: true,
                 expand: ['data.price'],
@@ -38,34 +40,31 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                     const { data: existingBilling, error: existingBillingError } = await supabaseServerClient.from("billing").select("*").eq("chatbot_id", chatbot.id).single();
 
                     if (existingBilling) {
+                        await stripe.private.subscriptions.del(existingBilling.subscription_id);
+
+                        await supabaseServerClient.from("billing")
+                            .update({
+                                chatbot_id: chatbot.id,
+                                openai_api_k: "",
+                                price_id: process.env.NEXT_PUBLIC_STRIPE_PRICING_DEFAULT_API_ID,
+                                product_id: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_DEFAULT_ID,
+                                user_id: user.user?.id,
+                                billing_id: customer_id,
+                                subscription_id: "",
+                            }).eq("id", existingBilling.id);
+
+                        const { data: updatedBilling } = await supabaseServerClient.from("billing").select("*").eq("chatbot_id", chatbot.id).single();
+
                         return res.status(200).json({
-                            billing: existingBilling,
+                            billing: updatedBilling,
                             plans: products.data,
                         });
                     }
 
-                    const customer = await stripe.private.customers.create({
-                        email: user.user?.email,
-                    });
-
-                    const { data: billing, error: billingError } = await supabaseServerClient.from("billing").insert({
-                        chatbot_id: chatbot.id,
-                        openai_api_k: "",
-                        price_id: process.env.STRIPE_PRICING_DEFAULT_API_ID,
-                        product_id: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_DEFAULT_ID,
-                        user_id: user.user?.id,
-                        billing_id: customer.id,
-                        subscription_id: "",
-                    }).single();
-
-                    if (billingError) {
-                        throw new Error(billingError.message);
-                    }
-
-                    return res.status(201).json({
-                        billing,
+                    return res.status(200).json({
                         plans: products.data,
-                    });
+                        billing: existingBilling,
+                    })
                 } else {
                     throw new Error("Chatbot does not exist");
                 }
