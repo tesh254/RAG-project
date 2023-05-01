@@ -6,6 +6,7 @@ import Input from "../input";
 import Button from "../button";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 interface IAuthForm {
   type: "login" | "signup";
@@ -69,6 +70,11 @@ const AuthForm: FC<IAuthForm> = ({ type, label }) => {
 
       if (data.user) {
         toast.success("Success! Please check email for verfication link");
+
+        await axios.post("/api/billing/create", {
+          user: data.user,
+        });
+        
         router.push("/go-to-email");
       }
     }

@@ -21,6 +21,8 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                 expand: ['data.price'],
             });
 
+            const product = products.data.find(item => item.name === "Free");
+
             const existingCustomer = await stripe.private.customers.list({
                 email: user.email,
                 limit: 1,
@@ -62,8 +64,8 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                     const { data: billing, error: billingError } = await supabaseServerClient.from("billing").insert({
                         chatbot_id: chatbot.id,
                         openai_api_k: "",
-                        price_id: process.env.STRIPE_PRICING_DEFAULT_API_ID,
-                        product_id: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_DEFAULT_ID,
+                        price_id: product?.default_price,
+                        product_id: product?.id,
                         user_id: user.id,
                         billing_id: customer.id,
                         subscription_id: "",
