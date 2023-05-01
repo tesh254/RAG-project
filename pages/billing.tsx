@@ -121,6 +121,8 @@ const BillingPage: NextPage<{
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
 
+  console.log(process.env.VERCEL_URL, "[process.env.VERCEL_URL]");
+
   const {
     data: { session },
   } = await supabase.auth.getSession();
