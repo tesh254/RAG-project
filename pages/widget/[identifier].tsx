@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { LegacyRef, useRef, useState, useEffect } from "react";
+import { LegacyRef, useRef, useState, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import axios from "axios";
 import { getFingerprint } from "../../lib/identity";
@@ -25,6 +25,33 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
   const [isSending, setIsSending] = useState<boolean>(false);
   const textareaRef = useRef<LegacyRef<HTMLTextAreaElement>>();
   const chatListRef = useRef<LegacyRef<HTMLDivElement>>();
+  const [isLimitExceeded, setIsLimitExceeded] = useState(false);
+
+  const checkLimit = useCallback(() => {
+    axios
+      .post("/api/chat/limit", {
+        chatbot_id: id,
+      })
+      .then((res) => {
+        setIsLimitExceeded(res.data.is_limit_exceeded);
+      })
+      .catch((err) => {
+        setIsLimitExceeded(err.response.data.is_limit_exceeded);
+      });
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      checkLimit();
+      const interval = setInterval(() => {
+        checkLimit();
+      }, 20000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [checkLimit, id]);
 
   const sendUsage = () => {
     axios
@@ -165,11 +192,15 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
           }}
         >
           <textarea
-            placeholder="How can I help?"
+            placeholder={
+              isLimitExceeded
+                ? "Chat is currently unaivalable"
+                : "How can I help?"
+            }
             name=""
             rows={1}
             ref={textareaRef as unknown as LegacyRef<HTMLTextAreaElement>}
-            disabled={isSending}
+            disabled={isLimitExceeded}
             value={text}
             className="outline-none h-auto resize-none w-full"
             onChange={(e) => {
