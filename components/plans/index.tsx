@@ -5,7 +5,6 @@ import { Elements } from "@stripe/react-stripe-js";
 import { useUser } from "@supabase/auth-helpers-react";
 import { Billing, PlansType } from "../../pages/billing";
 import Button from "../button";
-import Checkout from "../checkout";
 import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 
