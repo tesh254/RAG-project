@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { addDays } from "date-fns";
+import stripe from "../../../lib/stripe";
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
@@ -26,6 +27,21 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                     await supabaseClient.from("chat_usage").delete("billing_id", billing.id);
                 }
             }
+
+            const products = await stripe.private.products.list({});
+
+            const product = products.data.find(item => item.name === "Free");
+
+            if (product) {
+                await supabaseClient.from("billing").update({
+                    is_paid: false,
+                    price_id: product.default_price,
+                    product_id: product.id,
+                    subscription_id: null,
+                    next_billing: addDays(new Date(), 30).toISOString(),
+                }).eq("id", billing[i].id)
+            }
+
         }
     } catch (error: unknown) {
 

@@ -54,7 +54,7 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
                 .single();
 
             if (billing) {
-                const date =  new Date(subscription.current_period_end * 1000).toISOString();
+                const date = new Date(subscription.current_period_end * 1000).toISOString();
 
                 await supabaseServerClient
                     .from("billing")
@@ -126,7 +126,32 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
 
         case 'invoice.paid': {
             const invoice: any = event.data.object;
-            console.log({ invoice });
+
+            const { data: billing } = await supabaseServerClient.from("billing")
+                .select("*")
+                .eq("billing_id", invoice.customer)
+                .single();
+
+            if (billing) {
+                const date = new Date(invoice.period_end * 1000).toISOString();
+
+                const subscription: any = await stripeObj.private.subscriptions.retrieve(invoice.subscription);
+
+                console.log({ subscription });
+
+                if (subscription) {
+                    await supabaseServerClient
+                        .from("billing")
+                        .update({
+                            billing_id: invoice.customer,
+                            subscription_id: invoice.subscription,
+                            product_id: subscription.plan.product,
+                            next_billing: date,
+                            is_paid: true,
+                            price_id: subscription.plan.id,
+                        });
+                }
+            }
 
             break;
         }

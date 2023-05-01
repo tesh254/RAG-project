@@ -21,6 +21,21 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                 expand: ['data.price'],
             });
 
+            const existingCustomer = await stripe.private.customers.list({
+                email: user.email,
+                limit: 1,
+            });
+
+            let customer;
+
+            if (existingCustomer.data.length > 0) {
+                customer = existingCustomer.data[0];
+            } else {
+                customer = await stripe.private.customers.create({
+                    email: user.email,
+                });
+            }
+
             for (let i = 0; i < products.data.length; i++) {
                 const res = await stripe.private.prices.list({
                     product: products.data[i].id,
@@ -35,18 +50,14 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                 const { data: chatbot, error: chatbotError } = await supabaseServerClient.from("chatbot").select("id").eq("user_id", user?.id).single();
 
                 if (chatbot) {
-                    const { data: existingBilling, error: existingBillingError } = await supabaseServerClient.from("billing").select("*").eq("chatbot_id", chatbot.id).single();
+                    const { data: existingBilling, error: existingBillingError } = await supabaseServerClient.from("billing").select("*").eq("chatbot_id", chatbot.id);
 
-                    if (existingBilling) {
+                    if (existingBilling && existingBilling?.length > 0) {
                         return res.status(200).json({
-                            billing: existingBilling,
+                            billing: existingBilling[0],
                             plans: products.data,
                         });
                     }
-
-                    const customer = await stripe.private.customers.create({
-                        email: user.email,
-                    });
 
                     const { data: billing, error: billingError } = await supabaseServerClient.from("billing").insert({
                         chatbot_id: chatbot.id,
@@ -56,14 +67,14 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                         user_id: user.id,
                         billing_id: customer.id,
                         subscription_id: "",
-                    }).single();
+                    }).select();
 
                     if (billingError) {
                         throw new Error(billingError.message);
                     }
 
                     return res.status(201).json({
-                        billing,
+                        billing: billing[0],
                         plans: products.data,
                     });
                 } else {
@@ -73,6 +84,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
             res.redirect("/login");
         } catch (error: unknown) {
+            console.log({ error });
             if (error instanceof Error) {
                 return res.status(400).json(error);
             }
