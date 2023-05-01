@@ -15,7 +15,6 @@ interface Chat {
 }
 
 const coreUrl = process.env.NEXT_PUBLIC_SCRAPER_BACKEND_URL;
-const baseUrl = process.env.VERCEL_URL;
 
 const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
   const [chats, setChats] = useState<

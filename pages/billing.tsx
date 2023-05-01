@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 import Plans from "../components/plans";
 import Stripe from "stripe";
 import Counter from "../components/counter";
+import { protocol } from "../lib/sanitizer";
 
 export type Billing = {
   id?: number;
@@ -142,7 +143,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   try {
     const response = await axios.post(
-      `${process.env.VERCEL_URL}/api/billing/create`,
+      `${protocol}${process.env.VERCEL_URL}/api/billing/create`,
       data,
       {
         withCredentials: true,

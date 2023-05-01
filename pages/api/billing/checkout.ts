@@ -1,6 +1,7 @@
 import nc from "next-connect";
 import stripe from "../../../lib/stripe";
 import { NextApiRequest, NextApiResponse } from "next";
+import { protocol } from "../../../lib/sanitizer";
 
 const initCheckout = async (req: NextApiRequest, res: NextApiResponse) => {
     const { price_id, billing_id, customer_id } = req.body;
@@ -14,8 +15,8 @@ const initCheckout = async (req: NextApiRequest, res: NextApiResponse) => {
         ],
         customer: customer_id,
         mode: "subscription",
-        success_url: `${process.env.VERCEL_URL}/billing`,
-        cancel_url: `${process.env.VERCEL_URL}/billing`
+        success_url: `${protocol}${process.env.VERCEL_URL}/billing`,
+        cancel_url: `${protocol}${process.env.VERCEL_URL}/billing`
     });
 
     const checkoutUrl = session.url as unknown as string;
