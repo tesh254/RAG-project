@@ -12,6 +12,8 @@ const Dashboard: NextPage<{ user: User; }> = ({ user }) => {
 }
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  console.log(process.env.VERCEL_URL, "[process.env.VERCEL_URL]");
+
   // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx)
   // Check if we have a session
