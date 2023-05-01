@@ -1,8 +1,13 @@
 {
-    "crons": [
-      {
-        "path": "/api/cron",
-        "schedule": "0 9,21 * * *"
-      }
-    ]
+  "crons": [
+    {
+      "path": "/pages/api/cron",
+      "schedule": "0 9,21 * * *"
+    }
+  ],
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_BASE_URL": "${VERCEL_URL}"
+    }
   }
+}
