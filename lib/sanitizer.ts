@@ -61,4 +61,4 @@ export function cosSimilarity(embedding1: number[], embedding2: number[], record
     return [denominator === 0 ? 0 : dotProduct / denominator, recordId];
 }
 
-export const protocol = process.env.NODE_ENV === "development" ? "http://" : "https://";
+export const protocol =  process.env.APP_ENV !== "development" ? "https://" : "http://";
