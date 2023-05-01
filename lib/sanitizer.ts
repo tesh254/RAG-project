@@ -60,3 +60,5 @@ export function cosSimilarity(embedding1: number[], embedding2: number[], record
     const denominator = Math.sqrt(norm1) * Math.sqrt(norm2);
     return [denominator === 0 ? 0 : dotProduct / denominator, recordId];
 }
+
+export const protocol =  process.env.APP_ENV !== "development" ? "https://" : "http://";
