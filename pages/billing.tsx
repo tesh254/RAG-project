@@ -142,7 +142,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/billing/create`,
+      `${process.env.VERCEL_URL}/api/billing/create`,
       data,
       {
         withCredentials: true,

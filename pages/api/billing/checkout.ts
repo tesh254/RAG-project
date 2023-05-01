@@ -14,8 +14,8 @@ const initCheckout = async (req: NextApiRequest, res: NextApiResponse) => {
         ],
         customer: customer_id,
         mode: "subscription",
-        success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/billing`,
-        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/billing`
+        success_url: `${process.env.VERCEL_URL}/billing`,
+        cancel_url: `${process.env.VERCEL_URL}/billing`
     });
 
     const checkoutUrl = session.url as unknown as string;
