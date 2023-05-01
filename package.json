@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prebuild": "node pre-build/billing.js",
     "bundle:widget": "uglifyjs public/widget/embed.js -o public/widget/embed.min.js -c pure_funcs -m --verbose"
   },
   "dependencies": {
