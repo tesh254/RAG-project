@@ -38,6 +38,7 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
         event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
     } catch (err: unknown) {
         if (err instanceof Error) {
+            console.log({ endpointSecret });
             console.log(`⚠️ Error verifying Stripe signature: ${err.message}`);
             return res.status(400).send(`Webhook Error: ${err.message}`);
         }
