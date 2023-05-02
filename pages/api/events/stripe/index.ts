@@ -38,7 +38,6 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
         event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
     } catch (err: unknown) {
         if (err instanceof Error) {
-            console.log({ endpointSecret });
             console.log(`⚠️ Error verifying Stripe signature: ${err.message}`);
             return res.status(400).send(`Webhook Error: ${err.message}`);
         }
@@ -125,7 +124,8 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
             break;
         }
 
-        case 'invoice.paid': {
+        case 'invoice.paid':
+        case 'invoice.payment_succeeded': {
             const invoice: any = event.data.object;
 
             const { data: billing } = await supabaseServerClient.from("billing")
