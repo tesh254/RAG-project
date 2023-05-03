@@ -54,9 +54,8 @@ const AuthForm: FC<IAuthForm> = ({ type, label }) => {
       password: state.password,
       options: {
         emailRedirectTo:
-          process.env.NODE_ENV === "development" ||
-          process.env.NODE_ENV === "test"
-            ? "http://localhost:3000/verify/"
+          process.env.APP_ENV === "development"
+            ? "http://localhost:3000/verify"
             : "https://app.suportal.co/verify",
       },
     });
