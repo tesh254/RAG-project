@@ -22,7 +22,7 @@ const Navbar = () => {
 
     return (
      // sidebar
-     <div className="h-screen w-120 bg-gray-200	 h-[81px] z-30">
+     <div className="h-screen min-w-120 w-120 bg-gray-200 h-[81px] z-30">
       
        <div className="max-w-full px-[20px] py-[18px] mx-auto w-full flex-col space-y-20">
         
