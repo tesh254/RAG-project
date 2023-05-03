@@ -16,39 +16,39 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         const { user } = req.body;
 
         try {
-            const products = await stripe.private.products.list({
-                active: true,
-                expand: ['data.price'],
-            });
-
-            const product = products.data.find(item => item.name === "Free");
-
-            const existingCustomer = await stripe.private.customers.list({
-                email: user.email,
-                limit: 1,
-            });
-
-            let customer;
-
-            if (existingCustomer.data.length > 0) {
-                customer = existingCustomer.data[0];
-            } else {
-                customer = await stripe.private.customers.create({
-                    email: user.email,
-                });
-            }
-
-            for (let i = 0; i < products.data.length; i++) {
-                const res = await stripe.private.prices.list({
-                    product: products.data[i].id,
+            if (user && user.email) {
+                const products = await stripe.private.products.list({
+                    active: true,
+                    expand: ['data.price'],
                 });
 
-                Object.assign(products.data[i], {
-                    price: res.data[0],
-                });
-            }
+                const product = products.data.find(item => item.name === "Free");
 
-            if (user) {
+                const existingCustomer = await stripe.private.customers.list({
+                    email: user?.email,
+                    limit: 1,
+                });
+
+                let customer;
+
+                if (existingCustomer.data.length > 0) {
+                    customer = existingCustomer.data[0];
+                } else {
+                    customer = await stripe.private.customers.create({
+                        email: user?.email,
+                    });
+                }
+
+                for (let i = 0; i < products.data.length; i++) {
+                    const res = await stripe.private.prices.list({
+                        product: products.data[i].id,
+                    });
+
+                    Object.assign(products.data[i], {
+                        price: res.data[0],
+                    });
+                }
+
                 const { data: chatbot, error: chatbotError } = await supabaseServerClient.from("chatbot").select("id").eq("user_id", user?.id).single();
 
                 if (chatbot) {
