@@ -62,69 +62,83 @@ const Plans: FC<Props> = ({ plans, billing, resetPlan }) => {
       });
   };
 
+  const newPlans = {
+    Free: {
+      metadata: ["No API key required", "10 chats/month", "1 ChatBot"],
+      plan: plans.find((item) => item.name === "Free"),
+    },
+    Basic: {
+      plan: plans.find((item) => item.name === "Basic"),
+      metadata: ["No API key required", "50 chats/month", "1 ChatBot"],
+    },
+    Pro: {
+      plan: plans.find((item) => item.name === "Pro"),
+      metadata: ["No API key required", "100 chats/month", "1 ChatBot"],
+    },
+    Developer: {
+      plan: plans.find((item) => item.name === "Developer"),
+      metadata: ["Use your own API Key", "Unlimited chats", "1 ChatBot"],
+    },
+  };
+
   return (
     <div className="select-none flex flex-wrap gap-y-[14px] gap-x-[14px]">
-      {plans.map((plan) => {
+      {Object.entries(newPlans).map(([key, plan]: any) => {
         return (
           <div
-            key={plan.id}
+            key={plan.plan.id}
             className={`p-[1rem] rounded-[18px] border-[1px] border-[rgba(83, 90, 116, 0.08)] w-[265px] h-fit min-h-[234px] ${
-              plan.name === "Developer" ? "bg-[#212121] text-white" : "bg-white"
+              plan.plan.name === "Developer"
+                ? "bg-[#212121] text-white"
+                : "bg-white"
             }`}
           >
             <div className="mb-[18px]">
-              <h4 className="text-[18px]">{plan.name}</h4>
+              <h4 className="text-[18px]">{plan.plan.name}</h4>
               <h6
                 className={`text-[22px] ${
-                  plan.name === "Developer"
+                  plan.plan.name === "Developer"
                     ? "text-suportal-purple"
                     : "text-suportal-blue"
                 }`}
               >
-                ${plan.price.unit_amount / 100}/mo
+                ${plan.plan.price.unit_amount / 100}/mo
               </h6>
             </div>
             <div className="mb-[18px]">
-              <div className="flex space-x-[11px] place-items-center mb-[8px]">
-                <CheckIcon
-                  fill={plan.name === "Developer" ? "#8849FF" : "#0C8CFB"}
-                  className="w-[18px] h-[18px]"
-                />
-                <p>
-                  {plan.metadata.own_api === "true"
-                    ? "Use your own API Key"
-                    : "No API key required"}
-                </p>
-              </div>
-              <div className="flex space-x-[11px] place-items-center mb-[8px]">
-                <CheckIcon
-                  fill={plan.name === "Developer" ? "#8849FF" : "#0C8CFB"}
-                  className="w-[18px] h-[18px]"
-                />
-                <p>{plan.metadata.chats}</p>
-              </div>
-              <div className="flex space-x-[11px] place-items-center mb-[8px]">
-                <CheckIcon
-                  fill={plan.name === "Developer" ? "#8849FF" : "#0C8CFB"}
-                  className="w-[18px] h-[18px]"
-                />
-                <p>{`${plan.metadata.chatbot_count} ChatBot`}</p>
-              </div>
+              {plan.metadata.map((item: string) => {
+                return (
+                  <div
+                    key={item}
+                    className="flex space-x-[11px] place-items-center mb-[8px]"
+                  >
+                    <CheckIcon
+                      fill={
+                        plan.plan.name === "Developer" ? "#8849FF" : "#0C8CFB"
+                      }
+                      className="w-[18px] h-[18px]"
+                    />
+                    <p>{item}</p>
+                  </div>
+                );
+              })}
             </div>
             <div className="mb-[18px]">
               <Button
-                kind={plan.name === "Developer" ? "third" : "primary"}
+                kind={plan.plan.name === "Developer" ? "third" : "primary"}
                 onClick={() => {
-                  changePlan(plan.price.id);
+                  changePlan(plan.plan.price.id);
                 }}
                 type="button"
                 className=" py-[7px]"
-                disabled={billing.product_id === plan.id}
+                disabled={billing.product_id === plan.plan.id}
               >
-                {billing.product_id === plan.id ? "Current Plan" : "Upgrade"}
+                {billing.product_id === plan.plan.id
+                  ? "Current Plan"
+                  : "Upgrade"}
               </Button>
             </div>
-            {plan.name === "Developer" && (
+            {plan.plan.name === "Developer" && (
               <p className="text-[12px] m-0 p-0 font-normal">
                 *Using your own Key will require an OpenAI account.
               </p>
