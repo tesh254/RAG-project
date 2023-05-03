@@ -21,7 +21,7 @@ const Navbar = () => {
     const router = useRouter();
 
     return (
-     <div className="w-150 bg-white h-[81px] z-30">
+     <div className="h-screen	w-150 bg-white h-[81px] z-30">
       
        <div className="max-w-full px-[16px] py-[18px] mx-auto w-full flex-col">
         
@@ -29,7 +29,7 @@ const Navbar = () => {
            <img className="w-[144px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
          </div>
  
-         <div className="w-full flex justify-center">
+         <div className="w-full flex-col justify-center">
           <div className="flex space-x-60">
             {links.map((link) => (
               <Link
