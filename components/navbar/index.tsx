@@ -9,12 +9,12 @@ const links = [
     {
       label: "Dashboard",
       link: "/",
-      icon: <img className="w-[20px] mr-5" src="/Icon.svg" />,
+      icon: <img className="w-[20px] mr-2" src="/Icon.svg" />,
     },
     {
       label: "Upgrade",
       link: "/billing",
-      icon: <img className="w-[20px] mr-5" src="/Icon-1.svg"/>,
+      icon: <img className="w-[20px] mr-2" src="/Icon-1.svg"/>,
     },
   ];
 
@@ -25,9 +25,9 @@ const Navbar = () => {
 
     return (
      // sidebar
-     <div className="h-screen min-w-200 w-200 bg-gray-200 h-[81px] z-30">
+     <div className="h-screen w-[200px] bg-gray-200 h-[81px] z-30">
       
-       <div className="max-w-full px-[20px] py-[18px] mx-auto w-full flex-col space-y-20">
+       <div className="max-w-full px-[20px] py-[18px] mx-auto w-full flex-col space-y-10">
         
          <div className="w-full">
            <img className="w-[144px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
