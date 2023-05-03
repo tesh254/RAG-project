@@ -94,25 +94,23 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   };
 
   try {
-    if (user?.email) {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/billing/create`,
-        data,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/billing/create`,
+      data,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-      const billing = response.data.billing;
-      const plans = response.data.plans;
+    const billing = response.data.billing;
+    const plans = response.data.plans;
 
-      return { props: { user, billing, plans } };
-    }
-    return { props: { user, billing: null, plans: null } };
+    return { props: { user, billing, plans } };
   } catch (error) {
+    console.log({ error });
     return { props: { user, billing: null, plans: null } };
   }
 };
