@@ -53,10 +53,7 @@ const AuthForm: FC<IAuthForm> = ({ type, label }) => {
       email: state.email,
       password: state.password,
       options: {
-        emailRedirectTo:
-          process.env.APP_ENV === "development"
-            ? "http://localhost:3000/verify"
-            : "https://app.suportal.co/verify",
+        emailRedirectTo: "https://app.suportal.co/verify",
       },
     });
 
