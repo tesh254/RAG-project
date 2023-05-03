@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { apiUrl } from "../../public/widget/embed-string";
 import Paths from "../paths";
+import { useUser } from "@supabase/auth-helpers-react";
 
 const fetcher: any = (url: string) =>
   axios
@@ -52,12 +53,10 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
     try {
       const res = await axios.post("/api/chatbot", state, {
         withCredentials: true,
-      });
-
-      const { bot } = res.data;
+      })
 
       await axios.post("/api/billing/create", {
-        chatbot_id: bot.id,
+        user
       }, {
         withCredentials: true
       });
@@ -65,7 +64,6 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
       setUpdating(false);
       toast.success("Suportal updated");
     } catch (error) {
-      console.log({ error });
       toast.error(
         "Sorry, there was a problem faced while updating your suportal"
       );

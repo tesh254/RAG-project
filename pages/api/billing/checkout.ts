@@ -26,7 +26,6 @@ const initCheckout = async (req: NextApiRequest, res: NextApiResponse) => {
             url: checkoutUrl,
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({
             message: "Internal server error"
         })
