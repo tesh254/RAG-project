@@ -12,11 +12,11 @@
 }
 
 .button-primary {
-  @apply flex text-white place-items-center space-x-[7px] justify-center bg-suportal-blue rounded-[12px] px-[13px] py-[12px];
+  @apply flex text-white place-items-center space-x-[7px] justify-center bg-suportal-blue rounded-[16px] px-[13px] py-[12px];
 }
 
 .button-third {
-  @apply flex text-white place-items-center space-x-[7px] justify-center bg-suportal-purple rounded-[12px] px-[13px] py-[12px];
+  @apply flex text-white place-items-center space-x-[7px] justify-center bg-suportal-purple rounded-[16px] px-[13px] py-[12px];
 }
 
 .button-secondary {
