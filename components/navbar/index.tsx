@@ -29,17 +29,19 @@ const Navbar = () => {
            <img className="w-[144px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
          </div>
  
-         <div className="flex space-x-64">
-           {links.map((link) => (
-             <Link
-               className="hover:text-suportal-blue transition duration-300"
-               href={link.link}
-               key={link.link}
-             >
-               {link.label}
-             </Link>
-           ))}
-         </div>
+         <div className="w-1/3">
+          <div className="flex space-x-64">
+            {links.map((link) => (
+              <Link
+                className="hover:text-suportal-blue transition duration-300"
+                href={link.link}
+                key={link.link}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
 
          <div className="w-1/3">
            <Button
