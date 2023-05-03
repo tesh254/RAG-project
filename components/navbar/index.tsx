@@ -34,10 +34,10 @@ const Navbar = () => {
          </div>
  
          <div className="w-full flex-col">
-          <div className="flex-col space-y-20">
+          <div className="flex-col space-y-5">
             {links.map((link) => (
               <Link
-                className="flex w-full p-5 hover:text-suportal-blue hover:bg-slate-400 transition duration-300"
+                className="flex rounded-lg space-x-2 w-full p-5 hover:text-suportal-blue hover:bg-slate-400 transition duration-300"
                 href={link.link}
                 key={link.link}
               >
