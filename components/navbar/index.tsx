@@ -29,7 +29,7 @@ const Navbar = () => {
            <img className="w-[144px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
          </div>
  
-         <div className="w-1/3">
+         <div className="w-1/3 flex justify-center">
           <div className="flex space-x-64">
             {links.map((link) => (
               <Link
@@ -43,7 +43,7 @@ const Navbar = () => {
           </div>
         </div>
 
-         <div className="w-1/3">
+         <div className="w-1/3 flex justify-end">
            <Button
              onClick={() => {
                supabaseClient.auth.signOut();
