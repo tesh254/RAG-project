@@ -11,7 +11,7 @@ const links = [
     link: "/",
   },
   {
-    label: "Billing",
+    label: "Upgrade",
     link: "/billing",
   },
 ];
