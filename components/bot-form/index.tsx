@@ -58,6 +58,8 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
 
       await axios.post("/api/billing/create", {
         chatbot_id: bot.id,
+      }, {
+        withCredentials: true
       });
 
       setUpdating(false);
