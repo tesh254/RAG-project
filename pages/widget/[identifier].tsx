@@ -45,7 +45,7 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
       checkLimit();
       const interval = setInterval(() => {
         checkLimit();
-      }, 20000);
+      }, 50000);
 
       return () => {
         clearInterval(interval);

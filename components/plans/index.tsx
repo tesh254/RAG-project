@@ -75,10 +75,10 @@ const Plans: FC<Props> = ({ plans, billing, resetPlan }) => {
       plan: plans.find((item) => item.name === "Pro"),
       metadata: ["No API key required", "100 chats/month", "1 ChatBot"],
     },
-    // Developer: {
-    //   plan: plans.find((item) => item.name === "Developer"),
-    //   metadata: ["Use your own API Key", "Unlimited chats", "1 ChatBot"],
-    // },
+    Developer: {
+      plan: plans.find((item) => item.name === "Developer"),
+      metadata: ["Use your own API Key", "Unlimited chats", "1 ChatBot"],
+    },
   };
 
   return (
