@@ -30,7 +30,7 @@ const Navbar = () => {
          </div>
  
          <div className="w-1/3 flex justify-center">
-          <div className="flex space-x-64">
+          <div className="flex space-x-25">
             {links.map((link) => (
               <Link
                 className="hover:text-suportal-blue transition duration-300"
