@@ -21,15 +21,15 @@ const Navbar = () => {
     const router = useRouter();
 
     return (
-     <div className="w-full bg-white fixed top-0 h-[81px] z-30">
+     <div className="w-150 bg-white h-[81px] z-30">
       
-       <div className="max-w-full px-[16px] py-[18px] mx-auto w-full flex items-center justify-between">
+       <div className="max-w-full px-[16px] py-[18px] mx-auto w-full flex-col">
         
-         <div className="w-1/3">
+         <div className="w-full">
            <img className="w-[144px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
          </div>
  
-         <div className="w-1/3 flex justify-center">
+         <div className="w-full flex justify-center">
           <div className="flex space-x-60">
             {links.map((link) => (
               <Link
@@ -43,7 +43,7 @@ const Navbar = () => {
           </div>
         </div>
 
-         <div className="w-1/3 flex justify-end">
+         <div className="w-full flex justify-end">
            <Button
              onClick={() => {
                supabaseClient.auth.signOut();
