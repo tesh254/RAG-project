@@ -9,6 +9,7 @@ import Plans from "../components/plans";
 import Stripe from "stripe";
 import Counter from "../components/counter";
 import { protocol } from "../lib/sanitizer";
+import ApiKey from "../components/api-key";
 
 export type Billing = {
   id?: number;
@@ -18,6 +19,7 @@ export type Billing = {
   plan_label?: string;
   product_id?: string;
   subscription_id?: string;
+  openai_api_k?: string;
 };
 
 export type PlansType = {
@@ -67,6 +69,7 @@ const BillingPage: NextPage<{
           </div>
         )}
       </div>
+      {billing && <ApiKey billing={billing} />}
     </Layout>
   );
 };
