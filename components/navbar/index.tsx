@@ -9,12 +9,12 @@ const links = [
     {
       label: "Dashboard",
       link: "/",
-      icon: <img className="w-[20px]" src="/Icon.svg mr-5" />,
+      icon: <img className="w-[20px] mr-5" src="/Icon.svg" />,
     },
     {
       label: "Upgrade",
       link: "/billing",
-      icon: <img className="w-[20px]" src="/Icon-1.svg mr-5" />,
+      icon: <img className="w-[20px] mr-5" src="/Icon-1.svg"/>,
     },
   ];
 
@@ -34,10 +34,10 @@ const Navbar = () => {
          </div>
  
          <div className="w-full flex-col">
-          <div className="flex-col space-y-4">
+          <div className="flex-col space-y-2">
             {links.map((link) => (
               <Link
-                className="flex rounded-lg space-x-2 w-full p-5 hover:text-suportal-blue hover:bg-slate-400 transition duration-300"
+                className="flex rounded-lg space-x-2 w-full p-4 hover:text-suportal-blue hover:bg-slate-400 transition duration-300"
                 href={link.link}
                 key={link.link}
               >
@@ -47,7 +47,7 @@ const Navbar = () => {
           </div>
         </div>
 
-         <div className="w-full flex justify-end">
+         <div className="w-full flex">
            <Button
              onClick={() => {
                supabaseClient.auth.signOut();
