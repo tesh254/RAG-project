@@ -6,15 +6,18 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 const links = [
-  {
-    label: "Dashboard",
-    link: "/",
-  },
-  {
-    label: "Upgrade",
-    link: "/billing",
-  },
-];
+    {
+      label: "Dashboard",
+      link: "/",
+      icon: <img className="w-[144px]" src="/Icon.svg" />,
+    },
+    {
+      label: "Upgrade",
+      link: "/billing",
+      icon: <img className="w-[144px]" src="/Icon-1.svg" />,
+    },
+  ];
+
 
 const Navbar = () => {
     const supabaseClient = useSupabaseClient();
@@ -38,7 +41,7 @@ const Navbar = () => {
                 href={link.link}
                 key={link.link}
               >
-                {link.label}
+                {link.icon} {link.label}
               </Link>
             ))}
           </div>
