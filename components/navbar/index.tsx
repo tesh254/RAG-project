@@ -25,26 +25,24 @@ const Navbar = () => {
 
     return (
      // sidebar
-     <div className="h-screen w-2/12 bg-gray-200 h-[81px] z-30">
+     <div className="h-screen w-2/12 bg-gray-100 h-full z-30">
       
-       <div className="max-w-full px-[20px] py-[18px] mx-auto w-full flex-col space-y-10">
+       <div className="max-w-full px-[20px] py-[20px] mx-auto w-full flex-col space-y-[10px]">
         
          <div className="w-full">
-           <img className="w-[144px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
+           <img className="w-[150px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
          </div>
  
-         <div className="w-full flex-col">
-          <div className="flex-col space-y-2">
+         <div className="w-full flex-col space-y-2">
             {links.map((link) => (
               <Link
-                className="flex rounded-lg space-x-2 w-full p-4 hover:text-suportal-blue hover:bg-slate-400 transition duration-300"
+                className="flex rounded-2xl w-full p-[4px] hover:text-suportal-blue hover:bg-gray-300 transition duration-300"
                 href={link.link}
                 key={link.link}
               >
                 {link.icon} {link.label}
               </Link>
             ))}
-          </div>
         </div>
 
          <div className="w-full flex">
