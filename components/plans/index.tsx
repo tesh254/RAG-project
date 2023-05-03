@@ -64,7 +64,7 @@ const Plans: FC<Props> = ({ plans, billing, resetPlan }) => {
 
   return (
     <div className="select-none flex flex-wrap gap-y-[14px] gap-x-[14px]">
-      {[...plans].reverse().map((plan) => {
+      {plans.map((plan) => {
         return (
           <div
             key={plan.id}
