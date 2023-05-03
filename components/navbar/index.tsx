@@ -21,9 +21,10 @@ const Navbar = () => {
     const router = useRouter();
 
     return (
-     <div className="h-screen	w-150 bg-white h-[81px] z-30">
+     // sidebar
+     <div className="h-screen w-120 bg-gray-200	 h-[81px] z-30">
       
-       <div className="max-w-full px-[16px] py-[18px] mx-auto w-full flex-col">
+       <div className="max-w-full px-[20px] py-[18px] mx-auto w-full flex-col space-y-20">
         
          <div className="w-full">
            <img className="w-[144px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
