@@ -23,14 +23,14 @@ const Navbar = () => {
     return (
      <div className="w-full bg-white fixed top-0 h-[81px] z-30">
       
-       <div className="max-w-7xl px-[16px] py-[18px] mx-auto w-full flex items-center justify-between">
+       <div className="max-w-full px-[16px] py-[18px] mx-auto w-full flex items-center justify-between">
         
          <div className="w-1/3">
            <img className="w-[144px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
          </div>
  
          <div className="w-1/3 flex justify-center">
-          <div className="flex space-x-25">
+          <div className="flex space-x-60">
             {links.map((link) => (
               <Link
                 className="hover:text-suportal-blue transition duration-300"
