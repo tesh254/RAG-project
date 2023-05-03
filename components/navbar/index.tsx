@@ -9,12 +9,12 @@ const links = [
     {
       label: "Dashboard",
       link: "/",
-      icon: <img className="w-[20px]" src="/Icon.svg" />,
+      icon: <img className="w-[20px]" src="/Icon.svg mr-5" />,
     },
     {
       label: "Upgrade",
       link: "/billing",
-      icon: <img className="w-[20px]" src="/Icon-1.svg" />,
+      icon: <img className="w-[20px]" src="/Icon-1.svg mr-5" />,
     },
   ];
 
@@ -34,7 +34,7 @@ const Navbar = () => {
          </div>
  
          <div className="w-full flex-col">
-          <div className="flex-col space-y-5">
+          <div className="flex-col space-y-4">
             {links.map((link) => (
               <Link
                 className="flex rounded-lg space-x-2 w-full p-5 hover:text-suportal-blue hover:bg-slate-400 transition duration-300"
