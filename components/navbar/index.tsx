@@ -16,6 +16,11 @@ const links = [
       link: "/billing",
       icon: <img className="w-[20px] mr-2" src="/Icon-1.svg"/>,
     },
+    {
+        label: "Support",
+        link: "https://suportal.co/support",
+        icon: <img className="w-[20px] mr-2" src="/Icon.svg" />,
+      },
   ];
 
 
@@ -27,7 +32,7 @@ const Navbar = () => {
      // sidebar
      <div className="h-screen w-2/12 bg-gray-100 h-full z-30">
       
-       <div className="max-w-full px-[20px] py-[20px] mx-auto w-full flex-col space-y-[10px]">
+       <div className="max-w-full px-[20px] py-[20px] mx-auto w-full flex-col space-y-[20px]">
         
          <div className="w-full">
            <img className="w-[150px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
@@ -36,7 +41,7 @@ const Navbar = () => {
          <div className="w-full flex-col space-y-2">
             {links.map((link) => (
               <Link
-                className="flex rounded-2xl w-full p-[4px] hover:text-suportal-blue hover:bg-gray-300 transition duration-300"
+                className="flex rounded-2xl w-full p-[12px] hover:text-suportal-blue hover:bg-gray-300 transition duration-300"
                 href={link.link}
                 key={link.link}
               >
