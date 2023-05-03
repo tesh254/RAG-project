@@ -30,8 +30,8 @@ const Navbar = () => {
            <img className="w-[144px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
          </div>
  
-         <div className="w-full flex-col justify-center">
-          <div className="flex space-x-60">
+         <div className="w-full flex-col">
+          <div className="flex-col space-y-20">
             {links.map((link) => (
               <Link
                 className="hover:text-suportal-blue transition duration-300"
