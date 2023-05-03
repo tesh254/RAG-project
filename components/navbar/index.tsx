@@ -25,7 +25,7 @@ const Navbar = () => {
 
     return (
      // sidebar
-     <div className="h-screen min-w-120 w-120 bg-gray-200 h-[81px] z-30">
+     <div className="h-screen min-w-200 w-200 bg-gray-200 h-[81px] z-30">
       
        <div className="max-w-full px-[20px] py-[18px] mx-auto w-full flex-col space-y-20">
         
@@ -37,7 +37,7 @@ const Navbar = () => {
           <div className="flex-col space-y-20">
             {links.map((link) => (
               <Link
-                className="flex w-full p-12 hover:text-suportal-blue hover:bg-slate-400 transition duration-300"
+                className="flex w-full p-5 hover:text-suportal-blue hover:bg-slate-400 transition duration-300"
                 href={link.link}
                 key={link.link}
               >
