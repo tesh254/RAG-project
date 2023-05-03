@@ -34,6 +34,7 @@ const handler: NextApiHandler = async (
         bot: data[0],
       });
     } catch (error) {
+      console.log({ chatbotError: error });
       return res.status(400).json(error);
     }
   }
@@ -46,6 +47,7 @@ const handler: NextApiHandler = async (
         .eq("user_id", user?.id);
 
       if (error) {
+        console.log({ chatbotError: error });
         return res.status(400).json(error);
       }
 
@@ -79,6 +81,7 @@ const handler: NextApiHandler = async (
         bot: [saveData],
       });
     } catch (error) {
+      console.log({ chatbotError: error });
       return res.status(400).json(error);
     }
   }

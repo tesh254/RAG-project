@@ -63,6 +63,7 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
       setUpdating(false);
       toast.success("Suportal updated");
     } catch (error) {
+      console.log({ error });
       toast.error(
         "Sorry, there was a problem faced while updating your suportal"
       );
