@@ -22,13 +22,17 @@ const Navbar = () => {
 
   return (
     <div className="w-full bg-white fixed top-0 h-[81px] z-30">
-      <div className="max-w-screen-lg px-[16px] py-[20px] mx-auto w-full flex place-items-center justify-between">
+      <div className="max-w-7xl px-[16px] py-[18px] mx-auto w-full flex place-items-center justify-between">
+       
+       <div className"w-1/3"
         <img
-          className="w-[144px]"
+          className="w-full max-w-[144px]"
           src="/logo-svg-1.svg"
           alt="gray-suportal-logo"
         />
-        <div className="flex space-x-[64px]">
+       </div>               
+       
+       <div className="flex space-x-[64px]">
           {links.map((link) => {
             return (
               <Link className="hover:text-suportal-blue transition duration-300" href={link.link} key={link.link}>
@@ -36,15 +40,19 @@ const Navbar = () => {
               </Link>
             );
           })}
-        </div>
-        <Button
+       </div>
+         
+       <div className"w-1/3"
+         <Button
           onClick={() => {
             supabaseClient.auth.signOut();
             router.push("/login");
           }}
           kind="primary"
           className=""
-        >
+         >
+       </div>
+           
           Logout
         </Button>
       </div>
