@@ -19,7 +19,7 @@ const links = [
     {
         label: "Roadmap",
         link: "https://zaaphq.notion.site/Suportal-Roadmap-f6d68bba7ff14be5ab245d33e09c98bb",
-        icon: <img className="w-[18px] mr-[5px]" src="/Icon.svg" />,
+        icon: <img className="w-[18px] mr-[5px]" src="/mapicon.svg" />,
       },
   ];
 
