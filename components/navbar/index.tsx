@@ -34,7 +34,7 @@ const Navbar = () => {
       
        <div className="max-w-full h-full px-[20px] py-[20px] mx-auto w-full flex-col justify-stretch">
         
-         <div className="w-full">
+         <div className="w-full h-3/6">
            <img className="w-[150px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
 
            <div className="w-full flex-col">
@@ -50,7 +50,7 @@ const Navbar = () => {
             </div>
          </div>
 
-         <div className="w-full flex">
+         <div className="w-full flex h-3/6">
            <Button
              onClick={() => {
                supabaseClient.auth.signOut();
