@@ -35,7 +35,7 @@ const Navbar = () => {
        <div className="max-w-full h-full px-[20px] py-[20px] mx-auto w-full flex-col justify-stretch">
         
          <div className="w-full h-3/6 flex-col space-y-[20px]">
-           <img className="w-[150px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
+           <img className="w-[150px] ml-[12px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
 
            <div className="w-full flex-col">
             {links.map((link) => (
