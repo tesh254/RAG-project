@@ -57,7 +57,7 @@ const BillingPage: NextPage<{
 
   return (
     <Layout title="Suportal - Billing">
-      <div className="w-[700px] p-[24px] mx-auto bg-white rounded-[25px]">
+      <div className="w-[600px] p-[24px] mx-auto bg-white rounded-[25px]">
         <h1 className="font-bold text-[22px]">Upgrade</h1>
         {billing && (
           <div className="mt-[20px]">
