@@ -46,7 +46,7 @@ export default function Layout({
       <div className="w-screen flex flex-row justify-between">
         <Navbar />
         <main id="skip" className="w-10/12 bg-white flex">
-         <section className="w-full p-[30px] grid grid-cols-1 content-start">
+         <section className="w-full p-[30px] flex-col justify-start">
            {children}
          </section>
         </main>
