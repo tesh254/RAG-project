@@ -186,9 +186,9 @@ return (
           })}
         </div>
       </div>
-      <div className="pt-0 pl-[16px] pb-[4px] pr-[16px] max-h-[58px] relative">
+      <div className="pt-0 pl-[16px] pb-[4px] pr-[16px] max-h-[100px] relative">
         <div
-          className="w-full h-full overflow-hidden border-2 border-[#e8e8e8] rounded-[25.5px] place-items-center py-[5px] px-[16px]"
+          className="w-full bg-gray-50 h-full overflow-hidden border-2 border-[#e8e8e8] rounded-[25.5px] place-items-center py-[5px] px-[16px]"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr auto",
@@ -199,7 +199,7 @@ return (
           <textarea
             placeholder={
               isLimitExceeded
-                ? "Chat is currently unaivalable"
+                ? "Chat is currently unavailable"
                 : "How can I help?"
             }
             name=""
@@ -221,7 +221,7 @@ return (
           <button
             disabled={isSending}
             onClick={sendText}
-            className="bg-[#007aff] rounded-[50%] flex justify-center place-items-center outline-none h-[28px] w-[28px]"
+            className="bg-[#007aff] rounded-[20%] flex justify-center place-items-center outline-none h-[28px] w-[28px]"
           >
             <svg
               width={12}
@@ -243,7 +243,7 @@ return (
       <a
         target="_blank"
         href="https://www.suportal.co"
-        className="flex justify-center space-x-[6px] place-items-center border-t-[1px] border-[rgba(0, 0, 0, 0.1)] p-[5px]"
+        className="flex justify-center space-x-[10px] place-items-center p-[10px]"
       >
         <p className="font-suportal-bold text-[14px]">Powered by</p>
         <img src="/logo-svg-1.svg" className="w-[75px]" alt="logo" />
