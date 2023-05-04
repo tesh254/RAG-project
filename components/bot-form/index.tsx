@@ -5,7 +5,7 @@ import Input from "../input";
 import Button from "../button";
 import { toast } from "react-hot-toast";
 import { User } from "@supabase/auth-helpers-nextjs";
-import { apiUrl } from "../../public/widget/embed-string";
+import { apiUrl } from "../../lib/embed-string";
 import Paths from "../paths";
 import { useUser } from "@supabase/auth-helpers-react";
 
