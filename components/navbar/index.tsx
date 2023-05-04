@@ -50,7 +50,7 @@ const Navbar = () => {
             </div>
          </div>
 
-         <div className="w-full flex-col h-3/6 justify-end">
+         <div className="w-full h-3/6 grid grid-cols-1 content-end">
            <Button
              onClick={() => {
                supabaseClient.auth.signOut();
