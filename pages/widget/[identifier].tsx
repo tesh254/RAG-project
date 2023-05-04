@@ -157,7 +157,7 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
 
   return (
     <div className="w-full h-screen flex flex-col bg-white border-0">
-      <div className="w-full py-[12px] px-[20px] flex z-[99]" style="background-image: url('/Frame 4869.png');">
+      <div className="w-full py-[12px] px-[20px] bg-violet-100 flex z-[99]">
         <h6 className="font-suportal-bold text-[18px]">{title ?? "Chat"}</h6>
       </div>
       <div className="grow relative mt-[16px] px-[1px]">
