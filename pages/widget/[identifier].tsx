@@ -162,7 +162,7 @@ return (
         <div className="w-full flex items-center space-x-[7px]">
          <div className="w-[10px] h-[10px] bg-green-500	rounded-full">
          </div>
-         <h6 className="font-suportal-medium text-slate-700 text-[12px]">Replies Instantly</h6>
+         <h6 className="font-suportal-medium text-slate-700 text-[13px]">Replies Instantly</h6>
         </div>
       </div>
       <div className="grow relative mt-[16px] px-[1px]">
@@ -186,7 +186,7 @@ return (
           })}
         </div>
       </div>
-      <div className="pt-0 pl-[16px] pb-[4px] pr-[16px] max-h-[100px] relative">
+      <div className="pt-0 pl-[16px] pb-[4px] pr-[16px] max-h-[150px] relative">
         <div
           className="w-full bg-gray-50 h-full overflow-hidden border-2 border-[#e8e8e8] rounded-[25.5px] place-items-center py-[5px] px-[16px]"
           style={{
@@ -200,7 +200,7 @@ return (
             placeholder={
               isLimitExceeded
                 ? "Chat is currently unavailable"
-                : "How can I help?"
+                : "How can we help?"
             }
             name=""
             rows={1}
