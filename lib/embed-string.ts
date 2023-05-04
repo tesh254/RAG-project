@@ -47,6 +47,7 @@ export default function widgetString(identifier: string) {
 
       iframe.width = "100%";
       iframe.height = "100%";
+      iframe.style.cssText="border: none !important;";
       chatContainer.appendChild(iframe);
     
       document.body.appendChild(toggleButton);

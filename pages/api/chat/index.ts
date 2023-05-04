@@ -1,7 +1,7 @@
 import { Configuration, CreateCompletionResponse, OpenAIApi } from "openai";
 import { Readable, Transform } from 'stream';
 import { StreamPayload } from "../../../lib/gpt-parser";
-import { apiUrl } from "../../../public/widget/embed-string";
+import { apiUrl } from "../../../lib/embed-string";
 import { NextApiRequest, NextApiResponse } from "next";
 
 

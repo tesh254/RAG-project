@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextApiRequest, NextApiResponse } from "next";
 import Cors from "nextjs-cors";
-import widgetString from "../../../public/widget/embed-string";
+import widgetString from "../../../lib/embed-string";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await Cors(req, res, {
