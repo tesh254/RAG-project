@@ -68,8 +68,8 @@ const BillingPage: NextPage<{
             <Plans resetPlan={resetPlan} plans={plans} billing={billing} />
           </div>
         )}
+        {billing && <ApiKey billing={billing} />}
       </div>
-      {billing && <ApiKey billing={billing} />}
     </Layout>
   );
 };
