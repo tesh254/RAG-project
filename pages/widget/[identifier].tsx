@@ -159,8 +159,8 @@ return (
     <div className="w-full h-screen flex flex-col bg-white border-0">
       <div className="w-full py-[12px] px-[20px] bg-violet-100 flex-col spacy-y-[5px] z-[99]">
         <h6 className="font-suportal-bold text-slate-950 text-[18px]">{title ?? "Chat"}</h6>
-        <div className="w-full flex-row space-x-[7px]">
-         <div className="w-[10px] h-[10px] bg-green-500	">
+        <div className="w-full flex items-center space-x-[7px]">
+         <div className="w-[10px] h-[10px] bg-green-500	rounded-full">
          </div>
          <h6 className="font-suportal-medium text-slate-700 text-[12px]">Replies Instantly</h6>
         </div>
