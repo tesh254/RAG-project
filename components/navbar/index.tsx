@@ -30,7 +30,7 @@ const Navbar = () => {
 
     return (
      // sidebar
-     <div className="relative h-screen w-2/12 bg-gray-100 h-full z-30">
+     <div className="sticky top-0 h-screen w-2/12 bg-gray-100 h-full z-30">
       
        <div className="max-w-full h-full px-[20px] py-[20px] mx-auto w-full flex-col justify-stretch">
         
