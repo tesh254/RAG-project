@@ -128,8 +128,8 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
   };
 
   return (
-    <div className="w-full space-y-[24px] h-auto flex justify-center flex-col place-items-center">
-      <div className="mt-[4px] bg-white w-fit-content p-[24px] rounded-[26px] w-[500px]">
+    <div className="w-[600px] space-y-[24px] h-auto flex justify-center flex-col place-items-center">
+      <div className="bg-white p-[24px] rounded-[26px] w-[600px]">
         <h6 className="text-black mb-[32px] text-[25px]">
           Dashboard
         </h6>
@@ -157,13 +157,13 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
             </div>
           </div>
           <div className="base-s-input">
-            <label className="">Website Link</label>
+            <label className="">Website Link (Or Knowledge base)</label>
             <div className="base-s-input-element-container">
               <Input
                 name="website_link"
                 onChange={onChange}
                 inputClassname=""
-                placeholder="Website link"
+                placeholder="Website/Docs link"
                 type="text"
                 value={state.website_link}
               />
