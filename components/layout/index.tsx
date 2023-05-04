@@ -43,7 +43,7 @@ export default function Layout({
           src="http://localhost:3000/api/widget/ea8a05af-102b-4862-828b-530489106e52"
         />
       )}
-      <div className="w-screen flex flex-row justify-between">
+      <div className="w-screen flex flex-row justify-end">
         <Navbar />
         <main id="skip" className="w-10/12 bg-white flex justify-start">
          <section className="w-full p-[30px]">
