@@ -32,7 +32,7 @@ const Navbar = () => {
      // sidebar
      <div className="fixed h-screen w-2/12 bg-gray-100 h-full z-30">
       
-       <div className="max-w-full h-full px-[20px] py-[20px] mx-auto w-full flex-col content-between">
+       <div className="max-w-full h-full px-[20px] py-[20px] mx-auto w-full flex-col justify-stretch">
         
          <div className="w-full">
            <img className="w-[150px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
