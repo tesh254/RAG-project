@@ -45,7 +45,7 @@ export default function Layout({
       )}
       <div className="w-screen flex flex-row justify-end">
         <Navbar />
-        <main id="skip" className="w-10/12 bg-white flex justify-start">
+        <main id="skip" className="w-10/12 bg-white flex justify-between">
          <section className="w-full p-[30px]">
            {children}
          </section>
