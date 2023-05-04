@@ -17,8 +17,8 @@ const links = [
       icon: <img className="w-[18px] mr-[5px]" src="/Icon-1.svg"/>,
     },
     {
-        label: "Support",
-        link: "https://suportal.co/support",
+        label: "Roadmap",
+        link: "https://zaaphq.notion.site/Suportal-Roadmap-f6d68bba7ff14be5ab245d33e09c98bb",
         icon: <img className="w-[18px] mr-[5px]" src="/Icon.svg" />,
       },
   ];
