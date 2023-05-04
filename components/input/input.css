@@ -11,7 +11,7 @@
 }
 
 .base-s-input-element-container {
-  @apply w-full h-[120px];
+  @apply w-full h-[100px];
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: 42px;
