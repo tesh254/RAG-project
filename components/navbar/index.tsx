@@ -9,17 +9,17 @@ const links = [
     {
       label: "Dashboard",
       link: "/",
-      icon: <img className="w-[20px] mr-2" src="/Icon.svg" />,
+      icon: <img className="w-[18px] mr-[5px]" src="/Icon.svg" />,
     },
     {
       label: "Upgrade",
       link: "/billing",
-      icon: <img className="w-[20px] mr-2" src="/Icon-1.svg"/>,
+      icon: <img className="w-[18px] mr-[5px]" src="/Icon-1.svg"/>,
     },
     {
         label: "Support",
         link: "https://suportal.co/support",
-        icon: <img className="w-[20px] mr-2" src="/Icon.svg" />,
+        icon: <img className="w-[18px] mr-[5px]" src="/Icon.svg" />,
       },
   ];
 
@@ -32,7 +32,7 @@ const Navbar = () => {
      // sidebar
      <div className="fixed h-screen w-2/12 bg-gray-100 h-full z-30">
       
-       <div className="max-w-full px-[20px] py-[20px] mx-auto w-full flex-col justify-between">
+       <div className="max-w-full h-full px-[20px] py-[20px] mx-auto w-full flex-col justify-between">
         
          <div className="w-full">
            <img className="w-[150px]" src="/logo-svg-1.svg" alt="gray-suportal-logo" />
