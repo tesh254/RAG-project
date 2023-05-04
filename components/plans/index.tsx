@@ -87,7 +87,7 @@ const Plans: FC<Props> = ({ plans, billing, resetPlan }) => {
         return (
           <div
             key={plan.plan.id}
-            className={`p-[1rem] rounded-[18px] border-[1px] border-[rgba(83, 90, 116, 0.08)] w-[265px] h-fit min-h-[234px] ${
+            className={`p-[1rem] rounded-[18px] shadow-md border-[1px] border-[rgba(83, 90, 116, 0.08)] w-[265px] h-fit min-h-[234px] ${
               plan.plan.name === "Developer"
                 ? "bg-[#212121] text-white"
                 : "bg-white"
