@@ -157,8 +157,8 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
 
   return (
     <div className="w-full h-screen flex flex-col bg-white border-0">
-      <div className="w-full py-[12px] px-[20px] flex border-b-[1px] border-[rgba(0, 0, 0, 0.1)] z-[99]">
-        <h6 className="font-suportal-bold text-[16px]">{title ?? "Chat"}</h6>
+      <div className="w-full py-[12px] px-[20px] flex bg-gradient-to-r from-sky-500 to-indigo-500 z-[99]">
+        <h6 className="font-suportal-bold text-[18px]">{title ?? "Chat"}</h6>
       </div>
       <div className="grow relative mt-[16px] px-[1px]">
         <div
@@ -240,8 +240,8 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
         href="https://www.suportal.co"
         className="flex justify-center space-x-[6px] place-items-center border-t-[1px] border-[rgba(0, 0, 0, 0.1)] p-[5px]"
       >
-        <p className="font-suportal-bold text-[11px]">Powered by</p>
-        <img src="/logo-svg-1.svg" className="w-[52px]" alt="logo" />
+        <p className="font-suportal-bold text-[14px]">Powered by</p>
+        <img src="/logo-svg-1.svg" className="w-[75px]" alt="logo" />
       </a>
     </div>
   );
