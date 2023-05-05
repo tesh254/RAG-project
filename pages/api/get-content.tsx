@@ -20,11 +20,11 @@ const handler: NextApiHandler = async (
       const body = req.body;
 
       const response = await axios.post(
-        `${scrapperUrl}/suportal-content`,
+        `${scrapperUrl}/content`,
         {
           base_link: body.base_link,
           paths: body.paths,
-          website_link_id: body.website_link_id,
+          chatbot_id: body.chatbot_id,
         }
       );
       return res.status(200).json(response.data);

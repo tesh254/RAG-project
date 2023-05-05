@@ -38,7 +38,7 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
       .post("/api/get-content", {
         base_link: link,
         paths,
-        website_link_id: chatbot_id,
+        chatbot_id: chatbot_id,
       })
       .then((r) => {
         // toast.success(
@@ -68,7 +68,7 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
   useEffect(() => {
     const interval = setInterval(() => {
       refetch();
-    }, 600000);
+    }, 200000);
 
     return () => {
       clearInterval(interval);
@@ -104,12 +104,15 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
         .then((res) => {
           setIsFetching(false);
           toast.loading(
-            `We are refreshing the links for ${website_link}, this will take close to 10 minutes, you can make a coffee ☕️ in the meantime, the links section will refresh every 20 seconds`,
+            `We are refreshing the links for ${website_link}, this will take close to 10 minutes, you can make a coffee ☕️ in the meantime, the links section will refresh in 20 seconds`,
             {
               duration: 10000,
               position: "top-center",
             }
           );
+          setTimeout(() => {
+            window.location.reload();
+          }, 20000);
         })
         .catch((err) => {
           setIsFetching(false);
