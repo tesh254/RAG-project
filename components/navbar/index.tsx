@@ -17,9 +17,14 @@ const links = [
       icon: <img className="w-[18px] mr-[5px]" src="/Icon-1.svg"/>,
     },
     {
-        label: "Roadmap",
-        link: "https://zaaphq.notion.site/Suportal-Roadmap-f6d68bba7ff14be5ab245d33e09c98bb",
-        icon: <img className="w-[18px] mr-[5px]" src="/mapicon.svg" />,
+      label: "Roadmap",
+      link: "https://zaaphq.notion.site/Suportal-Roadmap-f6d68bba7ff14be5ab245d33e09c98bb",
+      icon: <img className="w-[18px] mr-[5px]" src="/mapicon.svg" />,
+    },
+    {
+      label: "Demo",
+      link: "/demo",
+      icon: <img className="w-[18px] mr-[5px]" src="/mapicon.svg" />,
       },
   ];
 
