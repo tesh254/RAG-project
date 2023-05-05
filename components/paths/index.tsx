@@ -41,9 +41,9 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
         chatbot_id: chatbot_id,
       })
       .then((r) => {
-        // toast.success(
-        //   `${link} content is being retrieved and trained, this might take a couple of minutes`
-        // );
+        toast.success(
+          `${link} content is being retrieved and trained, this might take a couple of minutes`
+        );
       })
       .catch((err) => {
         toast.error(`Problem retrieving content from: ${link}`);
