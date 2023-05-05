@@ -5,8 +5,16 @@ import { GetServerSidePropsContext, NextPage } from "next";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import Plans from "../components/plans";
-import Stripe from "stripe";
 import Counter from "../components/counter";
 import { protocol } from "../lib/sanitizer";
 import ApiKey from "../components/api-key";
+
+
+return (
+    <Layout title="Suportal - Demo">
+      <div className="w-[600px] p-[24px] bg-white rounded-[25px]">
+        <h1 className="font-bold text-[22px]">Demo</h1>
+      </div>
+    </Layout>
+  );
+};
