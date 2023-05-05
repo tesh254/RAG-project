@@ -14,7 +14,7 @@ const links = [
     {
       label: "Demo",
       link: "/demo",
-      icon: <img className="w-[18px] mr-[5px]" src="/mapicon.svg" />,
+      icon: <img className="w-[18px] mr-[5px]" src="/Icon-demo.svg" />,
     },
     {
       label: "Upgrade",
