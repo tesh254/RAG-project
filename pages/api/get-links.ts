@@ -16,21 +16,23 @@ const handler: NextApiHandler = async (
 
   if (req.method === "POST") {
     try {
-        const body = req.body;
+      const body = req.body;
 
-        const response = await axios.post(`${scrapperUrl}/suportal-links/${body.chatbot_id}`, {
-            website_link: body.website_link,
-        }, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        });
+      const response = await axios.post(`${scrapperUrl}/links`, {
+        website_link: body.website_link,
+        chatbot_id: body.chatbot_id
+      }, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
 
-        return res.status(200).json(response.data);
+      return res.status(200).json(response.data);
     } catch (error) {
-        return res.status(500).json({
-            message: "Problem processing links"
-        })
+      console.log({ error })
+      return res.status(500).json({
+        message: "Problem processing links"
+      })
     }
   }
 };

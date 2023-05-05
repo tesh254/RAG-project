@@ -128,7 +128,7 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
   };
 
   return (
-    <div className="w-[600px] space-y-[24px] h-auto flex justify-center flex-col place-items-center">
+    <div className="w-[600px] space-y-[24px] h-auto flex justify-start flex-col">
       <div className="bg-white p-[24px] rounded-[26px] w-[600px]">
         <h6 className="text-black mb-[32px] text-[25px]">
           Dashboard

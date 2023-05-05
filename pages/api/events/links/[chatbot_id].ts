@@ -18,9 +18,21 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                 process.env.NEXT_PUBLIC_SUPABASE_URL as string,
                 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
             );
-            body.links.forEach(async (item: string) => {
-                const { data: result, error } = await supabaseClient.from("websitelink").select("*").eq('path', item).eq("chatbot_id", chatbotId)
 
+            const { data: result, error } = await supabaseClient.from("websitelink").select("*").eq("chatbot_id", chatbotId)
+
+            if (result && result.length > 0) {
+                for (let i = 0; i < result.length; i++) {
+                    await supabaseClient.from("websitelink").delete().eq("id", result[i].id)
+                }
+            }
+
+
+            for (let i = 0; i < body.links.length; i++) {
+                console.log(body.links[i])
+
+                const { data: result, error } = await supabaseClient.from("websitelink").select("*").eq('path', body.links[i]).eq("chatbot_id", chatbotId)
+    
                 if (result?.length !== 0) {
                     return;
                 } else {
@@ -29,9 +41,12 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                         .insert({
                             chatbot_id: chatbotId,
                             is_trained: false,
-                            path: item,
+                            path: body.links[i],
                         })
                 }
+            }
+
+            body.links.forEach(async (item: string) => {
             })
 
             return res.status(200).json({
