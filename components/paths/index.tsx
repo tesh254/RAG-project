@@ -137,9 +137,7 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
           {chatbot_id &&
             website_link &&
             data &&
-            data.paths &&
-            data.paths.filter((item: PathsType) => !!item.is_trained).length >
-              0 && (
+            data.paths && (
               <button
                 onClick={() => getContent(website_link, data.paths)}
                 className="flex p-[8px] rounded-[8px] place-items-center justify-center text-[16px] bg-suportal-purple text-white"
