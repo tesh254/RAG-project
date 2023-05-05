@@ -134,14 +134,19 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
           placeholder="Search path"
         />
         <div className="flex space-x-[4px]">
-          {chatbot_id && website_link && data && data.paths && (
-            <button
-              onClick={() => getContent(website_link, data.paths)}
-              className="flex p-[8px] rounded-[8px] place-items-center justify-center text-[16px] bg-suportal-purple text-white"
-            >
-              <span className="text-[12px]">Train</span>
-            </button>
-          )}
+          {chatbot_id &&
+            website_link &&
+            data &&
+            data.paths &&
+            data.paths.filter((item: PathsType) => !!item.is_trained).length >
+              0 && (
+              <button
+                onClick={() => getContent(website_link, data.paths)}
+                className="flex p-[8px] rounded-[8px] place-items-center justify-center text-[16px] bg-suportal-purple text-white"
+              >
+                <span className="text-[12px]">Train</span>
+              </button>
+            )}
           {chatbot_id && website_link && (
             <button
               onClick={getLinks}
