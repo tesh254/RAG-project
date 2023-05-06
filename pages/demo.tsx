@@ -10,7 +10,9 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
-const { user: userData, error: userError }: any = await supabaseClient.auth.getUser(req.headers.get('Authorization')!.replace('Bearer ', ''))
+async function getUser() {
+  const { user: userData, error: userError }: any = await supabaseClient.auth.getUser(req.headers.get('Authorization')!.replace('Bearer ', ''))
+}
 
 const Demo: NextPage = () => {
     return (
