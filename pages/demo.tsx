@@ -5,6 +5,8 @@ import { User } from "@supabase/supabase-js";
 import { useUser } from "@supabase/auth-helpers-react";
 import {createClient} from '@supabase/supabase-js'
 
+const { user: userData, error: userError } = await supabaseClient.auth.api.getUser(req.headers.get('Authorization')!.replace('Bearer ', ''))
+
 const Demo: NextPage = () => {
     return (
     <Layout title="Suportal - Demo">
