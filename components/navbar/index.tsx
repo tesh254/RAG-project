@@ -12,11 +12,6 @@ const links = [
       icon: <img className="w-[18px] mr-[5px]" src="/Icon.svg" />,
     },
     {
-      label: "Demo",
-      link: "/demo",
-      icon: <img className="w-[18px] mr-[5px]" src="/Icon-demo.svg" />,
-    },
-    {
       label: "Upgrade",
       link: "/billing",
       icon: <img className="w-[18px] mr-[5px]" src="/Icon-1.svg"/>,
