@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../components/layout";
 import { NextPage } from "next";
+import { User } from "@supabase/supabase-js";
 
 
 const Demo: NextPage = () => {
