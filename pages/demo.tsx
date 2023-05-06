@@ -3,10 +3,12 @@ import Layout from "../components/layout";
 import { NextPage } from "next";
 import { User } from "@supabase/supabase-js";
 import { useUser } from "@supabase/auth-helpers-react";
-
 import {createClient} from '@supabase/supabase-js'
-const supabaseUrl = process.env.https://lkxdecuqbkjplmgsrmrn.supabase.co
-const supabaseAnonKey = process.env.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxreGRlY3VxYmtqcGxtZ3NybXJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODEyMjM5MTUsImV4cCI6MTk5Njc5OTkxNX0.Yn3rjhVgvjilpHTOquiE-APYezroxWSFp2BZXLSOSLE
+
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
+
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+
 export const supabase = createClient (supabaseUrl, supabaseAnonKey)
 
 const Demo: NextPage = () => {
