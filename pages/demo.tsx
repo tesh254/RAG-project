@@ -7,11 +7,6 @@ import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import type { AppProps } from "next/app";
 
-const [supabaseClient] = useState(() => createBrowserSupabaseClient({
-    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-}));
-
 
 const Demo: NextPage = () => {
     return (
