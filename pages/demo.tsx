@@ -7,7 +7,6 @@ import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import type { AppProps } from "next/app";
 import { Toaster } from "react-hot-toast";
-import { useState } from "react";
 import "../styles/globals.css";
 
 
