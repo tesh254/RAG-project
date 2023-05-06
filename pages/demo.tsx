@@ -2,6 +2,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../components/layout";
 import { NextPage } from "next";
 import { User } from "@supabase/supabase-js";
+import { useUser } from "@supabase/auth-helpers-react";
+import { apiUrl } from "../../lib/embed-string";
+import Paths from "../paths";
+import useSWR from "swr";
+import axios from "axios";
+import Input from "../input";
 
 const script = (
     <span>
@@ -11,7 +17,7 @@ const script = (
       <br />
       {`/${user.id}"></script>`}
     </span>
-  );
+);
 
 const Demo: NextPage = () => {
     return (
