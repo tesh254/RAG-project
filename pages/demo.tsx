@@ -4,11 +4,6 @@ import { NextPage } from "next";
 import { User } from "@supabase/supabase-js";
 import { useUser } from "@supabase/auth-helpers-react";
 
-const script = (
-    <span>
-      {`${user.id}`}
-    </span>
-);
 
 const Demo: NextPage = () => {
     return (
@@ -17,7 +12,7 @@ const Demo: NextPage = () => {
         <h1 className="font-bold text-[22px]">Demo</h1>
         <iframe 
             className="w-full h-[600px] rounded-lg"
-            src="https://app.suportal.co/widget/{script}">
+            src="https://app.suportal.co/widget/${user.id}">
         </iframe>      
       </div>
     </Layout>
