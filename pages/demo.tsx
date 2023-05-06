@@ -3,10 +3,6 @@ import Layout from "../components/layout";
 import { NextPage } from "next";
 import { User } from "@supabase/supabase-js";
 import { useUser } from "@supabase/auth-helpers-react";
-import Paths from "../paths";
-import useSWR from "swr";
-import axios from "axios";
-import Input from "../input";
 
 const script = (
     <span>
