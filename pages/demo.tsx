@@ -10,9 +10,17 @@ import { createClient } from '@supabase/supabase-js';
 const supabase = createClient('https://lkxdecuqbkjplmgsrmrn.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxreGRlY3VxYmtqcGxtZ3NybXJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODEyMjM5MTUsImV4cCI6MTk5Njc5OTkxNX0.Yn3rjhVgvjilpHTOquiE-APYezroxWSFp2BZXLSOSLE');
 
 // Retrieve user ID
-const session = supabase.auth.session();
-const userId = session.user.id;
-console.log(userId);
+async function fetchUserId() {
+  const { user, error } = await supabase.auth.user();
+  if (error) {
+    console.error(error);
+    return;
+  }
+  const userId = user.id;
+  console.log(userId);
+}
+
+fetchUserId();
 
 const Demo: NextPage = () => {
     return (
