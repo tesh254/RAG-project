@@ -8,7 +8,7 @@ const Demo: NextPage = () => {
     <Layout title="Suportal - Demo">
       <div className="w-[600px] p-[24px] bg-white rounded-[25px]">
         <h1 className="font-bold text-[22px]">Demo</h1>
-        <iframe src="https://app.suportal.co/widget/${user.id}" width="100%" height="300" style="border:1px solid black;">
+        <iframe src="https://app.suportal.co/widget/${user.id}">
         </iframe>      
       </div>
     </Layout>
