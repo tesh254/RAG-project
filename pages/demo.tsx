@@ -11,7 +11,7 @@ const supabase = createClient('https://lkxdecuqbkjplmgsrmrn.supabase.co', 'eyJhb
 
 // Retrieve user ID
 async function fetchUserId() {
-  const { user, error } = await supabase.auth.user();
+  const { user, error } = supabase.auth.currentUser();
   if (error) {
     console.error(error);
     return;
