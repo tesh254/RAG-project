@@ -29,9 +29,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .limit(1)
         .single();
 
+
       if (!chatbot) {
         throw new Error("Suportal owner has not yet created a bot");
       }
+      const { data: billing, error: billingError } = await supabaseClient.from("billing").select("openai_api_k").eq("chatbot_id", chatbot.id).single();
+
+      const accountAPIKey = billing?.openai_api_k;
 
       const { data: paths, error: pathsError } = await supabaseClient
         .from("websitelink")
@@ -56,7 +60,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const sanitizedQuery = trimStr(query);
 
       const configuration = new Configuration({
-        apiKey: openAiKey,
+        apiKey: accountAPIKey ? accountAPIKey : openAiKey,
       });
 
       const openai = new OpenAIApi(configuration);
@@ -107,6 +111,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       return res.status(200).json({
         context: savedContent[selectedRecord[1]].content,
+        api_key: accountAPIKey ?? openAiKey
       });
     } catch (error) {
       res.status(500).json({

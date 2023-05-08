@@ -82,87 +82,98 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
     setFp(fingerprint);
   }, []);
 
-  const sendText = () => {
+  const sendText = async () => {
     const $text = text;
     setText("");
     setIsSending(true);
+
     const newChat: any = {
       message: text,
       user: "sender",
       id: chats.length + 1,
     };
+
     const typingChat: any = {
       message: "Typing...",
       user: "reply",
       id: chats.length + 2,
     };
+
     setChats((prev) => [...prev, newChat, typingChat]);
     checkIfNewChat();
-    axios({
-      method: "post",
-      url: `${coreUrl}/core-chat`,
+
+    const response = await fetch("/api/chat", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      responseType: "arraybuffer",
-      data: {
+      body: JSON.stringify({
         message: $text,
         website_link,
         chatbot_id: id,
-      },
-    })
-      .then(async (response) => {
-        const reader = new Response(response.data)?.body?.getReader();
-        let done = false;
-        let accumulatedChunks = "";
-        while (!done) {
-          // @ts-ignore
-          const { value, done: doneReading } = await reader?.read();
-          if (doneReading) {
-            done = true;
-          }
-          const chunk = new TextDecoder("utf-8").decode(value);
-          accumulatedChunks += chunk;
-          setChats((prev) => {
-            const typingChatIndex = prev.findIndex(
-              (item) => item.id === typingChat.id
-            );
-            const updatedChat: any = {
-              message:
-                typingChat.message === "Typing..."
-                  ? accumulatedChunks
-                  : typingChat.message + accumulatedChunks,
-              user: typingChat.user,
-              id: typingChat.id,
-            };
-            const updatedChats = [...prev];
-            updatedChats.splice(typingChatIndex, 1, updatedChat);
-            if (chatListRef.current) {
-              //@ts-ignore
-              chatListRef.current?.scrollTo({
-                //@ts-ignore
-                top: chatListRef.current?.scrollHeight,
-                behavior: "smooth",
-              });
-            }
-            return updatedChats;
+      }),
+    });
+
+    const data = response.body;
+
+    if (!data) {
+      return;
+    }
+
+    const reader = data.getReader();
+    let done = false;
+    let accumulatedChunks = "";
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunk = new TextDecoder("utf-8").decode(value);
+      accumulatedChunks += chunk;
+
+      setChats((prev) => {
+        const typingChatIndex = prev.findIndex(
+          (item) => item.id === typingChat.id
+        );
+
+        const updatedChat: any = {
+          message:
+            typingChat.message === "Typing..."
+              ? accumulatedChunks
+              : typingChat.message + accumulatedChunks,
+          user: typingChat.user,
+          id: typingChat.id,
+        };
+
+        const updatedChats = [...prev];
+        updatedChats.splice(typingChatIndex, 1, updatedChat);
+
+        if (chatListRef.current) {
+          //@ts-ignore
+          chatListRef.current?.scrollTo({
+            //@ts-ignore
+            top: chatListRef.current?.scrollHeight,
+            behavior: "smooth",
           });
         }
-      })
-      .catch((error: any) => {
-        setIsSending(false);
+
+        return updatedChats;
       });
+    }
+
     setIsSending(false);
   };
 
-return (
+  return (
     <div className="w-full h-screen flex flex-col bg-white border-0">
       <div className="w-full py-[12px] px-[20px] bg-violet-100 flex-col spacy-y-[5px] z-[99]">
-        <h6 className="font-suportal-bold text-slate-950 text-[18px]">{title ?? "Chat"}</h6>
+        <h6 className="font-suportal-bold text-slate-950 text-[18px]">
+          {title ?? "Chat"}
+        </h6>
         <div className="w-full flex items-center space-x-[7px]">
-         <div className="w-[10px] h-[10px] bg-green-500	rounded-full">
-         </div>
-         <h6 className="font-suportal-medium text-slate-700 text-[13px]">Replies Instantly</h6>
+          <div className="w-[10px] h-[10px] bg-green-500	rounded-full"></div>
+          <h6 className="font-suportal-medium text-slate-700 text-[13px]">
+            Replies Instantly
+          </h6>
         </div>
       </div>
       <div className="grow relative mt-[16px] px-[1px]">
@@ -180,7 +191,7 @@ return (
                     : "bg-[#e8e8e8] text-black font-suportal-medium self-start mt-[4px] mb-[8px]"
                 }`}
               >
-                <ReactMarkdown>{chat.message}</ReactMarkdown>
+                <ReactMarkdown className="whitespace-normal">{chat.message}</ReactMarkdown>
               </div>
             );
           })}

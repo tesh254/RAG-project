@@ -44,6 +44,10 @@ a {
   font-size: 14px;
 }
 
+textarea {
+  @apply bg-transparent;
+}
+
 textarea:focus {
   outline: none !important;
 }
@@ -66,4 +70,8 @@ p a {
 ol {
   list-style-type: decimal !important;
   @apply ml-[24px];
+}
+
+pre {
+  @apply whitespace-normal;
 }
