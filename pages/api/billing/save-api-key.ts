@@ -31,8 +31,6 @@ const saveApiKey = async (req: NextApiRequest, res: NextApiResponse) => {
             billing = response.data.billing;
         }
 
-        console.log({ billing })
-
         if (billing && billing.data && billing.data.product_id) {
             const { data: { product_id, id } } = billing;
 

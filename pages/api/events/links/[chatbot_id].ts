@@ -29,8 +29,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
 
             for (let i = 0; i < body.links.length; i++) {
-                console.log(body.links[i])
-
                 const { data: result, error } = await supabaseClient.from("websitelink").select("*").eq('path', body.links[i]).eq("chatbot_id", chatbotId)
     
                 if (result?.length !== 0) {

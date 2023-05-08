@@ -138,8 +138,6 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
 
                 const subscription: any = await stripeObj.private.subscriptions.retrieve(invoice.subscription);
 
-                console.log({ subscription });
-
                 if (subscription) {
                     await supabaseServerClient
                         .from("billing")

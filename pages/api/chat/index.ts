@@ -1,9 +1,5 @@
-import { Configuration, CreateCompletionResponse, OpenAIApi } from "openai";
-import { Readable, Transform } from 'stream';
-import { StreamPayload } from "../../../lib/gpt-parser";
+import { StreamPayload, chatGPTStream } from "../../../lib/gpt-parser";
 import { apiUrl } from "../../../lib/embed-string";
-import { NextApiRequest, NextApiResponse } from "next";
-
 
 export type RequestData = {
   website_link: string;
@@ -11,25 +7,14 @@ export type RequestData = {
   chatbot_id: number;
 };
 
-const configuration = new Configuration({
-  apiKey: process.env.OPEN_API_KEY as unknown as string,
-})
+export const config = {
+  runtime: 'edge',
+};
 
-const openai = new OpenAIApi(configuration);
-
-function isJsonParsable(str: string): boolean {
-  try {
-    JSON.parse(str);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: any) => {
   if (req.method === "POST") {
     try {
-      const body = req.body as RequestData;
+      const body = (await req.json()) as RequestData;
 
       const response = await fetch(`${apiUrl}/api/ai/embed`, {
         method: "POST",
@@ -39,19 +24,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       }).then((res) => res.json());
 
-      const { context } = response;
+      const { context, api_key } = response;
 
       const content = `
-        You are helping answer a user's question
-
-        Use the paragraph below as context:
-        ${context}
-
-        Their question was: "${body.message}"
-
-        Write an answer to the user's question
-
-        Answer as markdown
+      You are helping answer a user's question
+      
+      Use the paragraph below as context:
+      ${context}
+      
+      Their question was: "${body.message}"
+      
+      Write an answer to the user's question
+      
+      Answer as markdown
       `;
 
       const data: StreamPayload = {
@@ -62,47 +47,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         stream: true,
       };
 
-      const completion = await openai.createCompletion(data, { responseType: "stream" });
-      const stream = completion.data as unknown as Readable;
+      const stream = await chatGPTStream(data, api_key);
 
-      res.setHeader("Content-Type", "application/octet-stream");
-
-      stream.on("data", (chunk) => {
-        let message: any = Buffer.from(chunk).toString();
-        message = message.replace(/\n/g, "").trim();
-        if (message !== "[DONE]") {
-          const crMsg = message.trim().split("data: ").filter((item: string) => item !== "" && item !== "[DONE]");
-          if (isJsonParsable(crMsg[0])) {
-            const parsedMessage: any = JSON.parse(crMsg[0]);
-            const text = parsedMessage.choices[0]?.text.toString();
-            return res.write(text);
-          }
-          return;
-        } else {
-          res.end();
-        }
-      });
+      return new Response(stream);
     } catch (err) {
-      res.write(`We are currently facing an issue on processing messages, please try again later`);
-      res.end();
+      console.log(err)
     }
   }
 };
 
 export default handler;
-
-// stream.data.on('data', (data: string) => {
-//   const lines = data.toString().split('\n').filter((line) => line.trim() !== '');
-//   for (const line of lines) {
-//     const message = line.replace(/^data: /, '');
-//     if (message === '[DONE]') {
-//       return; // Stream finished
-//     }
-//     try {
-//       const parsed = JSON.parse(message);
-//       return parsed.choices[0].text;
-//     } catch (error) {
-//       console.error('Could not JSON parse stream message', message, error);
-//     }
-//   }
-// });
