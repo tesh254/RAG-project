@@ -67,14 +67,6 @@ const AuthForm: FC<IAuthForm> = ({ type, label }) => {
       if (data.user) {
         toast.success("Success! Please check email for verfication link");
 
-        await axios.post(
-          "/api/billing/create",
-          {
-            user: data.user,
-          },
-          { withCredentials: true }
-        );
-
         router.push("/go-to-email");
       }
     }

@@ -1,7 +1,5 @@
 import React, { FC, useEffect, useRef } from "react";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
-import { toast } from "react-hot-toast";
-import { Elements } from "@stripe/react-stripe-js";
 import { useUser } from "@supabase/auth-helpers-react";
 import { Billing, PlansType } from "../../pages/billing";
 import Button from "../button";
@@ -54,8 +52,8 @@ const Plans: FC<Props> = ({ plans, billing, resetPlan }) => {
     axios
       .post(`/api/billing/checkout`, {
         price_id: priceId,
-        billing_id: billing.id,
-        customer_id: billing.billing_id,
+        customer_id: billing?.billing_id,
+        user,
       })
       .then((res: AxiosResponse) => {
         router.push(res.data.url);
@@ -63,10 +61,6 @@ const Plans: FC<Props> = ({ plans, billing, resetPlan }) => {
   };
 
   const newPlans = {
-    Free: {
-      metadata: ["No API key required", "10 chats/month", "1 ChatBot"],
-      plan: plans.find((item) => item.name === "Free"),
-    },
     Basic: {
       plan: plans.find((item) => item.name === "Basic"),
       metadata: ["No API key required", "100 chats/month", "1 ChatBot"],
@@ -131,9 +125,9 @@ const Plans: FC<Props> = ({ plans, billing, resetPlan }) => {
                 }}
                 type="button"
                 className=" py-[7px]"
-                disabled={billing.product_id === plan.plan.id}
+                disabled={billing?.product_id === plan.plan.id}
               >
-                {billing.product_id === plan.plan.id
+                {billing?.product_id === plan.plan.id
                   ? "Current Plan"
                   : "Upgrade"}
               </Button>

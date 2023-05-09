@@ -66,7 +66,9 @@ const isLimitExceeded = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const chatCount = usage ? usage.chats : 0;
 
-        if (limit <= chatCount) {
+        let isUserUsingOldPlan = !injectedPlans.map(item => item.id).includes(billing?.product_id);
+
+        if (limit <= chatCount || isUserUsingOldPlan || !billing) {
             return res.status(200).json({
                 is_limit_exceeded: true,
             })

@@ -3,13 +3,19 @@ import { useRouter } from "next/router";
 import { ReactNode } from "react";
 import Navbar from "../navbar";
 import Script from "next/script";
+import { Billing, PlansType } from "../../pages/billing";
+import Plans from "../plans";
 
 export default function Layout({
   children,
   title = "Suportal",
+  billing,
+  plans,
 }: {
   children: ReactNode;
   title?: string;
+  billing: Billing | null;
+  plans: PlansType[];
 }) {
   const router = useRouter();
 
@@ -36,7 +42,6 @@ export default function Layout({
         {/* <meta name="twitter:image" content={meta.cardImage} /> */}
       </Head>
 
-
       {process.env.NODE_ENV === "development" && (
         <Script
           strategy="afterInteractive"
@@ -46,9 +51,19 @@ export default function Layout({
       <div className="w-screen flex flex-row justify-between">
         <Navbar />
         <main id="skip" className="w-10/12 bg-white flex">
-         <section className="w-full p-[30px] flex-col justify-start">
-           {children}
-         </section>
+          {billing?.product_id && (
+            <section className="w-full p-[30px] flex-col justify-start">
+              {children}
+            </section>
+          )}
+          {!billing?.product_id && (
+            <section className="w-full p-[30px] flex-col justify-start">
+              <p className="my-[8px] text-2xl">
+                Before you can create a Suportal subscribe to a plan
+              </p>
+              <Plans resetPlan={() => {}} plans={plans} billing={billing as unknown as Billing} />
+            </section>
+          )}
         </main>
       </div>
     </>

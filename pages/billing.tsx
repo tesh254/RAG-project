@@ -56,7 +56,7 @@ const BillingPage: NextPage<{
   const resetPlan = () => {};
 
   return (
-    <Layout title="Suportal - Billing">
+    <Layout title="Suportal - Billing" billing={billing} plans={plans}>
       <div className="w-[600px] p-[24px] bg-white rounded-[25px]">
         <h1 className="font-bold text-[22px]">Upgrade</h1>
         {billing && (
@@ -98,7 +98,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/billing/create`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/billing`,
       data,
       {
         withCredentials: true,
