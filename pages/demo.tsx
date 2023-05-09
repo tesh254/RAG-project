@@ -1,16 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import Layout from "../components/layout";
-import { NextPage } from "next";
+import { GetServerSidePropsContext, NextPage } from "next";
 import { User } from "@supabase/supabase-js";
-import { useUser } from "@supabase/auth-helpers-react";
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import type { AppProps } from "next/app";
+import axios from "axios";
+import { Billing, PlansType } from "./billing";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 
-const Demo: NextPage = () => {
+const Demo: NextPage<{
+  user: User;
+  billing: Billing | null;
+  plans: PlansType[];
+}> = ({ user, billing, plans }) => {
     return (
-    <Layout title="Suportal - Demo">
+    <Layout title="Suportal - Demo" billing={billing} plans={plans}>
       <div className="w-[600px] p-[24px] bg-white rounded-[25px]">
         <h1 className="font-bold text-[22px]">Demo</h1>
         <iframe 
@@ -20,6 +23,46 @@ const Demo: NextPage = () => {
       </div>
     </Layout>
   );
+};
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session)
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+
+  const { user } = session;
+
+  try {
+    const data = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/billing`,
+      {
+        user,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return {
+      props: { user, billing: data.data.billing, plans: data.data.plans },
+    };
+  } catch (error: unknown) {
+    return { props: { user } };
+  }
 };
 
 export default Demo;
