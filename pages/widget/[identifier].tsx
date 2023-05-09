@@ -210,7 +210,7 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
           <textarea
             placeholder={
               isLimitExceeded
-                ? "Chat is currently unavailable"
+                ? "Chat unavailable"
                 : "How can we help?"
             }
             name=""

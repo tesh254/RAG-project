@@ -1,11 +1,5 @@
 export const static_plans = [
     {
-        id: "free",
-        label: "Free",
-        key: process.env.NEXT_PUBLIC_FREE_PROD_KEY,
-        chats: 10,
-    },
-    {
         id: "basic",
         label: "Basic",
         key: process.env.NEXT_PUBLIC_BASIC_PROD_KEY,
