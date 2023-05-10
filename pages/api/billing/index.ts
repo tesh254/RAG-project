@@ -28,8 +28,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         });
     }
 
-    console.error({ products: products.data });
-
     let customer: any;
 
     const existingCustomer = await stripe.private.customers.list({
@@ -46,24 +44,14 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     }
 
     try {
-        const { data: chatbot, error: chatbotError } = await supabaseServerClient.from("chatbot").select("id").eq("user_id", req.body.user.id).single();
-
-        let bot: any = {};
-
-        if (chatbotError || !chatbot) {
-            bot = {
-                id: null,
-            };
-        } else {
-            bot = chatbot;
-        }
-
         const { data: billing, error: billingError } = await supabaseServerClient.from("billing").select("*").eq("user_id", req.body.user.id).single();
 
         let newBilling: any;
 
+        console.log({billingError})
+
         if (billingError || !billing) {
-            newBilling = await supabaseServerClient.from("billing").insert({ user_id: req.body.user.id, billing_id: customer.id, chatbot_id: bot?.id ?? null }).select();
+            newBilling = await supabaseServerClient.from("billing").insert({ user_id: req.body.user.id, billing_id: customer.id }).select();
         }
 
         return res.status(200).json({
