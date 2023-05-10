@@ -67,6 +67,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
     } catch (error: unknown) {
         if (error instanceof Error) {
+            console.log(error)
             return res.status(400).json(error);
         }
 
