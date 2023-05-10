@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
 import { useUser } from "@supabase/auth-helpers-react";
 import { Billing, PlansType } from "../../pages/billing";
@@ -37,6 +37,18 @@ const CheckIcon = ({
 const Plans: FC<Props> = ({ plans, billing, resetPlan }) => {
   const stripeRef = useRef<Stripe | null>(null);
   const user = useUser();
+  const [newPlans, setNewPlans] = useState<{
+    [key: string]: {
+      plan: PlansType | undefined;
+      metadata: string[];
+    }
+  }>({});
+
+  useEffect(() => {
+    if (plans) {
+      setNewPlans(newPlans);
+    }
+  }, [newPlans, plans]);
 
   useEffect(() => {
     (async () => {
@@ -58,21 +70,6 @@ const Plans: FC<Props> = ({ plans, billing, resetPlan }) => {
       .then((res: AxiosResponse) => {
         router.push(res.data.url);
       });
-  };
-
-  const newPlans = {
-    Basic: {
-      plan: plans.find((item) => item.name === "Basic"),
-      metadata: ["No API key required", "100 chats/month", "1 ChatBot"],
-    },
-    Pro: {
-      plan: plans.find((item) => item.name === "Pro"),
-      metadata: ["No API key required", "Unlimited chats", "1 ChatBot"],
-    },
-    Developer: {
-      plan: plans.find((item) => item.name === "Developer"),
-      metadata: ["Use your own API Key", "Unlimited chats", "1 ChatBot"],
-    },
   };
 
   return (
