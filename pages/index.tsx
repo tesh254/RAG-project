@@ -13,6 +13,9 @@ const Dashboard: NextPage<{
   billing: Billing | null;
   plans: PlansType[];
 }> = ({ user, billing, plans }) => {
+
+  console.log({ billing, plans });
+
   return (
     <Layout title="Suportal - Dashboard" billing={billing} plans={plans}>
       <BotForm user={user} />
