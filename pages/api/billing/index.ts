@@ -17,15 +17,18 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         expand: ['data.price'],
     });
 
+    
     for (let i = 0; i < products.data.length; i++) {
         const res = await stripe.private.prices.list({
             product: products.data[i].id,
         });
-
+        
         Object.assign(products.data[i], {
             price: res.data[0],
         });
     }
+    
+    console.error({ products });
 
     let customer: any;
 
