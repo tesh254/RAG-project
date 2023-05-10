@@ -66,12 +66,14 @@ const handler: NextApiHandler = async (
           await supabaseServerClient
             .from("chatbot")
             .update(payload)
-            .eq("user_id", user?.id);
+            .eq("user_id", user?.id)
+            .select();
 
         await supabaseServerClient
           .from("billing")
           .update({
-            chatbot_id: data[0]?.id,
+            // @ts-ignore
+            chatbot_id: updateData?.id,
           }).eq("billing_id", billing?.id)
 
         return res.status(201).json({
@@ -84,17 +86,14 @@ const handler: NextApiHandler = async (
       const { data: saveData, error: saveError } = await supabaseServerClient
         .from("chatbot")
         .insert(payload)
+        .select()
 
       if (billing) {
-        const { data: bot, error: botError } = await supabaseServerClient
-          .from("chatbot")
-          .select("id")
-          .single();
-
         await supabaseServerClient
           .from("billing")
           .update({
-            chatbot_id: bot?.id,
+            // @ts-ignore
+            chatbot_id: saveData?.id,
           }).eq("billing_id", billing.id);
       }
 

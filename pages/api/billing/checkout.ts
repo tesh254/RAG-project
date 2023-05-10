@@ -7,8 +7,6 @@ const initCheckout = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const { price_id, customer_id, user } = req.body;
 
-        console.log({ customer_id })
-
         let customer: any = {};
 
         if (!customer_id) {
@@ -50,7 +48,6 @@ const initCheckout = async (req: NextApiRequest, res: NextApiResponse) => {
         });
     } catch (error: unknown) {
         // @ts-ignore
-        console.log(error.message);
         return res.status(500).json({
             message: "Internal server error"
         })

@@ -13,9 +13,6 @@ const Dashboard: NextPage<{
   billing: Billing | null;
   plans: PlansType[];
 }> = ({ user, billing, plans }) => {
-
-  console.log({ billing, plans });
-
   return (
     <Layout title="Suportal - Dashboard" billing={billing} plans={plans}>
       <BotForm user={user} />
@@ -55,14 +52,11 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       }
     );
 
-    console.log(data.data.plans.length, data.data.billing)
-
     return {
       props: { user, billing: data.data.billing, plans: data.data.plans },
     };
   } catch (error: unknown) {
     // @ts-ignore
-    console.log(error.response.data)
     return { props: { user } };
   }
 };
