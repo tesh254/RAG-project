@@ -58,7 +58,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       props: { user, billing: data.data.billing, plans: data.data.plans },
     };
   } catch (error: unknown) {
-    console.log(error)
+    // @ts-ignore
+    console.log(error.response.data)
     return { props: { user } };
   }
 };
