@@ -48,11 +48,11 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
         let newBilling: any;
 
-        console.log({billingError})
 
         if (billingError || !billing) {
             newBilling = await supabaseServerClient.from("billing").insert({ user_id: req.body.user.id, billing_id: customer.id }).select();
         }
+        console.log({ billingError, billing, newBilling })
 
         return res.status(200).json({
             billing: billing ?? newBilling,
