@@ -28,7 +28,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         });
     }
     
-    console.error({ products });
+    console.error({ products: products.data });
 
     let customer: any;
 

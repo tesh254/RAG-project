@@ -52,6 +52,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       }
     );
 
+    console.log(data.data.plans)
+
     return {
       props: { user, billing: data.data.billing, plans: data.data.plans },
     };
