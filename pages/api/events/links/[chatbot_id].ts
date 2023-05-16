@@ -12,6 +12,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
     if (req.method === "POST") {
         try {
             const body = req.body;
+            console.log({ body });
             const chatbotId = req.query.chatbot_id;
 
             const supabaseClient = createClient(
