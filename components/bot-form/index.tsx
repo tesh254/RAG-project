@@ -212,7 +212,7 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
         </div>
       </div>
       {data && data.bot && data.bot.id && (
-        <Paths chatbot_id={data.bot.id} website_link={data.bot.website_link} />
+        <Paths chatbot_id={data.bot.id} website_link={state.website_link} />
       )}
     </div>
   );
