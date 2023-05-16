@@ -34,6 +34,7 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
   );
 
   const getContent = (link: string, paths: string[]) => {
+    setIsFetching(true);
     axios
       .post("/api/get-content", {
         base_link: link,
@@ -44,9 +45,11 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
         toast.success(
           `${link} content is being retrieved and trained, this might take a couple of minutes`
         );
+        setIsFetching(false);
       })
       .catch((err) => {
         toast.error(`Problem retrieving content from: ${link}`);
+        setIsFetching(false);
       });
   };
 
@@ -134,17 +137,36 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
           placeholder="Search path"
         />
         <div className="flex space-x-[4px]">
-          {chatbot_id &&
-            website_link &&
-            data &&
-            data.paths && (
-              <button
-                onClick={() => getContent(website_link, data.paths)}
-                className="flex p-[8px] rounded-[8px] place-items-center justify-center text-[16px] bg-suportal-purple text-white"
-              >
-                <span className="text-[12px]">Train</span>
-              </button>
-            )}
+          {chatbot_id && website_link && data && data.paths && (
+            <button
+              onClick={() => getContent(website_link, data.paths)}
+              className="flex p-[8px] rounded-[8px] place-items-center justify-center text-[16px] bg-suportal-purple text-white"
+            >
+              {isFetching && (
+                <svg
+                  className="animate-spin h-[10px] w-[10px] text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              )}
+              <span className="text-[12px]">Train</span>
+            </button>
+          )}
           {chatbot_id && website_link && (
             <button
               onClick={getLinks}
