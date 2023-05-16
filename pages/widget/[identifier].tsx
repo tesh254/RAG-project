@@ -43,13 +43,6 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
   useEffect(() => {
     if (id) {
       checkLimit();
-      const interval = setInterval(() => {
-        checkLimit();
-      }, 50000);
-
-      return () => {
-        clearInterval(interval);
-      };
     }
   }, [checkLimit, id]);
 
@@ -191,7 +184,9 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
                     : "bg-[#e8e8e8] text-black font-suportal-medium self-start mt-[4px] mb-[8px]"
                 }`}
               >
-                <ReactMarkdown className="whitespace-normal">{chat.message}</ReactMarkdown>
+                <ReactMarkdown className="whitespace-normal">
+                  {chat.message}
+                </ReactMarkdown>
               </div>
             );
           })}
@@ -209,9 +204,7 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
         >
           <textarea
             placeholder={
-              isLimitExceeded
-                ? "Chat unavailable"
-                : "How can we help?"
+              isLimitExceeded ? "Chat unavailable" : "How can we help?"
             }
             name=""
             rows={1}

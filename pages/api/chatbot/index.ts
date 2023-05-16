@@ -69,6 +69,17 @@ const handler: NextApiHandler = async (
             .eq("user_id", user?.id)
             .select();
 
+        if (updateData && updateData[0].website_link !== data[0].website_link) {
+          // @ts-ignore
+          const { data: result, error } = await supabaseServerClient.from("websitelink").select("*").eq("chatbot_id", updateData[0].id)
+
+          if (result) {
+            for (let i = 0; i < result.length; i++) {
+              await supabaseServerClient.from("websitelink").delete().eq("id", result[i].id)
+            }
+          }
+        }
+
         await supabaseServerClient
           .from("billing")
           .update({

@@ -51,9 +51,16 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
 
     setUpdating(true);
     try {
-      const res = await axios.post("/api/chatbot", state, {
-        withCredentials: true,
-      })
+      const res = await axios.post(
+        "/api/chatbot",
+        {
+          title: state.title,
+          website_link: state.website_link.replace(/\/$/, ""),
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       setUpdating(false);
       toast.success("Suportal updated");
@@ -124,9 +131,7 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
   return (
     <div className="w-[600px] space-y-[24px] h-auto flex justify-start flex-col">
       <div className="bg-white p-[24px] rounded-[26px] w-[600px]">
-        <h6 className="text-black mb-[32px] text-[25px]">
-          Dashboard
-        </h6>
+        <h6 className="text-black mb-[32px] text-[25px]">Dashboard</h6>
         <div className="flex flex-col space-y-[24px] w-full">
           <div className="base-s-input">
             <label className="">Suportal Title</label>
