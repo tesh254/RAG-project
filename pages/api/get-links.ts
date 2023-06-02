@@ -4,6 +4,30 @@ import axios from "axios";
 
 const scrapperUrl = process.env.SCRAPER_BACKEND_URL;
 
+/**
+ * @swagger
+ * /api/get-links:
+ *   post:
+ *     description: makes a request to the scrapper to get links for a website link tied to a chatbot
+ *     requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                website_link:
+ *                  type: string
+ *                chatbot_id:
+ *                  type: string
+ *              required:
+ *                - website_link
+ *                - chatbot_id
+ *     responses:
+ *       200:
+ *         description: message
+ */
+
 const handler: NextApiHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
