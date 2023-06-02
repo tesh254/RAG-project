@@ -126,3 +126,56 @@ This is the repo for Suportal frontend and Nextjs API
 `pages/api/get-links`
 > [POST]: `/api/get-links`
 - makes a request to the scrapper to get links for a website link tied to a chatbot
+
+`pages/widget/[identifier]`
+- this is the page loaded in the iframe within the widget
+
+`pages/billing.tsx`
+- this page renders all the pricing plans, chat counter and also ability to updgrade plan and api key
+
+`pages/demo.tsx`
+- this page renders a demo chat for users to try it out
+
+`pages/docs.tsx`
+- this page instantiates the swagger ui docs for the api endpoints
+
+`pages/go-to-email.tsx`
+- this informs the user to check email after signing up to verify their account
+
+`pages/index.tsx`
+- this page renders the dashboard, where the links for the chatbot tied are shown and the chabot form
+
+`pages/login.tsx`
+- this is the login page
+
+`pages/signup.tsx`
+- this is the signup page
+
+`pages/verify.tsx`
+- this is the page the users sees when they click on the verify link received in their email
+
+## Suggestions
+- instead of storing fingerprint with the data collected for each unique user, a better would be generate a sha256 checksum
+- updating the scrapper code to use `google/transformer` model or `openai/tiktoken` to reduce openai pricing to generate embeddings
+- adding proper auth for admin api endpoints and creation of an admin ui to better help users whenever issues arise
+
+## How to run
+
+- clone the repo
+- install dependencies, we use `yarn` `berry` version `yarn install`
+- create `.env.local` and copy over contents of `.env.example` and provide their values
+- run development server `yarn dev`
+
+## Deployment
+- if on a new branch, and you push a commit and raise a PR, vercel will automatically detect changes and deploy a preview url, for review and also preview feedback ui on the pages for better ui feedback
+- on merge to `main`, vercel will deploy the latest commit automatically
+- when you push directly to `main` vercel might not deploy the commit, so the easiest way is to use a `deploy-hook`. The curl request below does that
+```bash
+curl -X POST https://api.vercel.com/v1/integrations/deploy/prj_N4lXDKNFkk71PAdnYMAqnWWRdaht/qamtWLdRa8
+```
+- to check for errors visit the vercel organization dashboard [link](https://vercel.com/suportalhq)
+![](assets/Capture-2023-06-02-120720.png)
+- click on the suportal card, and the deployments tab
+![](assets/Capture-2023-06-02-122320.png)
+- click on the deployment with an error, you will see the logs below
+![](assets/Capture-2023-06-02-122423.png)
