@@ -179,3 +179,6 @@ curl -X POST https://api.vercel.com/v1/integrations/deploy/prj_N4lXDKNFkk71PAdnY
 ![](assets/Capture-2023-06-02-122320.png)
 - click on the deployment with an error, you will see the logs below
 ![](assets/Capture-2023-06-02-122423.png)
+
+## How does the context injection works in Suportal
+- refer to this [chart](https://whimsical.com/suportal-embeddings-creation-process-HPUXk25GdwFwH68MGrQeGw)
