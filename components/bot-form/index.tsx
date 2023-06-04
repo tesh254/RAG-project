@@ -212,19 +212,19 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
           </div>
         </div>
       </div>
-      <Tabs
+      <>
+        {data && data.bot && data.bot.id && (
+          <Paths
+            chatbot_id={data.bot.id}
+            website_link={state.website_link}
+          />
+        )}
+      </>
+      {/* <Tabs
         tabs={{
           Webpages: {
             id: 1,
             content: (
-              <>
-                {data && data.bot && data.bot.id && (
-                  <Paths
-                    chatbot_id={data.bot.id}
-                    website_link={state.website_link}
-                  />
-                )}
-              </>
             ),
           },
           Notion: {
@@ -241,7 +241,7 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
             ),
           },
         }}
-      />
+      /> */}
     </div>
   );
 };
