@@ -7,8 +7,6 @@ import { toast } from "react-hot-toast";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { apiUrl } from "../../lib/embed-string";
 import Paths from "../paths";
-import { useUser } from "@supabase/auth-helpers-react";
-import Tabs from "../tabs";
 
 const fetcher: any = (url: string) =>
   axios
@@ -220,28 +218,6 @@ const BotForm: FC<{ user: User }> = ({ user }) => {
           />
         )}
       </>
-      {/* <Tabs
-        tabs={{
-          Webpages: {
-            id: 1,
-            content: (
-            ),
-          },
-          Notion: {
-            id: 1,
-            content: (
-              <>
-                {data && data.bot && data.bot.id && (
-                  <Paths
-                    chatbot_id={data.bot.id}
-                    website_link={state.website_link}
-                  />
-                )}
-              </>
-            ),
-          },
-        }}
-      /> */}
     </div>
   );
 };
