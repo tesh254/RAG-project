@@ -184,7 +184,15 @@ const Widget: NextPage<Chat> = ({ chat: { title, website_link, id } }) => {
                     : "bg-[#e8e8e8] text-black font-suportal-medium self-start mt-[4px] mb-[8px]"
                 }`}
               >
-                <ReactMarkdown className="whitespace-normal">
+                <ReactMarkdown
+                  components={{
+                    pre: ({ children }) => <pre className="">{children}</pre>, // Override pre tag
+                    code: ({ lang, ...props }) => (
+                      <code className={`language-${lang}`} {...props} /> // Override code tag
+                    ),
+                  }}
+                  className="whitespace-normal"
+                >
                   {chat.message}
                 </ReactMarkdown>
               </div>
