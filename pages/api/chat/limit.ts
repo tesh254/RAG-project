@@ -62,13 +62,19 @@ const isLimitExceeded = async (req: NextApiRequest, res: NextApiResponse) => {
             .eq("chatbot_id", chatbot_id)
             .single()
 
+        if (!billing) {
+            return res.status(200).json({
+                is_limit_exceeded: true
+            })
+        }
+
         const limit = injectedPlans.find(item => item.label === billing?.plan_label)?.chats ?? 0;
 
         const chatCount = usage ? usage.chats : 0;
 
-        let isUserUsingOldPlan = !injectedPlans.map(item => item.label).includes(billing?.plan_label);
+        let nextBilling = billing?.next_billing;
 
-        if (limit <= chatCount || isUserUsingOldPlan || !billing) {
+        if (limit <= chatCount || new Date(nextBilling).getTime() < new Date().getTime()) {
             return res.status(200).json({
                 is_limit_exceeded: true,
             })
