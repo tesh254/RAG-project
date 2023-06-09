@@ -147,35 +147,40 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
                 const trimmedStrings = splitString(trimmedString, 4095)
 
-                trimmedStrings.forEach(async (input) => {
-                    const shaChecksum = genChecksum(input);
+                for (let i = 0; i < trimmedStrings.length; i++) {
+                    const input = trimmedStrings[i];
 
-                    const { data: docContent, error: contentError } = await supabaseClient.from("document").select("*").eq("sha_checksum", shaChecksum).eq("doc_id", pageId).single()
+                    if (input.replace(/\s/g, "").length !== 0) {
+                        const shaChecksum = genChecksum(input);
 
-                    if (!docContent || contentError) {
-                        const embeddingResponse = await openai.createEmbedding({
-                            model: "text-embedding-ada-001",
-                            input: input,
-                        })
+                        const { data: docContent, error: contentError } = await supabaseClient.from("document").select("*").eq("sha_checksum", shaChecksum).eq("doc_id", pageId).single()
 
-                        if (embeddingResponse.status !== 200) {
-                            const [responseData] = embeddingResponse.data.data;
+                        if (!docContent || contentError) {
+                            const embeddingResponse = await openai.createEmbedding({
+                                model: "text-embedding-ada-002",
+                                input: input,
+                            })
 
-                            await supabaseClient.from("document")
-                                .insert({
-                                    name: `chatbot_id-${chatbot_id};page_id-${pageId}`,
-                                    metadata: {},
-                                    type: "notion-doc",
-                                    is_trained: true,
-                                    chatbot_id,
-                                    embeddings: responseData.embedding,
-                                    doc_id: pageId,
-                                    sha_checksum: shaChecksum,
-                                    last_trained: new Date().toISOString(),
-                                })
+                            if (embeddingResponse.status === 200) {
+                                const [responseData] = embeddingResponse.data.data;
+
+                                await supabaseClient.from("document")
+                                    .insert({
+                                        name: `chatbot_id-${chatbot_id};page_id-${pageId}`,
+                                        metadata: {},
+                                        type: "notion-doc",
+                                        is_trained: true,
+                                        chatbot_id,
+                                        embeddings: responseData.embedding,
+                                        doc_id: pageId,
+                                        sha_checksum: shaChecksum,
+                                        last_trained: new Date().toISOString(),
+                                        content: input
+                                    })
+                            }
                         }
                     }
-                })
+                }
             })
 
             return res.status(200).json({

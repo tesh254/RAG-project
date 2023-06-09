@@ -75,13 +75,13 @@ export const renderBlock = (block: any) => {
     switch (block.type) {
         case 'heading_1':
             // For a heading
-            return `<h1>${block['heading_1'].text[0].plain_text} </h1>`
+            return `<h1>${block['heading_1'].rich_text[0].plain_text ?? ""} </h1>`
         case 'bulleted_list_item':
             // For an unordered list
-            return `<ul><li>${block['bulleted_list_item'].text[0].plain_text}</li></ul>`
+            return `<ul><li>${block['bulleted_list_item'].rich_text[0].plain_text ?? ""}</li></ul>`
         case 'paragraph':
             // For a paragraph
-            return `<p>${block['paragraph'].text[0]?.text?.content}</p>`
+            return `<p>${block['paragraph'].rich_text[0]?.text?.content ?? ""}</p>`
         default:
             // For an extra type
             return ""
@@ -90,10 +90,10 @@ export const renderBlock = (block: any) => {
 
 export function splitString(input: string, maxLength: number = 4095) {
     const result = [];
-  
+
     for (let i = 0; i < input.length; i += maxLength) {
-      result.push(input.slice(i, i + maxLength));
+        result.push(input.slice(i, i + maxLength));
     }
-  
+
     return result;
-  }
+}

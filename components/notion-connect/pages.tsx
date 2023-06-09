@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import PageItem, { IPageProps } from "./page-item";
+import { toast } from "react-hot-toast";
 
 const NotionPages = ({ chatbot_id }: { chatbot_id: number }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +38,9 @@ const NotionPages = ({ chatbot_id }: { chatbot_id: number }) => {
     if (!isTrainingRequestMadeRef.current) {
       isTrainingRequestMadeRef.current = true;
       setIsTraining(true);
+      toast.loading(
+        "We are training you notion content, please wait and do not close this page"
+      );
 
       axios
         .post(`/api/integrate/notion/data/pages/train`, {
@@ -51,6 +55,7 @@ const NotionPages = ({ chatbot_id }: { chatbot_id: number }) => {
         })
         .finally(() => {
           setIsTraining(false);
+          toast.dismiss();
         });
     }
   };
