@@ -22,3 +22,7 @@
 .button-secondary {
   @apply flex place-items-center space-x-[7px] justify-center bg-suportal-purple rounded-[16px] w-full px-[13px] py-[8px];
 }
+
+.button-connect {
+  @apply flex text-black place-items-center space-x-[7px] justify-center bg-white rounded-[16px] border-[1px] border-black;
+}
