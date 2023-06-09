@@ -247,7 +247,7 @@ const Paths: FC<{ chatbot_id: number; website_link: string }> = ({
                     </div>
                   ))}
                 {!isLoading && !isFetching && data && (
-                  <div className="overflow-y-scroll h-full scrollbar-none pb-[24px]">
+                  <div className="overflow-y-scroll h-[400px] scrollbar-none pb-[24px]">
                     {data?.paths.length > 0 && (
                       <>
                         {paths?.map((path: PathsType) => {

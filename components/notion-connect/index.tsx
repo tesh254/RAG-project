@@ -2,7 +2,7 @@ import * as React from "react";
 import axios from "axios";
 import Button from "../button";
 import toast from "react-hot-toast";
-import NotionContent from "./content";
+import NotionContent from "./pages";
 import { Loader2 } from "lucide-react";
 
 type NotionConnectProps = {

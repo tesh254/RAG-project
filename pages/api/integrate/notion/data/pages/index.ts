@@ -38,7 +38,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             return res.status(200).json(response.data)
         } catch (error) {
-            console.log(error)
 
             if (error instanceof Error) {
                 return res.status(400).json({
