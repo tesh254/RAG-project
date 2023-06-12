@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { cosSimilarity, trimStr } from "../../../../lib/sanitizer";
+import { cosSimilarity, cosineSimilarity, trimStr } from "../../../../lib/sanitizer";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
 import Cors from "nextjs-cors";
@@ -55,6 +55,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .select("id,embeddings,content")
         .in("websitelink_id", allPathsIds);
 
+      const { data: document, error: documentError } = await supabaseClient
+        .from("document")
+        .select("*")
+        .eq("chatbot_id", body.chatbot_id);
+
+      if (documentError) {
+        throw documentError
+      }
+
       const query = body.message;
 
       const sanitizedQuery = trimStr(query);
@@ -95,22 +104,41 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         id: number;
         content: string;
       }[];
-      let selectedRecord = [-1, savedContent[0].id];
-      for (let i = 0; i < savedContent.length; i++) {
-        const result = cosSimilarity(
-          JSON.parse(savedContent[i].embeddings),
-          embedding,
-          savedContent[i].id
-        );
 
-        if (result[0] > selectedRecord[0]) {
-          selectedRecord[0] = result[0];
-          selectedRecord[1] = i;
+      let selectedRecord: number | string | any[] = [-1, 0, null];
+      if (savedContent.length > 0) {
+        for (let i = 0; i < savedContent.length; i++) {
+          const result = cosSimilarity(
+            JSON.parse(savedContent[i].embeddings),
+            embedding,
+            savedContent[i].id
+          );
+          if (result[0] > selectedRecord[0]) {
+            selectedRecord[0] = result[0];
+            selectedRecord[1] = i;
+            selectedRecord[2] = savedContent[i]
+          }
+        }
+      }
+
+      if (document.length > 0) {
+        for (let i = 0; i < document.length; i++) {
+          const result = cosSimilarity(
+            JSON.parse(document[i].embeddings),
+            embedding,
+            document[i].id,
+          )
+
+          if (result[0] > selectedRecord[0]) {
+            selectedRecord[0] = result[0];
+            selectedRecord[1] = i
+            selectedRecord[2] = document[i];
+          }
         }
       }
 
       return res.status(200).json({
-        context: savedContent[selectedRecord[1]].content,
+        context: selectedRecord[2].content ?? "",
         api_key: accountAPIKey ?? openAiKey
       });
     } catch (error) {
