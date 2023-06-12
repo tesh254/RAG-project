@@ -14,9 +14,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             const { data: integration, error: integrationError } = await supabaseClient.from("integration").select("access_token").eq("chatbot_id", chatbot_id).single()
 
+            const { data: documents, error: documentsError } = await supabaseClient.from("document").select("*").eq("chatbot_id", chatbot_id);
+
             if (integrationError || !integration) {
                 throw new Error("Notion is not connected to Suportal");
             }
+
+            let docs: any[] = [];
+
+            if (documents && documents?.length > 0) {
+                docs = documents;
+            }
+
+            let formattedDocs: any[] = [];
 
             const response = await axios.post(`https://api.notion.com/v1/search`, {
                 "query": "",
@@ -36,9 +46,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 }
             })
 
-            return res.status(200).json(response.data)
-        } catch (error) {
+            const pages = response.data.results;
 
+            const results = pages.map((page: any) => {
+                const doc = docs.find(doc => doc.doc_id === page.id);
+
+                if (doc) {
+                    return {
+                        ...page,
+                        is_trained: doc.is_trained,
+                    }
+                } else {
+                    return {
+                        ...page,
+                        is_trained: false
+                    }
+                }
+            })
+
+            return res.status(200).json({
+                results
+            })
+        } catch (error) {
+            console.log(error)
             if (error instanceof Error) {
                 return res.status(400).json({
                     message: error.message,

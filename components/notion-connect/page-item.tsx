@@ -15,14 +15,19 @@ const PageItem: React.FC<{
   return (
     <>
       {pageItem.properties.title && (
-        <div className="w-full flex py-[8px] place-items-center">
+        <div className="w-full flex py-[8px] place-items-center justify-between">
           <div>
             <p className="font-medium text-[12px] text-suportal-gray-dark grow">
               {pageItem.properties.title.title[0].plain_text}
             </p>
           </div>
-          <div className="flex">
-            
+          <div className="flex place-items-center justify-center space-x-[6px] mr-[16px]">
+            {pageItem.is_trained && (
+              <div className="flex place-items-center space-x-[4px]">
+                <div className="h-[8px] w-[8px] bg-green-500 rounded-full"></div>
+                <span className="text-xs text-gray-400">trained</span>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -106,6 +111,7 @@ export interface IPageProps {
     };
     [key: string]: any;
   };
+  is_trained: boolean;
 }
 
 export default PageItem;

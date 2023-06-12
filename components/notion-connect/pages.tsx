@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import PageItem, { IPageProps } from "./page-item";
 import { toast } from "react-hot-toast";
@@ -11,25 +11,30 @@ const NotionPages = ({ chatbot_id }: { chatbot_id: number }) => {
   const [pageItems, setPageItems] = useState<IPageProps[]>([]);
   const [isTraining, setIsTraining] = useState(false);
 
+  const getPages = useCallback(() => {
+    setIsLoading(true);
+
+    axios
+      .post(`/api/integrate/notion/data/pages`, {
+        chatbot_id,
+      })
+      .then((res) => {
+        setPageItems(res.data.results);
+      })
+      .catch((err) => {
+        setPageItems([]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [chatbot_id]);
+
   useEffect(() => {
     if (!isRequestMadeRef.current) {
       isRequestMadeRef.current = true;
-      setIsLoading(true);
-      axios
-        .post(`/api/integrate/notion/data/pages`, {
-          chatbot_id,
-        })
-        .then((res) => {
-          setPageItems(res.data.results);
-        })
-        .catch((err) => {
-          setPageItems([]);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      getPages();
     }
-  }, [chatbot_id]);
+  }, [chatbot_id, getPages]);
 
   const trainBlocks = () => {
     if (isTrainingRequestMadeRef.current) {
@@ -39,7 +44,7 @@ const NotionPages = ({ chatbot_id }: { chatbot_id: number }) => {
       isTrainingRequestMadeRef.current = true;
       setIsTraining(true);
       toast.loading(
-        "We are training you notion content, please wait and do not close this page"
+        "We are training your Notion content, please wait and do not close this page"
       );
 
       axios
@@ -55,6 +60,7 @@ const NotionPages = ({ chatbot_id }: { chatbot_id: number }) => {
         })
         .finally(() => {
           setIsTraining(false);
+          getPages();
           toast.dismiss();
         });
     }
