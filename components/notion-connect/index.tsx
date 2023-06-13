@@ -83,7 +83,7 @@ const NotionConnect: React.FC<NotionConnectProps> = ({ chatbot_id }) => {
               </button>
             </div>
           ) : (
-            <NotionContent chatbot_id={chatbot_id} />
+            <NotionContent authorize={authorize} chatbot_id={chatbot_id} />
           )}
         </div>
       )}

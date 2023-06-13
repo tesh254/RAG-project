@@ -22,16 +22,12 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                 redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/notion/integrate`
             }
 
-            console.log({ payload })
-
             const response = await axios.post(`https://api.notion.com/v1/oauth/token`, payload, {
                 headers: {
                     Authorization: `Basic ${basicToken}`,
                     "Content-Type": "application/json"
                 }
             });
-
-            console.log(response.data)
 
             const accessToken = response.data.access_token;
             const botId = response.data.bot_id;
@@ -54,14 +50,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
             if (!data || error) {
                 throw new Error("Problem retrieiving chatbot in state");
-            }
-
-            const { data: existingIntegration, error: existingIntegrationError } = await supabaseClient.from("integration").select("*").eq("chatbot_id", chatbot_id).single()
-
-            if (existingIntegration) {
-                return res.status(200).json({
-                    is_success: true,
-                });
             }
 
             const { data: integration, error: integrationError } = await supabaseClient.from("integration").select("*").eq("chatbot_id", chatbot_id).single()
@@ -90,8 +78,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
                 is_success: true,
             });
         } catch (error) {
-            // @ts-ignore
-            console.log({ error: error.response.data })
 
             if (error instanceof Error) {
                 return res.status(400).json({

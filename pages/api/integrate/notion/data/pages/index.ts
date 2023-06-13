@@ -26,8 +26,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 docs = documents;
             }
 
-            let formattedDocs: any[] = [];
-
             const response = await axios.post(`https://api.notion.com/v1/search`, {
                 "query": "",
                 "filter": {
@@ -68,7 +66,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 results
             })
         } catch (error) {
-            console.log(error)
+            // @ts-ignore
+            if (error && error.response && error.response.data && error.response.data.code && error.response.data.code === 'unauthorized') {
+                return res.status(200).json({
+                    results: [],
+                })
+            }
+
             if (error instanceof Error) {
                 return res.status(400).json({
                     message: error.message,
