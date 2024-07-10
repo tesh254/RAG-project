@@ -171,7 +171,7 @@ This is the repo for Suportal frontend and Nextjs API
 - on merge to `main`, vercel will deploy the latest commit automatically
 - when you push directly to `main` vercel might not deploy the commit, so the easiest way is to use a `deploy-hook`. The curl request below does that
 ```bash
-curl -X POST https://api.vercel.com/v1/integrations/deploy/prj_N4lXDKNFkk71PAdnYMAqnWWRdaht/qamtWLdRa8
+curl -X POST https://api.vercel.com/v1/integrations/deploy/<project_id>
 ```
 - to check for errors visit the vercel organization dashboard [link](https://vercel.com/suportalhq)
 ![](assets/Capture-2023-06-02-120720.png)
